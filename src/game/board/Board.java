@@ -11,7 +11,7 @@ import game.piece.Piece;
 import game.piece.Queen;
 import game.piece.Rook;
 
-public class Board implements Cloneable{
+public class Board {
 
     private static final int ROW = 8;
     private static final int COL = 8;
@@ -240,12 +240,61 @@ public class Board implements Cloneable{
                 } else if (p instanceof King) {
                     s.append(p.isWhite() ? "K" : "k");
                 } else {
-                    s.append("_");
+                    s.append(".");
                 }
             }
         }
     
         return s.toString();
+    }
+
+    public boolean importBoardFromString(String s) {
+        if (s.length() != ROW * COL) return false;
+
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                char c = s.charAt(i * COL + j);
+                
+                Piece p = readPiece(c, i, j);
+            }
+        }
+
+        return true;
+    }
+
+    private Piece readPiece(char c, int i, int j) {
+        Position p = new Position(i, j);
+        switch (c) {
+            case 'P':
+                return new Pawn(true, p);
+            case 'R':
+                return new Rook(true, p);
+            case 'K':
+                return new King(true, p);
+            case 'Q':
+                return new Queen(true, p);
+            case 'B':
+                return new Bishop(true, p);
+            case 'N':
+                return new Knight(true, p);
+
+            case 'p':
+                return new Pawn(false, p);
+            case 'r':
+                return new Rook(false, p);
+            case 'k':
+                return new King(false, p);
+            case 'q':
+                return new Queen(false, p);
+            case 'b':
+                return new Bishop(false, p);
+            case 'n':
+                return new Knight(false, p);
+            case '.':
+                return null; // Placeholder for an empty square
+            default:
+                throw new IllegalArgumentException("Invalid character: " + c);
+        }
     }
 
     public void displayBoard() {

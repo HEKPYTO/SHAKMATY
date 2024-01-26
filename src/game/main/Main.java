@@ -8,7 +8,7 @@ public class Main {
     
     public static void main(String[] args) {
         Board b = new Board();
-        Bishop bi = new Bishop(true, new Position(0, 1));
+        Bishop bi = new Bishop(true, new Position(null));
 
         b.placePiece(bi);
 
