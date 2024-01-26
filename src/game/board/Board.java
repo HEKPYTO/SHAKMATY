@@ -214,6 +214,36 @@ public class Board implements Cloneable{
         }
     }
 
+    public String exportBoardToString() {
+
+        StringBuilder s = new StringBuilder();
+
+        for (int i = ROW - 1; i >= 0; i--) {
+
+            for (int j = 0; j < COL; j++) {
+                Piece p = getPiece(new Position(i, j));
+
+                if (p instanceof Pawn) {
+                    s.append(p.isWhite() ? "P" : "p");
+                } else if (p instanceof Bishop) {
+                    s.append(p.isWhite() ? "B" : "b");
+                } else if (p instanceof Knight) {
+                    s.append(p.isWhite() ? "N" : "n");
+                } else if (p instanceof Rook) {
+                    s.append(p.isWhite() ? "R" : "r");
+                } else if (p instanceof Queen) {
+                    s.append(p.isWhite() ? "Q" : "q");
+                } else if (p instanceof King) {
+                    s.append(p.isWhite() ? "K" : "k");
+                } else {
+                    s.append("_");
+                }
+            }
+        }
+    
+        return s.toString();
+    }
+
     public void displayBoard() {
 
     }
