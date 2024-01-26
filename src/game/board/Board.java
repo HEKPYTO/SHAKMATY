@@ -96,6 +96,8 @@ public class Board implements Cloneable{
         int x = p.getPos().getX();
         int y = p.getPos().getY();
 
+        if (p.getBoard() == null) p.setBoard(this);
+
         setValue(board, x, y, p);
         setValue(board, to.getX(), to.getY(), p);
         setValue(board, x, y, null);
