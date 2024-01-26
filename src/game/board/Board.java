@@ -256,6 +256,10 @@ public class Board {
                 char c = s.charAt(i * COL + j);
                 
                 Piece p = readPiece(c, i, j);
+
+                if (p == null) continue;
+                
+                placePiece(p);
             }
         }
 
