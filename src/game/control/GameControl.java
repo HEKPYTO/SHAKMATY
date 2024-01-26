@@ -1,4 +1,4 @@
-package game.game;
+package game.control;
 
 import game.board.Board;
 import game.piece.Bishop;
@@ -10,7 +10,9 @@ public class GameControl {
         Board b = new Board();
         Bishop bi = new Bishop(true, new Position(0, 1));
 
-        b.setPieceTo(bi, null);
+        b.placePiece(bi);
+
+        System.err.println(b.exportBoardToString());
 
     }
 }
