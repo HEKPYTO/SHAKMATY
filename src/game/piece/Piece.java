@@ -16,12 +16,12 @@ public abstract class Piece {
         legalMove = new ArrayList<Position>();
         setWhite(isWhite);
         setPos(pos);
-        board.setPiece(this, pos);
     }
 
     public Piece(boolean isWhite, Position pos, Board board) {
         this(isWhite, pos);
         setBoard(board);
+        board.setPiece(this, pos);
     }
 
     public abstract void legalMove();
