@@ -1,10 +1,17 @@
 package game.main;
 
-import game.control.GameControl;
+import game.board.Board;
+import game.piece.Bishop;
+import game.position.Position;
 
 public class Main {
     
     public static void main(String[] args) {
-        new GameControl();
+        Board b = new Board();
+        Bishop bi = new Bishop(true, new Position(0, 1));
+
+        b.placePiece(bi);
+
+        System.err.println(b.exportBoardToString());
     }
 }

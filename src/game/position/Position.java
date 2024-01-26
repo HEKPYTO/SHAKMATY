@@ -12,6 +12,10 @@ public class Position {
         setY(y);
     }
 
+    public Position(String s) { // must be char and int i.e. a4
+        this((int) s.charAt(0) - (int) 'a' + 1, 8 - Character.getNumericValue(s.charAt(1)));
+    }
+
     public Position(int x, int y, int rX, int rY) {
         this(x, y);
         rookPos = new Position(rX, rY);
