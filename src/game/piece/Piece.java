@@ -14,7 +14,11 @@ public abstract class Piece {
 
     public Piece(boolean isWhite, Position pos) {
         legalMove = new ArrayList<Position>();
+        setWhite(isWhite);
+        setPos(pos);
+        board.setPiece(this, pos);
     }
+
 
     public abstract void legalMove();
 
