@@ -56,7 +56,7 @@ public class Board implements Cloneable{
 
         if (p.getLegalMove().contains(to)) {
             if (!isVacantPosition(to)) capture(to);
-            setPiece(p, to);
+            setPieceTo(p, to);
             p.legalMove(); // get next legal moves
             return true;
         }
@@ -90,8 +90,12 @@ public class Board implements Cloneable{
         return getPiece(a) != null && getPiece(b) != null && getPiece(a) == getPiece(b);
     } 
 
+    public void placePiece(Piece p) {
+        
+        setValue(board, p.getPos().getX(), p.getPos().getY(), p);
+    }
 
-    public void setPiece(Piece p, Position to) {
+    public void setPieceTo(Piece p, Position to) {
 
         int x = p.getPos().getX();
         int y = p.getPos().getY();
