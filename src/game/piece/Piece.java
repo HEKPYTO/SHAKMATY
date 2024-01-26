@@ -19,6 +19,10 @@ public abstract class Piece {
         board.setPiece(this, pos);
     }
 
+    public Piece(boolean isWhite, Position pos, Board board) {
+        this(isWhite, pos);
+        setBoard(board);
+    }
 
     public abstract void legalMove();
 
