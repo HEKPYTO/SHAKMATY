@@ -23,10 +23,10 @@ public class Movement { // Pawn Rook King have "moved"
     }
 
     private boolean isInBound(Position pos) {
-        return 0 <= pos.getX() && 
-            pos.getX() <= Constant.COL &&
-            0 <= pos.getY() &&
-            pos.getY() <= Constant.ROW;
+        return 0 <= pos.getCol() && 
+            pos.getCol() <= Constant.COL &&
+            0 <= pos.getRow() &&
+            pos.getRow() <= Constant.ROW;
     }
 
     private boolean isSameColorPiece(Position a, Position b) { 
@@ -47,8 +47,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void singlePawnMove() {
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
@@ -62,8 +62,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void doublePawnMove() {
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         int doubleMove = board.getPiece(current).isWhite() ? 2: -2;
 
@@ -77,8 +77,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void PawnCaptureMove() {
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
@@ -93,8 +93,8 @@ public class Movement { // Pawn Rook King have "moved"
     
     public void crossMove() { // + sign movement
         
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         for (int s = 0; s < 4; s++) {
             
@@ -115,8 +115,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void diagonalMove() { // x sign movement 
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         for (int s = 0; s < 4; s++) {
 
@@ -138,8 +138,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void lShapeMove() { // L sign movement
         
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         int[][] kMoves = {
             {-2, -1}, {-2, 1},
@@ -162,8 +162,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void squareMove() {
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         for (int i = x - 1; i < x + 1; i++) {
             for (int j = y - 1; j < y + 1; j++) {
@@ -196,8 +196,8 @@ public class Movement { // Pawn Rook King have "moved"
 
         if (k.isMoved() || r.isMoved()) return;
 
-        int kingX = k.getPos().getX();
-        int rookX = r.getPos().getX();
+        int kingX = k.getPos().getCol();
+        int rookX = r.getPos().getCol();
 
         for (int i = kingX + 1; i < rookX; i++) {
             if (!board.isVacantPosition(new Position(i, backRankY))) return;
@@ -224,8 +224,8 @@ public class Movement { // Pawn Rook King have "moved"
 
         if (k.isMoved() || r.isMoved()) return;
 
-        int kingX = k.getPos().getX();
-        int rookX = r.getPos().getX();
+        int kingX = k.getPos().getCol();
+        int rookX = r.getPos().getCol();
 
         for (int i = rookX + 1; i < kingX; i++) {
             if (!board.isVacantPosition(new Position(i, backRankY))) return;
@@ -239,8 +239,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void enPassantMove() {
 
-        int x = current.getX();
-        int y = current.getY();
+        int x = current.getCol();
+        int y = current.getRow();
 
         int enPos = board.getPiece(current).isWhite() ? Constant.ROW - 2: 2; // +2 -2 of border
 
