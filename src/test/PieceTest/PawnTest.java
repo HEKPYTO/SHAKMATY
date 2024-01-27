@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import game.board.Board;
-import game.constant.Constant;
 import game.piece.Pawn;
 import game.piece.Piece;
 import game.position.Position;
