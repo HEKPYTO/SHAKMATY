@@ -4,6 +4,7 @@ import game.board.Board;
 import game.piece.Pawn;
 import game.piece.Piece;
 import game.position.Position;
+import game.util.FENConverter;
 
 public class Main {
     
@@ -11,21 +12,16 @@ public class Main {
 
         Board b = new Board();
 
-        // String s = "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3";
-        // b.importFEN(s);
+        String s = "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3";
+        FENConverter fen = new FENConverter();
+        fen.importFromFEN(b, s);
 
-        b.setDefaultPosition();
-
-        // Pawn p = new Pawn(false, new Position("d7"), b);
-        // Pawn p2 = new Pawn(true, new Position("e4"), b);
-
-        // System.out.println(b.getPiece(new Position("d7")));
-        // System.out.println(b.getPiece(new Position("e4")));
+        // b.setDefaultPosition();
 
         System.out.println(b.displayBoard());
         System.out.println(b.exportBoardToString());
 
-        System.out.println(b.getBoard());
+        System.out.println(fen.exportToFEN(b));
 
         // Piece p = b.getPiece(new Position("e2"));
 

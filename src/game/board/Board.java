@@ -15,8 +15,8 @@ import game.piece.Rook;
 
 public class Board {
 
-    private static final int ROW = 8;
-    private static final int COL = 8;
+    private static final int ROW = Constant.COL;
+    private static final int COL = Constant.ROW;
     private ArrayList<ArrayList<Piece>> board;
     private ArrayList<Position> moves;
 
@@ -36,13 +36,13 @@ public class Board {
         importBoardFromString(PositionString.initPos);
     }
 
-    public void setPiece(int x, int y, Piece piece) {
-        board.get(ROW - y - 1).set(x, piece);
-        piece.setPos(new Position(x, y)); 
+    public void setPiece(int row, int col, Piece piece) {
+        board.get(row).set(col, piece);
+        piece.setPos(new Position(row, col)); 
     }
 
     public void setPiece(Position pos, Piece piece) {
-        setPiece(pos.getX(), pos.getY(), piece);
+        setPiece(pos.getRow(), pos.getCol(), piece);
     }
 
     public void setPiece(Piece piece) {
@@ -50,7 +50,7 @@ public class Board {
     }
 
     public Piece getPiece(Position pos) {
-        return board.get(ROW - pos.getY() - 1).get(pos.getX());
+        return board.get(pos.getRow()).get(pos.getCol());
     }
 
     public boolean canBasicMoveTo(Position pos) {
@@ -88,10 +88,10 @@ public class Board {
     }
 
     public boolean isValidPosition(Position pos) { // Is in chess square
-        return 0 <= pos.getX() && 
-            pos.getX() <= ROW &&
-            0 <= pos.getY() &&
-            pos.getY() <= COL;
+        return 0 <= pos.getCol() && 
+            pos.getCol() <= ROW &&
+            0 <= pos.getRow() &&
+            pos.getRow() <= COL;
     }
 
     public boolean isVacantPosition(Position pos) { // Is that space free
@@ -104,8 +104,8 @@ public class Board {
 
     public void setPieceTo(Piece p, Position to) {
 
-        int x = p.getPos().getX();
-        int y = p.getPos().getY();
+        int x = p.getPos().getCol();
+        int y = p.getPos().getRow();
 
         if (p.getBoard() == null) p.setBoard(this);
 
@@ -118,108 +118,9 @@ public class Board {
     public Board cloneBoard() {
         Board b = new Board();
     
-        b.importFEN(this.exportFEN());
+       b.importBoardFromString(exportBoardToString());
 
         return b;
-    }
-
-    public void importFEN(String fen) {
-        board = new ArrayList<>(ROW);
-        for (int i = ROW - 1; i >= 0; i--) {
-            ArrayList<Piece> row = new ArrayList<>(COL);
-            for (int j = 0; j < COL; j++) {
-                row.add(null);
-            }
-            board.add(row);
-        }
-    
-        String[] fenParts = fen.split("\\s+");
-        String piecePlacement = fenParts[0];
-    
-        int rank = ROW - 1; // Start from the top rank
-        int file = 0;
-    
-        for (char c : piecePlacement.toCharArray()) {
-            if (Character.isDigit(c)) {
-                file += Character.getNumericValue(c);
-            } else if (c == '/') {
-                rank--;
-                file = 0;
-            } else {
-                boolean isWhite = Character.isUpperCase(c);
-                Piece piece = createPieceFromFENChar(c, isWhite, rank, file);
-                setPiece(new Position(rank, file), piece);
-                file++;
-            }
-        }
-    }
-    
-    public String exportFEN() {
-        StringBuilder fen = new StringBuilder();
-    
-        for (int i = ROW - 1; i >= 0; i--) {
-            int emptyCount = 0;
-    
-            for (int j = 0; j < COL; j++) {
-                Piece p = getPiece(new Position(i, j));
-    
-                if (p == null) {
-                    emptyCount++;
-                } else {
-                    if (emptyCount > 0) {
-                        fen.append(emptyCount);
-                        emptyCount = 0;
-                    }
-    
-                    if (p instanceof Pawn) {
-                        fen.append(p.isWhite() ? "P" : "p");
-                    } else if (p instanceof Bishop) {
-                        fen.append(p.isWhite() ? "B" : "b");
-                    } else if (p instanceof Knight) {
-                        fen.append(p.isWhite() ? "N" : "n");
-                    } else if (p instanceof Rook) {
-                        fen.append(p.isWhite() ? "R" : "r");
-                    } else if (p instanceof Queen) {
-                        fen.append(p.isWhite() ? "Q" : "q");
-                    } else if (p instanceof King) {
-                        fen.append(p.isWhite() ? "K" : "k");
-                    }
-                }
-            }
-    
-            if (emptyCount > 0) {
-                fen.append(emptyCount);
-            }
-    
-            if (i > 0) {
-                fen.append('/');
-            }
-        }
-    
-        fen.append(" w - - 0 1");
-    
-        return fen.toString();
-    }
-
-    private Piece createPieceFromFENChar(char c, boolean isWhite, int rank, int file) {
-        Position position = new Position(rank, file);
-        
-        switch (Character.toLowerCase(c)) {
-            case 'p':
-                return new Pawn(isWhite, position, this);
-            case 'n':
-                return new Knight(isWhite, position, this);
-            case 'b':
-                return new Bishop(isWhite, position, this);
-            case 'r':
-                return new Rook(isWhite, position, this);
-            case 'q':
-                return new Queen(isWhite, position, this);
-            case 'k':
-                return new King(isWhite, position, this);
-            default:
-                return null;
-        }
     }
 
     public String exportBoardToString() {
@@ -253,7 +154,7 @@ public class Board {
         if (s.length() != ROW * COL) return false;
     
         int index = 0;
-        for (int i = 0; i < ROW; i++) {
+        for (int i = ROW - 1; i >= 0; i--) {
             for (int j = 0; j < COL; j++) {
                 char c = s.charAt(index++);
                 Piece p = readPiece(c, i, j);
@@ -337,10 +238,6 @@ public class Board {
     public ArrayList<ArrayList<Piece>> getBoard() {
         return this.board;
     }
-
-    // public void setBoard(ArrayList<ArrayList<Piece>> board) {
-    //     this.board = board;
-    // }
 
     public ArrayList<Position> getMoves() {
         return this.moves;

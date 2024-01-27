@@ -24,8 +24,8 @@ public class Pawn extends Piece {
         Movement moves = new Movement(pos, board);
         moves.singlePawnMove();
 
-        if ((isWhite() && pos.getY() == 1) ||
-            (!isWhite() && pos.getY() == Constant.COL - 1)) moves.doublePawnMove();
+        if ((isWhite() && pos.getRow() == 1) ||
+            (!isWhite() && pos.getRow() == Constant.COL - 2)) moves.doublePawnMove();
 
         moves.PawnCaptureMove();
         moves.enPassantMove();
@@ -55,6 +55,6 @@ public class Pawn extends Piece {
     }
 
     public boolean canPromote() {
-        return isWhite() ? pos.getY() == 0: pos.getY() == Constant.COL - 1;
+        return isWhite() ? pos.getRow() == 0: pos.getRow() == Constant.COL - 1;
     }
 }

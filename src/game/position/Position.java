@@ -9,20 +9,20 @@ public class Position {
 
     Position rookPos = null;
 
-    public Position(int x, int y) {
-        setRow(Constant.ROW - 1 - y);
-        setCol(x);
-
-        validatePosition();
+    public Position(int row, int col) {
+        setRow(row);
+        setCol(col);
     }
 
     public Position(String s) {
-        if (s.length() != 2 || !Character.isLetter(s.charAt(0)) || !Character.isDigit(s.charAt(1))) {
-            throw new IllegalArgumentException("Invalid position format. Expected format: [a-h][0-7]");
+        if (s.length() != 2 || 
+            !Character.isLetter(s.charAt(0)) || 
+            !Character.isDigit(s.charAt(1))) {
+            throw new IllegalArgumentException("Invalid position format. Expected format: [a-h][1-8]");
         }
 
         int colIndex = s.charAt(0) - 'a';
-        int rowIndex = '8' - s.charAt(1);
+        int rowIndex = s.charAt(1) - '1';
 
         setRow(rowIndex);
         setCol(colIndex);
@@ -47,7 +47,7 @@ public class Position {
     }
 
     public String toString() {
-        return "" + (char) (col + 'a') + (char) ('8' - row);
+        return "" + (char) (col + 'a') + (char) (row + '1');
     }
 
     public boolean equals(Object obj) {
