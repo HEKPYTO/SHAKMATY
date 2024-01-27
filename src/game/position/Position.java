@@ -1,23 +1,25 @@
 package game.position;
 
-public final class Position {
+import game.constant.Constant;
+
+public final class Position { // Translate User pos: Program pos
 
     private int X;
     private int Y;
 
     private Position rookPos = null; // for castling position
 
-    public Position(int x, int y) {
+    public Position(int x, int y) { // (x, y) (0, 0) / a1 -> (7, 0) on array (y, x)
         setX(x);
         setY(y);
     }
 
     public Position(String s) { // must be char and int i.e. a4
-        this(s.charAt(0) - 'a', s.charAt(1) - '1');
+        this( s.charAt(0) - 'a', s.charAt(1) - '1');
     }
 
     public String toString() {
-        return "" + (char) (X + 'a') + (Y + 1);
+        return "" + (char) (X + 'a') + (8 - Y);
     }
 
     public Position(int x, int y, int rX, int rY) {
@@ -43,7 +45,7 @@ public final class Position {
     }
 
     public void setY(int Y) {
-        this.Y = Y;
+        this.Y = Constant.ROW - Y - 1;
     }
 
     public Position getRookPos() {

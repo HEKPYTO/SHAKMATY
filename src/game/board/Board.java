@@ -102,11 +102,6 @@ public class Board {
         return getPiece(a) != null && getPiece(b) != null && getPiece(a) == getPiece(b);
     } 
 
-    public void placePiece(Piece p) {
-        
-        setPiece(p.getPos(), p);
-    }
-
     public void setPieceTo(Piece p, Position to) {
 
         int x = p.getPos().getX();
@@ -117,9 +112,7 @@ public class Board {
         setPiece(to, p);
         setPiece(new Position(x, y), null);
 
-        // setValue(board, x, y, p);
-        // setValue(board, to.getX(), to.getY(), p);
-        // setValue(board, x, y, null);
+        //!
     }
 
     public Board cloneBoard() {
@@ -132,7 +125,7 @@ public class Board {
 
     public void importFEN(String fen) {
         board = new ArrayList<>(ROW);
-        for (int i = 0; i < ROW; i++) {
+        for (int i = ROW - 1; i >= 0; i--) {
             ArrayList<Piece> row = new ArrayList<>(COL);
             for (int j = 0; j < COL; j++) {
                 row.add(null);
@@ -143,14 +136,14 @@ public class Board {
         String[] fenParts = fen.split("\\s+");
         String piecePlacement = fenParts[0];
     
-        int rank = 0; // Start from the top rank
+        int rank = ROW - 1; // Start from the top rank
         int file = 0;
     
         for (char c : piecePlacement.toCharArray()) {
             if (Character.isDigit(c)) {
                 file += Character.getNumericValue(c);
             } else if (c == '/') {
-                rank++;
+                rank--;
                 file = 0;
             } else {
                 boolean isWhite = Character.isUpperCase(c);
@@ -192,10 +185,10 @@ public class Board {
                         fen.append(p.isWhite() ? "K" : "k");
                     }
                 }
+            }
     
-                if (j == COL - 1 && emptyCount > 0) {
-                    fen.append(emptyCount);
-                }
+            if (emptyCount > 0) {
+                fen.append(emptyCount);
             }
     
             if (i > 0) {
@@ -267,7 +260,7 @@ public class Board {
     
                 if (p == null) continue;
     
-                placePiece(p);
+                setPiece(p);
             }
         }
         return true;
@@ -310,12 +303,11 @@ public class Board {
 
     public String displayBoard() {
         StringBuilder s = new StringBuilder();
-
-        for (int i = 0; i < ROW; i++) {
-
+    
+        for (int i = ROW - 1; i >= 0; i--) {
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
-
+    
                 if (p instanceof Pawn) {
                     s.append(p.isWhite() ? "♟" : "♙");
                 } else if (p instanceof Bishop) {
@@ -329,12 +321,12 @@ public class Board {
                 } else if (p instanceof King) {
                     s.append(p.isWhite() ? "♚" : "♔");
                 } else {
-                    s.append((i + j) % 2 != 0 ? "□": "■");
+                    s.append((i + j) % 2 != 0 ? "□" : "■");
                 }
-
+    
                 s.append(" ");
             }
-
+    
             s.append("\n");
         }
     

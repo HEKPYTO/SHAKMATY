@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,6 +58,27 @@ public class PawnTest {
         Pawn p1 = new Pawn(true, posWhite, b);
         p1.legalMove();
 
-        assertEquals(0, p1.getLegalMove());
+        assertTrue(p1.getLegalMove().contains(new Position("d3")));
+        assertTrue(p1.getLegalMove().contains(new Position("d4")));
+        assertEquals(2, p1.getLegalMove().size());
+
+        Position d5 = new Position("e3");
+        Pawn p2 = new Pawn(true, d5, b);
+        p2.legalMove();
+
+        assertTrue(p2.getLegalMove().contains(new Position("e4")));
+        assertEquals(1, p2.getLegalMove().size());
+
+        assertEquals(0, b.displayBoard());
+
+        // Pawn b1 = new Pawn(false, posBlack, b);
+        // b1.getLegalMove();
+
+        // assertEquals(0, b.displayBoard());
+
+        // assertEquals(0, b1.getLegalMove());
+        // assertTrue(b1.getLegalMove().contains(new Position("d6")));
+        // assertTrue(b1.getLegalMove().contains(new Position("d5")));
+        // assertEquals(2, p1.getLegalMove().size());
     }
 }

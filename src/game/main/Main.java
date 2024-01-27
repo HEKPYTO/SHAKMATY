@@ -11,11 +11,21 @@ public class Main {
 
         Board b = new Board();
 
-        String s = "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3";
-        b.importFEN(s);
+        // String s = "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3";
+        // b.importFEN(s);
+
+        b.setDefaultPosition();
+
+        // Pawn p = new Pawn(false, new Position("d7"), b);
+        // Pawn p2 = new Pawn(true, new Position("e4"), b);
+
+        // System.out.println(b.getPiece(new Position("d7")));
+        // System.out.println(b.getPiece(new Position("e4")));
 
         System.out.println(b.displayBoard());
         System.out.println(b.exportBoardToString());
+
+        System.out.println(b.getBoard());
 
         // Piece p = b.getPiece(new Position("e2"));
 
