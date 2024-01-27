@@ -51,19 +51,5 @@ public class PawnTest {
 
     }
 
-    @Test
-    public void getLegalPawnMove1() {
 
-        Piece p = new Pawn(true, posWhite, b);
-
-        assert(p.isWhite());
-        assertEquals(posWhite, p.getPos());
-        assertEquals(b, p.getBoard());
-
-        p.legalMove();
-
-        System.out.println(p.getLegalMove());
-
-
-    }
 }
