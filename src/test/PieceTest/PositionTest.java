@@ -15,44 +15,44 @@ public class PositionTest {
     public void baseConstructorTest() {
 
         Position p = new Position(5, 0);
-        assertEquals(p.getX(), 5);
-        assertEquals(p.getY(), 0);
+        assertEquals(p.getRow(), 7);
+        assertEquals(p.getCol(), 5);
     }
     
     @Test
     public void testConstructorString() {
 
         Position pos1 = new Position("a1");
-        assertEquals(0, pos1.getX());
-        assertEquals(7, pos1.getY());
+        assertEquals(7, pos1.getRow());
+        assertEquals(0, pos1.getCol());
 
         Position pos2 = new Position("h8");
-        assertEquals(7, pos2.getX());
-        assertEquals(0, pos2.getY());
+        assertEquals(0, pos2.getRow());
+        assertEquals(7, pos2.getCol());
 
         Position pos3 = new Position("d4");
-        assertEquals(3, pos3.getX());
-        assertEquals(4, pos3.getY());
+        assertEquals(4, pos3.getRow());
+        assertEquals(3, pos3.getCol());
 
         Position pos4 = new Position("d5");
-        assertEquals(3, pos4.getX());
-        assertEquals(3, pos4.getY());
+        assertEquals(3, pos4.getRow());
+        assertEquals(3, pos4.getCol());
 
         Position pos5 = new Position("b1");
-        assertEquals(1, pos5.getX());
-        assertEquals(7, pos5.getY());
+        assertEquals(7, pos5.getRow());
+        assertEquals(1, pos5.getCol());
 
         Position pos6 = new Position("g7");
-        assertEquals(6, pos6.getX());
-        assertEquals(1, pos6.getY());
+        assertEquals(1, pos6.getRow());
+        assertEquals(6, pos6.getCol());
     }
 
     @Test
     public void testToString() {
-        Position pos = new Position(3, 4);
+        Position pos = new Position(3, 3);
         assertEquals("d4", pos.toString());
 
-        Position pos2 = new Position(4, 3);
+        Position pos2 = new Position(4, 4);
         assertEquals("e5", pos2.toString());
     }
 
@@ -106,11 +106,19 @@ public class PositionTest {
     @Test
     public void testEdgeCases() {
         Position pos1 = new Position("a1");
-        assertEquals(0, pos1.getX());
-        assertEquals(0, pos1.getY());
-    
+        assertEquals(7, pos1.getRow());
+        assertEquals(0, pos1.getCol());
+
         Position pos2 = new Position("h8");
-        assertEquals(7, pos2.getX());
-        assertEquals(7, pos2.getY());
+        assertEquals(0, pos2.getRow());
+        assertEquals(7, pos2.getCol());
+
+        Position pos3 = new Position("a8");
+        assertEquals(0, pos3.getRow());
+        assertEquals(0, pos3.getCol());
+
+        Position pos4 = new Position("h1");
+        assertEquals(7, pos4.getRow());
+        assertEquals(7, pos4.getCol());
     }
 }

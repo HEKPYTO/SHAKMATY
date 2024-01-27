@@ -2,24 +2,32 @@ package game.position;
 
 import game.constant.Constant;
 
-public final class Position { // Translate User pos: Program pos
+public class Position {
 
-    private int X;
-    private int Y;
+    private int row;
+    private int col;
 
-    private Position rookPos = null; // for castling position
+    Position rookPos = null;
 
-    public Position(int x, int y) { // (x, y) (0, 0) / a1 -> (7, 0) on array (y, x)
-        setX(x);
-        setY(y);
+    public Position(int x, int y) {
+        setRow(Constant.ROW - 1 - y);
+        setCol(x);
+
+        validatePosition();
     }
 
-    public Position(String s) { // must be char and int i.e. a4
-        this( s.charAt(0) - 'a', s.charAt(1) - '1');
-    }
+    public Position(String s) {
+        if (s.length() != 2 || !Character.isLetter(s.charAt(0)) || !Character.isDigit(s.charAt(1))) {
+            throw new IllegalArgumentException("Invalid position format. Expected format: [a-h][0-7]");
+        }
 
-    public String toString() {
-        return "" + (char) (X + 'a') + (8 - Y);
+        int colIndex = s.charAt(0) - 'a';
+        int rowIndex = '8' - s.charAt(1);
+
+        setRow(rowIndex);
+        setCol(colIndex);
+
+        validatePosition();
     }
 
     public Position(int x, int y, int rX, int rY) {
@@ -32,28 +40,14 @@ public final class Position { // Translate User pos: Program pos
         setRookPos(new Position(r));
     }
 
-    public int getX() {
-        return this.X;
+    private void validatePosition() {
+        if (col < 0 || col >= Constant.COL || row < 0 || row >= Constant.ROW) {
+            throw new IllegalArgumentException("Position out of bounds.");
+        }
     }
 
-    public void setX(int X) {
-        this.X = X;
-    }
-
-    public int getY() {
-        return this.Y;
-    }
-
-    public void setY(int Y) {
-        this.Y = Constant.ROW - Y - 1;
-    }
-
-    public Position getRookPos() {
-        return rookPos;
-    }
-
-    public void setRookPos(Position rookPos) {
-        this.rookPos = rookPos;
+    public String toString() {
+        return "" + (char) (col + 'a') + (char) ('8' - row);
     }
 
     public boolean equals(Object obj) {
@@ -63,7 +57,33 @@ public final class Position { // Translate User pos: Program pos
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Position other = (Position) obj;
-        return this.X == other.getX() && this.Y == other.getY();
+        return row == other.getRow() && col == other.getCol();
 
     }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return this.col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+
+    public Position getRookPos() {
+        return this.rookPos;
+    }
+
+    public void setRookPos(Position rookPos) {
+        this.rookPos = rookPos;
+    }
+
 }
