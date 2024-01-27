@@ -1,7 +1,5 @@
 package game.main;
 
-
-
 import game.board.Board;
 import game.piece.Pawn;
 import game.piece.Piece;

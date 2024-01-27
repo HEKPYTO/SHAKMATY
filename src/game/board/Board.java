@@ -29,6 +29,7 @@ public class Board {
             }
             board.add(row);
         }
+        setMoves(new ArrayList<Position>());
     }
 
     public void setDefaultPosition() {

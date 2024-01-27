@@ -1,13 +1,14 @@
 package test.PieceTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import game.board.Board;
+import game.constant.Constant;
 import game.piece.Pawn;
-import game.piece.Queen;
 import game.position.Position;
 
 public class BoardTest {
@@ -22,6 +23,16 @@ public class BoardTest {
     @Test
     public void boardConstructorTest() {
 
+        assertEquals(b.getBoard().size(), Constant.ROW);
+        assertEquals(b.getBoard().get(Constant.ROW - 1).size(), Constant.COL);
+
+        for (int i = 0; i < Constant.ROW; i++) {
+            for (int j = 0; j < Constant.COL; j++) {
+                assertNull(b.getPiece(new Position(i, j)));
+            }
+        }
+
+        assertEquals(b.getMoves().size(), 0);
     }
 
     @Test
