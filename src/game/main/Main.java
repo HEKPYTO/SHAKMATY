@@ -7,7 +7,11 @@ public class Main {
     public static void main(String[] args) {
         Board b = new Board();
 
-        System.err.println(b.exportBoardToString());
+        b.importFEN("RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w - - 0 1");
+
+        System.out.println(b.exportBoardToString());
+
+        System.out.println(b.exportFEN());
     }
 
 

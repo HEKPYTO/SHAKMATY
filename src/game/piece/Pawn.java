@@ -1,5 +1,6 @@
 package game.piece;
 
+import game.board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -10,6 +11,10 @@ public class Pawn extends Piece {
     
     public Pawn(boolean isWhite, Position pos) {
         super(isWhite, pos);
+    }
+
+    public Pawn(boolean isWhite, Position pos, Board board) {
+        super(isWhite, pos, board);
     }
 
     @Override

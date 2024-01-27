@@ -48,4 +48,9 @@ public class Position {
     public boolean equals(Position a, Position b) {
         return a.getX() == b.getX() && a.getY() == b.getY();
     }
+
+    @Override
+    public String toString() {
+        return "(x, y) = (" + X + ", " + Y + ")"; 
+    }
 }
