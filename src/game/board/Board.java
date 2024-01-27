@@ -129,15 +129,46 @@ public class Board {
         return b;
     }
 
+    public void importFEN(String fen) {
+        board = new ArrayList<>(ROW);
+        for (int i = 0; i < ROW; i++) {
+            ArrayList<Piece> row = new ArrayList<>(COL);
+            for (int j = 0; j < COL; j++) {
+                row.add(null);
+            }
+            board.add(row);
+        }
+    
+        String[] fenParts = fen.split("\\s+");
+        String piecePlacement = fenParts[0];
+    
+        int rank = 0; // Start from the top rank
+        int file = 0;
+    
+        for (char c : piecePlacement.toCharArray()) {
+            if (Character.isDigit(c)) {
+                file += Character.getNumericValue(c);
+            } else if (c == '/') {
+                rank++;
+                file = 0;
+            } else {
+                boolean isWhite = Character.isUpperCase(c);
+                Piece piece = createPieceFromFENChar(c, isWhite, rank, file);
+                setPiece(new Position(rank, file), piece);
+                file++;
+            }
+        }
+    }
+    
     public String exportFEN() {
         StringBuilder fen = new StringBuilder();
-
+    
         for (int i = ROW - 1; i >= 0; i--) {
             int emptyCount = 0;
-
+    
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
-
+    
                 if (p == null) {
                     emptyCount++;
                 } else {
@@ -145,7 +176,7 @@ public class Board {
                         fen.append(emptyCount);
                         emptyCount = 0;
                     }
-
+    
                     if (p instanceof Pawn) {
                         fen.append(p.isWhite() ? "P" : "p");
                     } else if (p instanceof Bishop) {
@@ -160,54 +191,23 @@ public class Board {
                         fen.append(p.isWhite() ? "K" : "k");
                     }
                 }
-
+    
                 if (j == COL - 1 && emptyCount > 0) {
                     fen.append(emptyCount);
                 }
             }
-
+    
             if (i > 0) {
                 fen.append('/');
             }
         }
-
+    
         fen.append(" w - - 0 1");
-
+    
         return fen.toString();
     }
 
-    public void importFEN(String fen) {
-        board = new ArrayList<>(ROW);
-        for (int i = 0; i < ROW; i++) {
-            ArrayList<Piece> row = new ArrayList<>(COL);
-            for (int j = 0; j < COL; j++) {
-                row.add(null);
-            }
-            board.add(row);
-        }
-
-        String[] fenParts = fen.split("\\s+");
-        String piecePlacement = fenParts[0];
-
-        int rank = ROW - 1;
-        int file = 0;
-
-        for (char c : piecePlacement.toCharArray()) {
-            if (Character.isDigit(c)) {
-                file += Character.getNumericValue(c);
-            } else if (c == '/') {
-                rank--;
-                file = 0;
-            } else {
-                boolean isWhite = Character.isUpperCase(c);
-                Piece piece = createPieceFromFENCharacter(c, isWhite, rank, file);
-                setPiece(new Position(rank, file), piece);
-                file++;
-            }
-        }
-    }
-
-    private Piece createPieceFromFENCharacter(char c, boolean isWhite, int rank, int file) {
+    private Piece createPieceFromFENChar(char c, boolean isWhite, int rank, int file) {
         Position position = new Position(rank, file);
         
         switch (Character.toLowerCase(c)) {
@@ -229,14 +229,12 @@ public class Board {
     }
 
     public String exportBoardToString() {
-
         StringBuilder s = new StringBuilder();
-
+    
         for (int i = 0; i < ROW; i++) {
-
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
-
+    
                 if (p instanceof Pawn) {
                     s.append(p.isWhite() ? "P" : "p");
                 } else if (p instanceof Bishop) {
@@ -254,25 +252,23 @@ public class Board {
                 }
             }
         }
-    
         return s.toString();
     }
-
+    
     public boolean importBoardFromString(String s) {
         if (s.length() != ROW * COL) return false;
-
+    
+        int index = 0;
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
-                char c = s.charAt(i * COL + j);
-                
+                char c = s.charAt(index++);
                 Piece p = readPiece(c, i, j);
-
+    
                 if (p == null) continue;
-                
+    
                 placePiece(p);
             }
         }
-
         return true;
     }
 
@@ -314,7 +310,7 @@ public class Board {
     public String displayBoard() {
         StringBuilder s = new StringBuilder();
 
-        for (int i = ROW - 1; i >= 0; i--) {
+        for (int i = 0; i < ROW; i++) {
 
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
@@ -332,7 +328,7 @@ public class Board {
                 } else if (p instanceof King) {
                     s.append(p.isWhite() ? "♚" : "♔");
                 } else {
-                    s.append((i + j) % 2 == 0 ? "□": "■");
+                    s.append((i + j) % 2 != 0 ? "□": "■");
                 }
 
                 s.append(" ");
