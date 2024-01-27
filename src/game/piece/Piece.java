@@ -28,7 +28,7 @@ public abstract class Piece {
 
 
     public boolean isMovable() {
-        return legalMove.isEmpty();
+        return !legalMove.isEmpty();
     }
 
     public boolean isWhite() {

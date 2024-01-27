@@ -36,7 +36,7 @@ public class PieceTest {
         assert(p1.isWhite());
         assertEquals(posWhite, p1.getPos());
         assertNull(p1.getBoard());
-        assertTrue(p1.getLegalMove().isEmpty());
+        assertTrue(!p1.isMovable());
         
     }
 
@@ -48,7 +48,7 @@ public class PieceTest {
         assert(!p2.isWhite());
         assertEquals(posBlack, p2.getPos());
         assertNull(p2.getBoard());
-        assertTrue(p2.getLegalMove().isEmpty());
+        assertTrue(!p2.isMovable());
         
     }
 
@@ -60,7 +60,7 @@ public class PieceTest {
         assert(p1.isWhite());
         assertEquals(posWhite, p1.getPos());
         assertEquals(b, p1.getBoard());
-        assertTrue(p1.getLegalMove().isEmpty());
+        assertTrue(!p1.isMovable());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class PieceTest {
         assert(!p2.isWhite());
         assertEquals(posBlack, p2.getPos());
         assertEquals(b, p2.getBoard());
-        assertTrue(p2.getLegalMove().isEmpty());
+        assertTrue(!p2.isMovable());
     }
 
 }
