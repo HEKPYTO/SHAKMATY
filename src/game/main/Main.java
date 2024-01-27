@@ -11,12 +11,11 @@ public class Main {
     
     public static void main(String[] args) {
 
-        System.out.println('b' - 'a');
+        Board b = new Board();
+        b.setDefaultPosition();
 
-        // Board b = new Board();
-        // b.setDefaultPosition();
-
-        // System.err.println(b.displayBoard());
+        System.out.println(b.displayBoard());
+        System.out.println(b.getPiece(new Position("e1")));
 
         // Piece p = b.getPiece(new Position("e2"));
 

@@ -31,12 +31,21 @@ public class Board {
         }
     }
 
-    public static void setValue(ArrayList<ArrayList<Piece>> arr, int row, int col, Piece value) {
-        arr.get(ROW - row - 1).set(col, value);
-    }
-
     public void setDefaultPosition() {
         importBoardFromString(PositionString.initPos);
+    }
+
+    public void setPiece(int x, int y, Piece piece) {
+        board.get(ROW - y - 1).set(x, piece);
+        piece.setPos(new Position(x, y));
+    }
+
+    public void setPiece(Position pos, Piece piece) {
+        setPiece(pos.getX(), pos.getY(), piece);
+    }
+
+    public Piece getPiece(Position pos) {
+        return board.get(ROW - pos.getY() - 1).get(pos.getX());
     }
 
     public boolean canBasicMoveTo(Position pos) {
@@ -90,7 +99,7 @@ public class Board {
 
     public void placePiece(Piece p) {
         
-        setValue(board, p.getPos().getX(), p.getPos().getY(), p);
+        setPiece(p.getPos(), p);
     }
 
     public void setPieceTo(Piece p, Position to) {
@@ -100,13 +109,12 @@ public class Board {
 
         if (p.getBoard() == null) p.setBoard(this);
 
-        setValue(board, x, y, p);
-        setValue(board, to.getX(), to.getY(), p);
-        setValue(board, x, y, null);
-    }
+        setPiece(to, p);
+        setPiece(new Position(x, y), null);
 
-    public Piece getPiece(Position pos) {
-        return board.get(pos.getX()).get(pos.getY());
+        // setValue(board, x, y, p);
+        // setValue(board, to.getX(), to.getY(), p);
+        // setValue(board, x, y, null);
     }
 
     public Board cloneBoard() {
@@ -189,7 +197,7 @@ public class Board {
             } else {
                 boolean isWhite = Character.isUpperCase(c);
                 Piece piece = createPieceFromFENCharacter(c, isWhite, rank, file);
-                setValue(board, rank, file, piece);
+                setPiece(new Position(rank, file), piece);
                 file++;
             }
         }
