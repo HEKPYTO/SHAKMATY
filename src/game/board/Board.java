@@ -37,11 +37,15 @@ public class Board {
 
     public void setPiece(int x, int y, Piece piece) {
         board.get(ROW - y - 1).set(x, piece);
-        piece.setPos(new Position(x, y));
+        piece.setPos(new Position(x, y)); 
     }
 
     public void setPiece(Position pos, Piece piece) {
         setPiece(pos.getX(), pos.getY(), piece);
+    }
+
+    public void setPiece(Piece piece) {
+        setPiece(piece.getPos(), piece);
     }
 
     public Piece getPiece(Position pos) {
@@ -228,7 +232,7 @@ public class Board {
 
         StringBuilder s = new StringBuilder();
 
-        for (int i = ROW - 1; i >= 0; i--) {
+        for (int i = 0; i < ROW; i++) {
 
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
