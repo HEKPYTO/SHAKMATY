@@ -3,6 +3,7 @@ package game.board;
 import java.util.ArrayList;
 
 import game.position.Position;
+import game.constant.Constant;
 import game.constant.PositionString;
 import game.piece.Bishop;
 import game.piece.King;
@@ -19,7 +20,7 @@ public class Board {
     private ArrayList<ArrayList<Piece>> board;
     private ArrayList<Position> moves;
 
-    public Board() { // Initialize 8 * 8 board
+    public Board() { // Initialize ROW * COL board
         board = new ArrayList<>(ROW);
         for (int i = 0; i < ROW; i++) {
             ArrayList<Piece> row = new ArrayList<Piece>(COL);
@@ -30,16 +31,12 @@ public class Board {
         }
     }
 
-    public static void setValue(ArrayList<ArrayList<Piece>> arr, int row, int column, Piece value) {
-        arr.get(row).set(column, value);
+    public static void setValue(ArrayList<ArrayList<Piece>> arr, int row, int col, Piece value) {
+        arr.get(ROW - row - 1).set(col, value);
     }
 
     public void setDefaultPosition() {
-        importBoardFromString(PositionString.init);
-    }
-
-    public void setPosition(String boardpos) {
-
+        importBoardFromString(PositionString.initPos);
     }
 
     public boolean canBasicMoveTo(Position pos) {
@@ -66,7 +63,7 @@ public class Board {
 
     }
 
-    public void capture(Position to) {
+    public void capture(Position to) { // TBD
         moves.add(to);
     }
 
@@ -203,17 +200,17 @@ public class Board {
         
         switch (Character.toLowerCase(c)) {
             case 'p':
-                return new Pawn(isWhite, position);
+                return new Pawn(isWhite, position, this);
             case 'n':
-                return new Knight(isWhite, position);
+                return new Knight(isWhite, position, this);
             case 'b':
-                return new Bishop(isWhite, position);
+                return new Bishop(isWhite, position, this);
             case 'r':
-                return new Rook(isWhite, position);
+                return new Rook(isWhite, position, this);
             case 'q':
-                return new Queen(isWhite, position);
+                return new Queen(isWhite, position, this);
             case 'k':
-                return new King(isWhite, position);
+                return new King(isWhite, position, this);
             default:
                 return null;
         }
@@ -271,30 +268,30 @@ public class Board {
         Position p = new Position(i, j);
         switch (c) {
             case 'P':
-                return new Pawn(true, p);
+                return new Pawn(true, p, this);
             case 'R':
-                return new Rook(true, p);
+                return new Rook(true, p, this);
             case 'K':
-                return new King(true, p);
+                return new King(true, p, this);
             case 'Q':
-                return new Queen(true, p);
+                return new Queen(true, p, this);
             case 'B':
-                return new Bishop(true, p);
+                return new Bishop(true, p, this);
             case 'N':
-                return new Knight(true, p);
+                return new Knight(true, p, this);
 
             case 'p':
-                return new Pawn(false, p);
+                return new Pawn(false, p, this);
             case 'r':
-                return new Rook(false, p);
+                return new Rook(false, p, this);
             case 'k':
-                return new King(false, p);
+                return new King(false, p, this);
             case 'q':
-                return new Queen(false, p);
+                return new Queen(false, p, this);
             case 'b':
-                return new Bishop(false, p);
+                return new Bishop(false, p, this);
             case 'n':
-                return new Knight(false, p);
+                return new Knight(false, p, this);
             case '.':
                 return null; // Placeholder for an empty square
             default:
@@ -336,5 +333,20 @@ public class Board {
     }
 
 
+    public ArrayList<ArrayList<Piece>> getBoard() {
+        return this.board;
+    }
+
+    // public void setBoard(ArrayList<ArrayList<Piece>> board) {
+    //     this.board = board;
+    // }
+
+    public ArrayList<Position> getMoves() {
+        return this.moves;
+    }
+
+    public void setMoves(ArrayList<Position> moves) {
+        this.moves = moves;
+    }
 
 }

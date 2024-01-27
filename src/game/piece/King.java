@@ -2,6 +2,7 @@ package game.piece;
 
 import java.util.ArrayList;
 
+import game.board.Board;
 import game.position.Position;
 import game.util.Checked;
 import game.util.Movement;
@@ -12,6 +13,10 @@ public class King extends Piece {
     
     public King(boolean isWhite, Position pos) {
         super(isWhite, pos);
+    }
+
+    public King(boolean isWhite, Position position, Board board) {
+        super(isWhite, position, board);
     }
 
     @Override
@@ -29,6 +34,11 @@ public class King extends Piece {
         }
 
         setLegalMove(legalize);
+    }
+
+    @Override
+    public String toString() {
+        return "King " + pos.toString();
     }
 
     public boolean inChecked() {

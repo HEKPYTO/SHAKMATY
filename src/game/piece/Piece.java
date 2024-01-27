@@ -26,6 +26,7 @@ public abstract class Piece {
 
     public abstract void legalMove();
 
+    public abstract String toString();
 
     public boolean isMovable() {
         return !legalMove.isEmpty();

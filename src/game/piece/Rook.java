@@ -1,5 +1,6 @@
 package game.piece;
 
+import game.board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -11,6 +12,10 @@ public class Rook extends Piece {
         super(isWhite, pos);
     }
 
+    public Rook(boolean isWhite, Position position, Board board) {
+        super(isWhite, position, board);
+    }
+
     @Override
     public void legalMove() {
 
@@ -20,6 +25,11 @@ public class Rook extends Piece {
 
         setLegalMove(moves.getMoves());
         
+    }
+
+    @Override
+    public String toString() {
+        return "Rook " + pos.toString();
     }
 
     public boolean isMoved() {

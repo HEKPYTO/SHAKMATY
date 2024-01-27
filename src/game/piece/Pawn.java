@@ -30,6 +30,11 @@ public class Pawn extends Piece {
         setLegalMove(moves.getMoves());
     }
 
+    @Override
+    public String toString() {
+        return "Pawn " + pos.toString();
+    }
+
     public boolean isMoved() {
         return this.moved;
     }

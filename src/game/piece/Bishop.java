@@ -1,5 +1,6 @@
 package game.piece;
 
+import game.board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -7,6 +8,10 @@ public class Bishop extends Piece {
     
     public Bishop(boolean isWhite, Position pos) {
         super(isWhite, pos);
+    }
+
+    public Bishop(boolean isWhite, Position pos, Board board) {
+        super(isWhite, pos, board);
     }
 
     @Override
@@ -17,5 +22,10 @@ public class Bishop extends Piece {
         moves.crossMove();
 
         setLegalMove(moves.getMoves());
+    }
+
+    @Override
+    public String toString() {
+        return "Bishop " + pos.toString();
     }
 }

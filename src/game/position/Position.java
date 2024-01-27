@@ -1,6 +1,6 @@
 package game.position;
 
-public class Position {
+public final class Position {
 
     private int X;
     private int Y;
@@ -13,12 +13,21 @@ public class Position {
     }
 
     public Position(String s) { // must be char and int i.e. a4
-        this(Character.getNumericValue(s.charAt(1)) - 1, (int) s.charAt(0) - (int) 'a');
+        this(s.charAt(0) - 'a', s.charAt(1) - '1');
+    }
+
+    public String toString() {
+        return "" + (char) (X + 'a') + (Y + 1);
     }
 
     public Position(int x, int y, int rX, int rY) {
         this(x, y);
         rookPos = new Position(rX, rY);
+    }
+
+    public Position(String s, String r) { // For Castling
+        this(s);
+        setRookPos(new Position(r));
     }
 
     public int getX() {
@@ -45,12 +54,14 @@ public class Position {
         this.rookPos = rookPos;
     }
 
-    public boolean equals(Position a, Position b) {
-        return a.getX() == b.getX() && a.getY() == b.getY();
-    }
+    public boolean equals(Object obj) {
 
-    @Override
-    public String toString() {
-        return "(x, y) = (" + X + ", " + Y + ")"; 
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Position other = (Position) obj;
+        return this.X == other.getX() && this.Y == other.getY();
+
     }
 }
