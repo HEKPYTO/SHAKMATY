@@ -3,6 +3,7 @@ package game.util;
 import java.util.ArrayList;
 
 import game.board.Board;
+import game.constant.Constant;
 import game.piece.King;
 import game.piece.Pawn;
 import game.piece.Rook;
@@ -14,8 +15,6 @@ public class Movement { // Pawn Rook King have "moved"
     protected ArrayList<Position> moves;
     protected Board board;
 
-    protected static final int LEN = 8;
-
     public Movement(Position current, Board board) {
         setCurrent(current);
         setBoard(board);
@@ -25,9 +24,9 @@ public class Movement { // Pawn Rook King have "moved"
 
     private boolean isInBound(Position pos) {
         return 0 <= pos.getX() && 
-            pos.getX() <= LEN &&
+            pos.getX() <= Constant.COL &&
             0 <= pos.getY() &&
-            pos.getY() <= LEN;
+            pos.getY() <= Constant.ROW;
     }
 
     private boolean isSameColorPiece(Position a, Position b) { 
@@ -86,9 +85,9 @@ public class Movement { // Pawn Rook King have "moved"
         Position pLeft = new Position(x - 1, y + singleMove);
         Position pRight = new Position(x + 1, y + singleMove);
 
-        if (isInBound(pLeft) && !isSameColorPiece(pLeft, current)) moves.add(pLeft);
+        if (isInBound(pLeft) && isDifferentColor(pLeft, current)) moves.add(pLeft);
 
-        if (isInBound(pRight) && !isSameColorPiece(pRight, current)) moves.add(pRight);
+        if (isInBound(pRight) && isDifferentColor(pRight, current)) moves.add(pRight);
 
     }
     
@@ -102,7 +101,7 @@ public class Movement { // Pawn Rook King have "moved"
             int dx = (int) Math.cos(s * Math.PI);
             int dy = (int) Math.sin(s * Math.PI);
 
-            for (int i = 1; i < LEN; i++) {
+            for (int i = 1; i < Math.max(Constant.ROW, Constant.COL); i++) {
 
                 Position p = new Position(x + dx * i, y + dy * i);
 
@@ -124,7 +123,7 @@ public class Movement { // Pawn Rook King have "moved"
             int dx = s < 2 ? 1: -1;
             int dy = s % 2 == 0 ? 1: -1;
             
-            for (int i = 1; i < LEN; i++) {
+            for (int i = 1; i < Math.max(Constant.ROW, Constant.COL); i++) {
 
                 Position p = new Position(x + s * dx * i, y + s * dy * i);
 
@@ -184,8 +183,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void shortCastleMove() {
 
-        int assumeRookX = LEN - 1;
-        int backRankY = board.getPiece(current).isWhite() ? 0: LEN - 1;
+        int assumeRookX = Constant.COL - 1;
+        int backRankY = board.getPiece(current).isWhite() ? 0: Constant.ROW - 1;
 
         Position assumeRook = new Position(assumeRookX, backRankY);
 
@@ -204,8 +203,8 @@ public class Movement { // Pawn Rook King have "moved"
             if (!board.isVacantPosition(new Position(i, backRankY))) return;
         }
 
-        int kingPlacementX = LEN - 2;
-        int rookPlacementX = LEN - 3;
+        int kingPlacementX = Constant.COL - 2;
+        int rookPlacementX = Constant.COL - 3;
 
         moves.add(new Position(kingPlacementX, backRankY, rookPlacementX, backRankY));
     }
@@ -213,7 +212,7 @@ public class Movement { // Pawn Rook King have "moved"
     public void longCastleMove() {
 
         int assumeRookX = 0;
-        int backRankY = board.getPiece(current).isWhite() ? 0: LEN - 1;
+        int backRankY = board.getPiece(current).isWhite() ? 0: Constant.COL - 1;
 
         Position assumeRook = new Position(assumeRookX, backRankY);
 
@@ -243,7 +242,7 @@ public class Movement { // Pawn Rook King have "moved"
         int x = current.getX();
         int y = current.getY();
 
-        int enPos = board.getPiece(current).isWhite() ? LEN - 2: 2; // +2 -2 of border
+        int enPos = board.getPiece(current).isWhite() ? Constant.ROW - 2: 2; // +2 -2 of border
 
         if (y != enPos) return;
 

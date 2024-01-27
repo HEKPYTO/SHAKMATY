@@ -21,14 +21,14 @@ public class PawnTest {
     
     @Before
     public void setUp() {
-        posWhite = new Position(4, 1);
-        posBlack = new Position(4, Constant.COL - 1);
+        posWhite = new Position("d2");
+        posBlack = new Position("d7");
 
         b = new Board();
     }
 
     @Test
-    public void pawnConstructorTest1() {
+    public void pawnConstructorTest() {
 
         Piece p1 = new Pawn(true, posWhite);
 
@@ -40,7 +40,7 @@ public class PawnTest {
     }
 
     @Test
-    public void pawnConstructorTest2() {
+    public void pawnConstructorWithBoardTest() {
 
         Piece p2 = new Pawn(false, posBlack, b);
 
@@ -51,5 +51,12 @@ public class PawnTest {
 
     }
 
+    @Test
+    public void pawnLegalMoveTest() {
 
+        Pawn p1 = new Pawn(true, posWhite, b);
+        p1.legalMove();
+
+        assertEquals(0, p1.getLegalMove());
+    }
 }
