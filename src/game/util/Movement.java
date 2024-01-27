@@ -19,6 +19,8 @@ public class Movement { // Pawn Rook King have "moved"
     public Movement(Position current, Board board) {
         setCurrent(current);
         setBoard(board);
+
+        clearMoves(); // usable anyway
     }
 
     private boolean isInBound(Position pos) {
@@ -38,7 +40,7 @@ public class Movement { // Pawn Rook King have "moved"
         return board.getPiece(pos) == null && isInBound(pos);
     }
 
-    public boolean isDifferentColor(Position a, Position b) {
+    protected boolean isDifferentColor(Position a, Position b) {
         return board.getPiece(a) != null && 
             board.getPiece(b) != null &&
             board.getPiece(a).isWhite() != board.getPiece(b).isWhite();

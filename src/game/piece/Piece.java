@@ -21,7 +21,7 @@ public abstract class Piece {
     public Piece(boolean isWhite, Position pos, Board board) {
         this(isWhite, pos);
         setBoard(board);
-        board.setPieceTo(this, pos);
+        board.placePiece(this);
     }
 
     public abstract void legalMove();

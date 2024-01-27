@@ -3,6 +3,7 @@ package game.board;
 import java.util.ArrayList;
 
 import game.position.Position;
+import game.constant.PositionString;
 import game.piece.Bishop;
 import game.piece.King;
 import game.piece.Knight;
@@ -34,7 +35,7 @@ public class Board {
     }
 
     public void setDefaultPosition() {
-
+        importBoardFromString(PositionString.init);
     }
 
     public void setPosition(String boardpos) {
@@ -301,8 +302,37 @@ public class Board {
         }
     }
 
-    public void displayBoard() {
+    public String displayBoard() {
+        StringBuilder s = new StringBuilder();
 
+        for (int i = ROW - 1; i >= 0; i--) {
+
+            for (int j = 0; j < COL; j++) {
+                Piece p = getPiece(new Position(i, j));
+
+                if (p instanceof Pawn) {
+                    s.append(p.isWhite() ? "♟" : "♙");
+                } else if (p instanceof Bishop) {
+                    s.append(p.isWhite() ? "♝" : "♗");
+                } else if (p instanceof Knight) {
+                    s.append(p.isWhite() ? "♞" : "♘");
+                } else if (p instanceof Rook) {
+                    s.append(p.isWhite() ? "♜" : "♖");
+                } else if (p instanceof Queen) {
+                    s.append(p.isWhite() ? "♛" : "♕");
+                } else if (p instanceof King) {
+                    s.append(p.isWhite() ? "♚" : "♔");
+                } else {
+                    s.append((i + j) % 2 == 0 ? "□": "■");
+                }
+
+                s.append(" ");
+            }
+
+            s.append("\n");
+        }
+    
+        return s.toString();
     }
 
 

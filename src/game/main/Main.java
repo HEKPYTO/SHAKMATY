@@ -1,17 +1,25 @@
 package game.main;
 
+
+
 import game.board.Board;
+import game.piece.Pawn;
+import game.piece.Piece;
+import game.position.Position;
 
 public class Main {
     
     public static void main(String[] args) {
+
+        // Position posWhite = new Position("e2");
         Board b = new Board();
+        b.setDefaultPosition();
 
-        b.importFEN("RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w - - 0 1");
+        System.err.println(b.displayBoard());
 
-        System.out.println(b.exportBoardToString());
+        // p.legalMove();
 
-        System.out.println(b.exportFEN());
+        // System.err.println(p.getLegalMove());
     }
 
 

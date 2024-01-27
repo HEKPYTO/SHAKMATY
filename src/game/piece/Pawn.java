@@ -1,6 +1,7 @@
 package game.piece;
 
 import game.board.Board;
+import game.constant.Constant;
 import game.position.Position;
 import game.util.Movement;
 
@@ -19,7 +20,7 @@ public class Pawn extends Piece {
 
     @Override
     public void legalMove() {
-        
+
         Movement moves = new Movement(pos, board);
         moves.singlePawnMove();
         moves.doublePawnMove();
@@ -45,5 +46,7 @@ public class Pawn extends Piece {
         this.passnt = passnt;
     }
 
-
+    public boolean canPromote() {
+        return isWhite() ? pos.getY() == 0: pos.getY() == Constant.COL - 1;
+    }
 }
