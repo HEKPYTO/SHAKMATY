@@ -24,9 +24,9 @@ public class Movement { // Pawn Rook King have "moved"
 
     private boolean isInBound(Position pos) {
         return 0 <= pos.getCol() && 
-            pos.getCol() <= Constant.COL &&
+            pos.getCol() <= Constant.COL - 1 &&
             0 <= pos.getRow() &&
-            pos.getRow() <= Constant.ROW;
+            pos.getRow() <= Constant.ROW - 1;
     }
 
     private boolean isSameColorPiece(Position a, Position b) { 
@@ -47,43 +47,49 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void singlePawnMove() {
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int col = current.getCol();
+        int row = current.getRow();
 
         int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
-        Position p = new Position(x, y + singleMove);
+        Position p = new Position(row + singleMove, col);
 
-        if (!isInBound(p)) return;
-
-        if (isVacantPosition(p)) moves.add(p);
+        if (isInBound(p) && isVacantPosition(p)) moves.add(p);
         
     }
 
     public void doublePawnMove() {
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int col = current.getCol();
+        int row = current.getRow();
 
-        int doubleMove = board.getPiece(current).isWhite() ? 2: -2;
+        boolean isWhite = board.getPiece(current).isWhite();
 
-        Position p = new Position(x, y + doubleMove);
+        if ((isWhite && row != 1) || (!isWhite && row != Constant.COL - 2)) return;
 
-        if (!isInBound(p)) return;
+        int singleMove = isWhite ? 1: -1;
 
-        if (isVacantPosition(p)) moves.add(p);
+        Position p1 = new Position(row + singleMove, col);
+
+        if (!(isInBound(p1) && isVacantPosition(p1))) return;
+
+        int doubleMove = isWhite ? 2: -2;
+
+        Position p2 = new Position(row + doubleMove, col);
+
+        if (isInBound(p2) && isVacantPosition(p2)) moves.add(p2);
 
     }
 
     public void PawnCaptureMove() {
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int col = current.getCol();
+        int row = current.getRow();
 
         int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
-        Position pLeft = new Position(x - 1, y + singleMove);
-        Position pRight = new Position(x + 1, y + singleMove);
+        Position pLeft = new Position(row + singleMove, col - 1);
+        Position pRight = new Position(row + singleMove, col + 1);
 
         if (isInBound(pLeft) && isDifferentColor(pLeft, current)) moves.add(pLeft);
 
@@ -239,15 +245,15 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void enPassantMove() {
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int col = current.getCol();
+        int row = current.getRow();
 
         int enPos = board.getPiece(current).isWhite() ? Constant.ROW - 2: 2; // +2 -2 of border
 
-        if (y != enPos) return;
+        if (row != enPos) return;
 
-        Position lPos = new Position(x - 1, enPos);
-        Position rPos = new Position(x + 1, enPos);
+        Position lPos = new Position(enPos, col - 1);
+        Position rPos = new Position(enPos, col + 1);
 
         if (isInBound(lPos) && 
             !isSameColorPiece(current, lPos) && 

@@ -23,10 +23,7 @@ public class Pawn extends Piece {
 
         Movement moves = new Movement(pos, board);
         moves.singlePawnMove();
-
-        if ((isWhite() && pos.getRow() == 1) ||
-            (!isWhite() && pos.getRow() == Constant.COL - 2)) moves.doublePawnMove();
-
+        moves.doublePawnMove();
         moves.PawnCaptureMove();
         moves.enPassantMove();
 
