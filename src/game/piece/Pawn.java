@@ -8,7 +8,7 @@ import game.util.Movement;
 public class Pawn extends Piece {
 
     private boolean passnt = false;
-    
+
     public Pawn(boolean isWhite, Position pos) {
         super(isWhite, pos);
     }
@@ -52,6 +52,6 @@ public class Pawn extends Piece {
     }
 
     public boolean canPromote() {
-        return !isWhite() ? pos.getRow() == 0: pos.getRow() == Constant.COL - 1;
+        return !isWhite() ? pos.getRow() == 0 : pos.getRow() == Constant.COL - 1;
     }
 }

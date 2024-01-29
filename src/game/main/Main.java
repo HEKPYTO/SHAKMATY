@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import game.board.Board;
+import game.piece.Knight;
 import game.piece.Pawn;
 import game.position.Position;
 
@@ -14,11 +15,9 @@ public class Main {
         Board b = new Board();
 
         Position h7 = new Position("h7");
-        Pawn pw4 = new Pawn(false, h7, b);
+        Knight k = new Knight(true, h7, b);
 
-        System.out.println(b.displayBoard());
-        pw4.legalMove();
-        System.out.println(pw4.getLegalMove());
+        System.out.println(k.isMoved());
 
     }
 

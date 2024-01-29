@@ -8,7 +8,7 @@ import game.position.Position;
 public abstract class Piece {
 
     private boolean white;
-    protected boolean moved = false;
+    protected boolean moved;
     protected Position pos;
     protected Board board;
     protected ArrayList<Position> legalMove;
@@ -17,12 +17,14 @@ public abstract class Piece {
         legalMove = new ArrayList<Position>();
         setWhite(isWhite);
         setPos(pos);
+        setMoved(false);
     }
 
     public Piece(boolean isWhite, Position pos, Board board) {
         this(isWhite, pos);
         setBoard(board);
         board.setPiece(this);
+        setMoved(false);
     }
 
     public abstract void legalMove();
@@ -83,6 +85,5 @@ public abstract class Piece {
     public void setMoved(boolean moved) {
         this.moved = moved;
     }
-
 
 }

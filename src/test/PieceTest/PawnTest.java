@@ -14,11 +14,11 @@ import game.piece.Piece;
 import game.position.Position;
 
 public class PawnTest {
-    
+
     Position posWhite;
     Position posBlack;
     Board b;
-    
+
     @Before
     public void setUp() {
         posWhite = new Position("d2");
@@ -32,10 +32,10 @@ public class PawnTest {
 
         Piece p1 = new Pawn(true, posWhite);
 
-        assert(p1.isWhite());
+        assertTrue(p1.isWhite());
         assertEquals(posWhite, p1.getPos());
         assertNull(p1.getBoard());
-        assertTrue(!p1.isMovable());
+        assertTrue(!p1.isMoved());
 
     }
 
@@ -44,21 +44,21 @@ public class PawnTest {
 
         Piece p2 = new Pawn(false, posBlack, b);
 
-        assert(!p2.isWhite());
+        assert (!p2.isWhite());
         assertEquals(posBlack, p2.getPos());
         assertEquals(p2.getBoard(), b);
-        assertTrue(!p2.isMovable());
+        assertTrue(!p2.isMoved());
 
     }
 
     @Test
     public void testPawnMovedStatus() {
         Pawn pawn = new Pawn(true, new Position("a2"));
-        assertFalse(pawn.isMoved()); 
-        
+        assertFalse(pawn.isMoved());
+
         // Move the pawn
         pawn.move(new Position("a3"));
-        assertTrue(pawn.isMoved()); 
+        assertTrue(pawn.isMoved());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class PawnTest {
 
         Pawn p1 = new Pawn(true, posWhite, b);
 
-        assertTrue(p1.getLegalMove().contains(new Position("d3"))); 
+        assertTrue(p1.getLegalMove().contains(new Position("d3")));
         assertTrue(p1.getLegalMove().contains(new Position("d4")));
         assertEquals(2, p1.getLegalMove().size());
 
@@ -78,7 +78,7 @@ public class PawnTest {
 
         Pawn p3 = new Pawn(false, posBlack, b);
 
-        assertTrue(p3.getLegalMove().contains(new Position("d6"))); 
+        assertTrue(p3.getLegalMove().contains(new Position("d6")));
         assertTrue(p3.getLegalMove().contains(new Position("d5")));
         assertEquals(2, p3.getLegalMove().size());
 
@@ -121,7 +121,7 @@ public class PawnTest {
 
         assertEquals(0, pw3.getLegalMove().size());
         assertEquals(0, pb3.getLegalMove().size());
-        
+
         // Black obstruct Start Single Pawn Move
         Position h7 = new Position("h7");
         Position h6 = new Position("h6");
@@ -215,7 +215,7 @@ public class PawnTest {
 
     @Test
     public void sameColorCantCapturePiece() {
-        
+
         // White Piece
         Pawn d2 = new Pawn(true, new Position("d2"), b);
         Pawn e3 = new Pawn(true, new Position("e3"), b);
@@ -240,11 +240,11 @@ public class PawnTest {
     @Test
     public void testPawnEnPassantFlag() {
         Pawn pawn = new Pawn(true, new Position("a2"));
-        assertFalse(pawn.isPassant()); 
-        
+        assertFalse(pawn.isPassant());
+
         // Set the en passant flag
         pawn.setPassant(true);
-        assertTrue(pawn.isPassant()); 
+        assertTrue(pawn.isPassant());
     }
 
     @Test
@@ -305,21 +305,21 @@ public class PawnTest {
     public void testPawnPromotion() {
         // White pawn at promotion row
         Pawn whitePawn = new Pawn(true, new Position("a8"));
-        assertTrue(whitePawn.canPromote()); 
-    
+        assertTrue(whitePawn.canPromote());
+
         // Black pawn at promotion row
         Pawn blackPawn = new Pawn(false, new Position("h1"));
-        assertTrue(blackPawn.canPromote()); 
+        assertTrue(blackPawn.canPromote());
     }
 
     @Test
     public void testPawnCantPromotion() {
         // White pawn at promotion row
         Pawn whitePawn = new Pawn(true, new Position("b7"));
-        assertTrue(!whitePawn.canPromote()); 
-    
+        assertTrue(!whitePawn.canPromote());
+
         // Black pawn at promotion row
         Pawn blackPawn = new Pawn(false, new Position("f5"));
-        assertTrue(!blackPawn.canPromote()); 
+        assertTrue(!blackPawn.canPromote());
     }
 }

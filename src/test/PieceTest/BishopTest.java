@@ -18,16 +18,16 @@ public class BishopTest {
     @Test
     public void test_GET() {
         Assert.assertEquals(W_D_B.getWhite(), true); // test get white
-        Assert.assertEquals(W_D_B.getPos().getX(), 2); // test get X
-        Assert.assertEquals(W_D_B.getPos().getY(), 7); // test get Y
+        Assert.assertEquals(W_D_B.getPos().getCol(), 2); // test get X
+        Assert.assertEquals(W_D_B.getPos().getRow(), 7); // test get Y
     }
 
     @Test
     public void test_SET() {
-        W_D_B.getPos().setX(5);
-        W_D_B.getPos().setY(4);
-        Assert.assertEquals(W_D_B.getPos().getX(), 5); // test set X
-        Assert.assertEquals(W_D_B.getPos().getY(), 4); // test set Y
+        W_D_B.getPos().setCol(5);
+        W_D_B.getPos().setRow(4);
+        Assert.assertEquals(W_D_B.getPos().getCol(), 5); // test set X
+        Assert.assertEquals(W_D_B.getPos().getRow(), 4); // test set Y
     }
 
 }
