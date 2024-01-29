@@ -38,7 +38,7 @@ public class Board {
 
     public void setPiece(int row, int col, Piece piece) {
         board.get(row).set(col, piece);
-        piece.setPos(new Position(row, col)); 
+        piece.move(new Position(row, col));
     }
 
     public void setPiece(Position pos, Piece piece) {

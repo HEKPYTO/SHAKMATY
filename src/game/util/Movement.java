@@ -248,22 +248,28 @@ public class Movement { // Pawn Rook King have "moved"
         int col = current.getCol();
         int row = current.getRow();
 
-        int enPos = board.getPiece(current).isWhite() ? Constant.ROW - 2: 2; // +2 -2 of border
+        int enPos = board.getPiece(current).isWhite() ? Constant.ROW - 4: 3; 
+        int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
         if (row != enPos) return;
 
         Position lPos = new Position(enPos, col - 1);
         Position rPos = new Position(enPos, col + 1);
 
+        Position afterLPos = new Position(enPos + singleMove, col - 1);
+        Position afterRPos = new Position(enPos + singleMove, col + 1);
+
         if (isInBound(lPos) && 
             !isSameColorPiece(current, lPos) && 
             board.getPiece(lPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(lPos)).isPassnt()) moves.add(lPos);
+            ((Pawn) board.getPiece(lPos)).isPassant() &&
+            isInBound(afterLPos)) moves.add(afterLPos);
 
         if (isInBound(rPos) && 
             !isSameColorPiece(current, rPos) && 
             board.getPiece(rPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(rPos)).isPassnt()) moves.add(rPos);
+            ((Pawn) board.getPiece(rPos)).isPassant() &&
+            isInBound(afterRPos)) moves.add(afterRPos);
 
     }
 

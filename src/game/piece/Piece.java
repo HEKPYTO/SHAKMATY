@@ -8,6 +8,7 @@ import game.position.Position;
 public abstract class Piece {
 
     private boolean white;
+    protected boolean moved = false;
     protected Position pos;
     protected Board board;
     protected ArrayList<Position> legalMove;
@@ -27,6 +28,11 @@ public abstract class Piece {
     public abstract void legalMove();
 
     public abstract String toString();
+
+    public void move(Position to) {
+        setMoved(true);
+        setPos(to);
+    }
 
     public boolean isMovable() {
         return !legalMove.isEmpty();
@@ -69,5 +75,14 @@ public abstract class Piece {
     public void setLegalMove(ArrayList<Position> legalMove) {
         this.legalMove = legalMove;
     }
+
+    public boolean isMoved() {
+        return this.moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
+    }
+
 
 }

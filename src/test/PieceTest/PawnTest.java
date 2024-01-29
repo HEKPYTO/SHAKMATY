@@ -2,6 +2,7 @@ package test.PieceTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Before;
@@ -48,6 +49,16 @@ public class PawnTest {
         assertEquals(p2.getBoard(), b);
         assertTrue(!p2.isMovable());
 
+    }
+
+    @Test
+    public void testPawnMovedStatus() {
+        Pawn pawn = new Pawn(true, new Position("a2"));
+        assertFalse(pawn.isMoved()); 
+        
+        // Move the pawn
+        pawn.move(new Position("a3"));
+        assertTrue(pawn.isMoved()); 
     }
 
     @Test
@@ -142,17 +153,173 @@ public class PawnTest {
     }
 
     @Test
-    public void PawnCaptureMove() {
+    public void testPawnCaptureMove() {
 
-        Board b1 = new Board();
-        Pawn pw1 = new Pawn(true, new Position("b3"), b1);
-        Pawn pb1 = new Pawn(false, new Position("a4"), b1);
-        Pawn pb2 = new Pawn(false, new Position("b4"), b1);
-        Pawn pb3 = new Pawn(false, new Position("c4"), b1);
+        // Testing white pawn capturing black piece
+        Board board = new Board();
+        Pawn wp = new Pawn(true, new Position("a2"), board);
+        Pawn bp1 = new Pawn(false, new Position("a3"), board);
+        Pawn bp2 = new Pawn(false, new Position("b3"), board);
 
-        assertEquals(2, pw1.getLegalMove().size());
-        assertTrue(pw1.getLegalMove().contains(new Position("a4")));
-        assertTrue(pw1.getLegalMove().contains(new Position("c4")));
+        assertEquals(1, wp.getLegalMove().size());
+        assertTrue(wp.getLegalMove().contains(new Position("b3")));
 
+        assertEquals(0, bp1.getLegalMove().size());
+
+        assertEquals(2, bp2.getLegalMove().size());
+        assertTrue(bp2.getLegalMove().contains(new Position("a2")));
+
+        // Testing black pawn capturing white piece
+        Board board1 = new Board();
+        Pawn bp = new Pawn(false, new Position("h7"), board1);
+        Pawn wp1 = new Pawn(true, new Position("h6"), board1);
+        Pawn wp2 = new Pawn(true, new Position("g6"), board1);
+
+        assertEquals(1, bp.getLegalMove().size());
+        assertTrue(bp.getLegalMove().contains(new Position("g6")));
+
+        assertEquals(0, wp1.getLegalMove().size());
+
+        assertEquals(2, wp2.getLegalMove().size());
+        assertTrue(wp2.getLegalMove().contains(new Position("h7")));
+
+        // Testing white pawn capturing multiple black pieces
+        Board board2 = new Board();
+        Pawn wp3 = new Pawn(true, new Position("b3"), board2);
+        Pawn bp3 = new Pawn(false, new Position("a4"), board2);
+        Pawn bp4 = new Pawn(false, new Position("b4"), board2);
+        Pawn bp5 = new Pawn(false, new Position("c4"), board2);
+
+        assertEquals(2, wp3.getLegalMove().size());
+        assertTrue(wp3.getLegalMove().contains(new Position("a4")));
+        assertTrue(wp3.getLegalMove().contains(new Position("c4")));
+
+        // Testing black pawn capturing multiple white pieces
+        Board board3 = new Board();
+        Pawn bp6 = new Pawn(false, new Position("g7"), board3);
+        Pawn wp4 = new Pawn(true, new Position("f6"), board3);
+        Pawn wp5 = new Pawn(true, new Position("h6"), board3);
+
+        assertEquals(4, bp6.getLegalMove().size());
+        assertTrue(bp6.getLegalMove().contains(new Position("f6")));
+        assertTrue(bp6.getLegalMove().contains(new Position("h6")));
+
+        assertEquals(2, wp4.getLegalMove().size());
+        assertTrue(wp4.getLegalMove().contains(new Position("f7")));
+        assertTrue(wp4.getLegalMove().contains(new Position("g7")));
+
+        assertEquals(2, wp5.getLegalMove().size());
+        assertTrue(wp5.getLegalMove().contains(new Position("g7")));
+        assertTrue(wp5.getLegalMove().contains(new Position("h7")));
+    }
+
+    @Test
+    public void sameColorCantCapturePiece() {
+        
+        // White Piece
+        Pawn d2 = new Pawn(true, new Position("d2"), b);
+        Pawn e3 = new Pawn(true, new Position("e3"), b);
+
+        assertEquals(2, d2.getLegalMove().size());
+        assertTrue(!d2.getLegalMove().contains(new Position("e3")));
+
+        assertTrue(d2.getLegalMove().contains(new Position("d3")));
+        assertTrue(d2.getLegalMove().contains(new Position("d4")));
+
+        // Black Piece
+        Pawn e7 = new Pawn(false, new Position("e7"), b);
+        Pawn c6 = new Pawn(false, new Position("c6"), b);
+
+        assertEquals(2, d2.getLegalMove().size());
+        assertTrue(!e7.getLegalMove().contains(new Position("c6")));
+
+        assertTrue(e7.getLegalMove().contains(new Position("e6")));
+        assertTrue(e7.getLegalMove().contains(new Position("e5")));
+    }
+
+    @Test
+    public void testPawnEnPassantFlag() {
+        Pawn pawn = new Pawn(true, new Position("a2"));
+        assertFalse(pawn.isPassant()); 
+        
+        // Set the en passant flag
+        pawn.setPassant(true);
+        assertTrue(pawn.isPassant()); 
+    }
+
+    @Test
+    public void enPassantMoveTest() { // En Passant turns will be implement in gameControl logic
+
+        // White
+        // Center case
+        Pawn e5 = new Pawn(true, new Position("e5"), b);
+        Pawn d5 = new Pawn(false, new Position("d5"), b);
+        d5.setPassant(true);
+
+        assertEquals(2, e5.getLegalMove().size());
+        assertTrue(e5.getLegalMove().contains(new Position("e6")));
+
+        // Corner Case Left
+        Pawn a5 = new Pawn(true, new Position("a5"), b);
+        Pawn b5 = new Pawn(false, new Position("b5"), b);
+        b5.setPassant(true);
+
+        assertEquals(2, a5.getLegalMove().size());
+        assertTrue(a5.getLegalMove().contains(new Position("b6")));
+
+        // Corner Case Right
+        Pawn h5 = new Pawn(true, new Position("h5"), b);
+        Pawn g5 = new Pawn(false, new Position("g5"), b);
+        g5.setPassant(true);
+
+        assertEquals(2, h5.getLegalMove().size());
+        assertTrue(h5.getLegalMove().contains(new Position("h6")));
+
+        // Black
+        // Center case
+        Pawn e4 = new Pawn(false, new Position("e4"), b);
+        Pawn d4 = new Pawn(true, new Position("d4"), b);
+        d4.setPassant(true);
+
+        assertEquals(2, e4.getLegalMove().size());
+        assertTrue(e4.getLegalMove().contains(new Position("e3")));
+
+        // Corner Case Left
+        Pawn a4 = new Pawn(false, new Position("a4"), b);
+        Pawn b4 = new Pawn(true, new Position("b4"), b);
+        b4.setPassant(true);
+
+        assertEquals(2, a4.getLegalMove().size());
+        assertTrue(a4.getLegalMove().contains(new Position("a3")));
+
+        // Corner Case Right
+        Pawn h4 = new Pawn(false, new Position("h4"), b);
+        Pawn g4 = new Pawn(true, new Position("g4"), b);
+        g4.setPassant(true);
+
+        assertEquals(2, h4.getLegalMove().size());
+        assertTrue(h4.getLegalMove().contains(new Position("h3")));
+    }
+
+    @Test
+    public void testPawnPromotion() {
+        // White pawn at promotion row
+        Pawn whitePawn = new Pawn(true, new Position("a8"));
+        assertTrue(whitePawn.canPromote()); 
+    
+        // Black pawn at promotion row
+        Pawn blackPawn = new Pawn(false, new Position("h1"));
+        assertTrue(blackPawn.canPromote()); 
+    }
+
+    @Test
+    public void testPawnCantPromotion() {
+        // White pawn at promotion row
+        Pawn whitePawn = new Pawn(true, new Position("b7"));
+        assertTrue(!whitePawn.canPromote()); 
+    
+        // Black pawn at promotion row
+        Pawn blackPawn = new Pawn(false, new Position("f5"));
+        assertTrue(!blackPawn.canPromote()); 
     }
 }

@@ -7,7 +7,6 @@ import game.util.Movement;
 
 public class Pawn extends Piece {
 
-    private boolean moved = false;
     private boolean passnt = false;
     
     public Pawn(boolean isWhite, Position pos) {
@@ -28,6 +27,7 @@ public class Pawn extends Piece {
         moves.enPassantMove();
 
         setLegalMove(moves.getMoves());
+
     }
 
     @Override
@@ -43,15 +43,15 @@ public class Pawn extends Piece {
         this.moved = moved;
     }
 
-    public boolean isPassnt() {
+    public boolean isPassant() {
         return this.passnt;
     }
 
-    public void setPassnt(boolean passnt) {
+    public void setPassant(boolean passnt) {
         this.passnt = passnt;
     }
 
     public boolean canPromote() {
-        return isWhite() ? pos.getRow() == 0: pos.getRow() == Constant.COL - 1;
+        return !isWhite() ? pos.getRow() == 0: pos.getRow() == Constant.COL - 1;
     }
 }
