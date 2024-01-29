@@ -62,6 +62,7 @@ public abstract class Piece {
     }
 
     public ArrayList<Position> getLegalMove() {
+        this.legalMove();
         return this.legalMove;
     }
 

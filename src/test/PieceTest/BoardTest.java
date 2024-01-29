@@ -53,7 +53,7 @@ public class BoardTest {
         
         assertEquals(pos2.getCol(), 0);
         assertEquals(pos2.getRow(), 0);
-        assertEquals(p2, b.getBoard().get(7).get(0));
+        assertEquals(p2, b.getBoard().get(0).get(0));
 
         Position pos3 = new Position("d4");
         Pawn p3 = new Pawn(false, pos3);
@@ -61,7 +61,7 @@ public class BoardTest {
 
         assertEquals(pos3.getCol(), 3);
         assertEquals(pos3.getRow(), 3);
-        assertEquals(p3, b.getBoard().get(4).get(3));
+        assertEquals(p3, b.getBoard().get(3).get(3));
 
         Position pos4 = new Position("b1");
         Pawn p4 = new Pawn(false, pos4);
@@ -69,7 +69,7 @@ public class BoardTest {
 
         assertEquals(pos4.getCol(), 1);
         assertEquals(pos4.getRow(), 0);
-        assertEquals(p4, b.getBoard().get(7).get(1));
+        assertEquals(p4, b.getBoard().get(0).get(1));
 
         Position pos5 = new Position("f4");
         Pawn p5 = new Pawn(true, pos5);
@@ -77,7 +77,7 @@ public class BoardTest {
 
         assertEquals(pos5.getCol(), 5);
         assertEquals(pos5.getRow(), 3);
-        assertEquals(p5, b.getBoard().get(4).get(5));
+        assertEquals(p5, b.getBoard().get(3).get(5));
     }
 
     @Test
