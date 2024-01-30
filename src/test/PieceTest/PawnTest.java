@@ -173,9 +173,9 @@ public class PawnTest {
         // Testing white pawn capturing multiple black pieces
         Board board2 = new Board();
         Pawn wp3 = new Pawn(true, new Position("b3"), board2);
-        Pawn bp3 = new Pawn(false, new Position("a4"), board2);
-        Pawn bp4 = new Pawn(false, new Position("b4"), board2);
-        Pawn bp5 = new Pawn(false, new Position("c4"), board2);
+        new Pawn(false, new Position("a4"), board2);
+        new Pawn(false, new Position("b4"), board2);
+        new Pawn(false, new Position("c4"), board2);
 
         assertEquals(2, wp3.getLegalMove().size());
         assertTrue(wp3.getLegalMove().contains(new Position("a4")));
@@ -205,7 +205,7 @@ public class PawnTest {
 
         // White Piece
         Pawn d2 = new Pawn(true, new Position("d2"), b);
-        Pawn e3 = new Pawn(true, new Position("e3"), b);
+        new Pawn(true, new Position("e3"), b);
 
         assertEquals(2, d2.getLegalMove().size());
         assertTrue(!d2.getLegalMove().contains(new Position("e3")));
@@ -215,7 +215,7 @@ public class PawnTest {
 
         // Black Piece
         Pawn e7 = new Pawn(false, new Position("e7"), b);
-        Pawn c6 = new Pawn(false, new Position("c6"), b);
+        new Pawn(false, new Position("c6"), b);
 
         assertEquals(2, d2.getLegalMove().size());
         assertTrue(!e7.getLegalMove().contains(new Position("c6")));
