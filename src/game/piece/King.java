@@ -10,10 +10,6 @@ import game.util.Movement;
 public class King extends Piece {
 
     private boolean moved = false;
-    
-    public King(boolean isWhite, Position pos) {
-        super(isWhite, pos);
-    }
 
     public King(boolean isWhite, Position position, Board board) {
         super(isWhite, position, board);

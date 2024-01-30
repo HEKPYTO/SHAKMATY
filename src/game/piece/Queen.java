@@ -6,10 +6,6 @@ import game.util.Movement;
 
 public class Queen extends Piece {
 
-    public Queen(boolean isWhite, Position pos) {
-        super(isWhite, pos);
-    }
-
     public Queen(boolean isWhite, Position position, Board board) {
         super(isWhite, position, board);
     }
@@ -20,7 +16,7 @@ public class Queen extends Piece {
         Movement moves = new Movement(pos, board);
 
         moves.diagonalMove();
-        moves.crossMove();
+        moves.diagonalMove();
 
         setLegalMove(moves.getMoves());
     }
