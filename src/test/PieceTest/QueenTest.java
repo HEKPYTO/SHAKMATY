@@ -27,28 +27,26 @@ public class QueenTest {
     }
 
     @Test
-    public void QueenConstructorTest() {
+    public void queenConstructorTest() {
+        Queen wQueen = new Queen(true, qW, b);
+        assertTrue(!wQueen.isMoved());
+        assertEquals(qW, wQueen.getPos());
+        assertEquals(b, wQueen.getBoard());
 
-        Queen wRook = new Queen(true, qW, b);
-
-        assertTrue(!wRook.isMoved());
-        assertEquals(qW, wRook.getPos());
-        assertEquals(b, wRook.getBoard());
-
-        Queen bRook = new Queen(false, qB, b);
-
-        assertTrue(!bRook.isMoved());
-        assertEquals(qB, bRook.getPos());
-        assertEquals(b, bRook.getBoard());
-
+        Queen bQueen = new Queen(false, qB, b);
+        assertTrue(!bQueen.isMoved());
+        assertEquals(qB, bQueen.getPos());
+        assertEquals(b, bQueen.getBoard());
     }
 
     @Test
-    public void testRookQueenStatus() {
-        Rook wRook = new Rook(true, wRL, b);
-        assertFalse(wRook.isMoved());
+    public void testQueenMovedStatus() {
+        Queen wQueen = new Queen(true, qW, b);
+        assertFalse(wQueen.isMoved());
 
-        wRook.move(new Position("a3"));
-        assertTrue(wRook.isMoved());
+        wQueen.move(new Position("e2"));
+        assertTrue(wQueen.isMoved());
     }
+
+
 }
