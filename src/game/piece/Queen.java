@@ -15,7 +15,7 @@ public class Queen extends Piece {
 
         Movement moves = new Movement(pos, board);
 
-        moves.diagonalMove();
+        moves.plusMove();
         moves.diagonalMove();
 
         setLegalMove(moves.getMoves());
