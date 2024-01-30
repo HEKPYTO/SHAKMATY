@@ -19,7 +19,7 @@ public class Bishop extends Piece {
 
         Movement moves = new Movement(pos, board);
 
-        moves.crossMove();
+        moves.diagonalMove();
 
         setLegalMove(moves.getMoves());
     }
