@@ -29,6 +29,7 @@ public abstract class Piece {
     public void move(Position to) {
         setMoved(true);
         setPos(to);
+        setLegalMove(new ArrayList<Position>()); // new move -> new leagl move
     }
 
     public boolean isMovable() {
