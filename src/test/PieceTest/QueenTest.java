@@ -49,6 +49,15 @@ public class QueenTest {
     }
 
     @Test
+    public void queenMovedTest() {
+        Queen wQueen = new Queen(true, qW, b);
+        assertFalse(wQueen.isMoved());
+
+        wQueen.move(new Position("h5"));
+        assertTrue(wQueen.getPos().equals(new Position("h5")));
+    }
+
+    @Test
     public void queenMoveStartingPositonTest() {
         Queen wQueen = new Queen(true, qW, b);
 
@@ -218,7 +227,7 @@ public class QueenTest {
 
         assertEquals(5, q1.getLegalMove().size());
 
-        Queen q2 = new Queen(true, new Position("c5"), b); 
+        Queen q2 = new Queen(true, new Position("c5"), b); // center obstructed
 
         new Pawn(false, new Position("b4"), b);
         new Pawn(false, new Position("b5"), b);
