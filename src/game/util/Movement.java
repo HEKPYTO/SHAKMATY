@@ -144,8 +144,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void lShapeMove() { // L sign movement
         
-        int x = current.getCol();
-        int y = current.getRow();
+        int row = current.getRow();
+        int col = current.getCol();
 
         int[][] kMoves = {
             {-2, -1}, {-2, 1},
@@ -156,12 +156,11 @@ public class Movement { // Pawn Rook King have "moved"
 
         for (int[] move : kMoves) {
 
-            Position p = new Position(x + move[0], y + move[1]);
-    
-            if (!isInBound(p)) continue;
+            Position p = new Position(row + move[0], col + move[1]);
 
-            if (isVacantPosition(p) || 
-                !isSameColorPiece(current, p)) moves.add(p);
+            if (isInBound(p) && 
+                (isVacantPosition(p) || 
+                !isSameColorPiece(current, p))) moves.add(p);
 
         }
     }
