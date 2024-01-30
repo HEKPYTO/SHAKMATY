@@ -32,23 +32,6 @@ public class KnightTest {
         bKL = new Position("b8");
         bKR = new Position("g8");
     }
-    
-    @Test
-    public void knightConstructorTest() {
-
-        Knight k = new Knight(true, wKL);
-
-        assertTrue(!k.isMoved());
-        assertEquals(wKL, k.getPos());
-        assertNull(k.getBoard());
-
-        Knight k1 = new Knight(false, bKL);
-
-        assertTrue(!k1.isMoved());
-        assertEquals(bKL, k1.getPos());
-        assertNull(k1.getBoard());
-
-    }
 
     @Test
     public void knightConstructorWithBoardTest() {
@@ -69,7 +52,7 @@ public class KnightTest {
 
     @Test
     public void testKnightMovedStatus() {
-        Knight k = new Knight(true, new Position("b1"));
+        Knight k = new Knight(true, new Position("b1"), b);
         assertFalse(k.isMoved());
 
         k.move(new Position("c3"));

@@ -7,10 +7,6 @@ import game.util.Movement;
 public class Rook extends Piece {
 
     private boolean moved = false;
-    
-    public Rook(boolean isWhite, Position pos) {
-        super(isWhite, pos);
-    }
 
     public Rook(boolean isWhite, Position position, Board board) {
         super(isWhite, position, board);
@@ -21,7 +17,7 @@ public class Rook extends Piece {
 
         Movement moves = new Movement(pos, board);
 
-        moves.squareMove();
+        moves.plusMove();
 
         setLegalMove(moves.getMoves());
         

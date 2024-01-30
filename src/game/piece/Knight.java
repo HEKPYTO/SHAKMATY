@@ -5,10 +5,6 @@ import game.position.Position;
 import game.util.Movement;
 
 public class Knight extends Piece {
-    
-    public Knight(boolean isWhite, Position pos) {
-        super(isWhite, pos);
-    }
 
     public Knight(boolean isWhite, Position pos, Board board) {
         super(isWhite, pos, board);

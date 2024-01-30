@@ -1,7 +1,6 @@
 package test.PieceTest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,18 +29,6 @@ public class PawnTest {
     @Test
     public void pawnConstructorTest() {
 
-        Piece p1 = new Pawn(true, posWhite);
-
-        assertTrue(p1.isWhite());
-        assertEquals(posWhite, p1.getPos());
-        assertNull(p1.getBoard());
-        assertTrue(!p1.isMoved());
-
-    }
-
-    @Test
-    public void pawnConstructorWithBoardTest() {
-
         Piece p2 = new Pawn(false, posBlack, b);
 
         assert (!p2.isWhite());
@@ -53,7 +40,7 @@ public class PawnTest {
 
     @Test
     public void testPawnMovedStatus() {
-        Pawn pawn = new Pawn(true, new Position("a2"));
+        Pawn pawn = new Pawn(true, new Position("a2"), b);
         assertFalse(pawn.isMoved());
 
         // Move the pawn
@@ -239,7 +226,7 @@ public class PawnTest {
 
     @Test
     public void testPawnEnPassantFlag() {
-        Pawn pawn = new Pawn(true, new Position("a2"));
+        Pawn pawn = new Pawn(true, new Position("a2"), b);
         assertFalse(pawn.isPassant());
 
         // Set the en passant flag
@@ -304,22 +291,22 @@ public class PawnTest {
     @Test
     public void testPawnPromotion() {
         // White pawn at promotion row
-        Pawn whitePawn = new Pawn(true, new Position("a8"));
+        Pawn whitePawn = new Pawn(true, new Position("a8"), b);
         assertTrue(whitePawn.canPromote());
 
         // Black pawn at promotion row
-        Pawn blackPawn = new Pawn(false, new Position("h1"));
+        Pawn blackPawn = new Pawn(false, new Position("h1"), b);
         assertTrue(blackPawn.canPromote());
     }
 
     @Test
     public void testPawnCantPromotion() {
         // White pawn at promotion row
-        Pawn whitePawn = new Pawn(true, new Position("b7"));
+        Pawn whitePawn = new Pawn(true, new Position("b7"), b);
         assertTrue(!whitePawn.canPromote());
 
         // Black pawn at promotion row
-        Pawn blackPawn = new Pawn(false, new Position("f5"));
+        Pawn blackPawn = new Pawn(false, new Position("f5"), b);
         assertTrue(!blackPawn.canPromote());
     }
 }

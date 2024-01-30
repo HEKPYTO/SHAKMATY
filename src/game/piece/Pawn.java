@@ -9,10 +9,6 @@ public class Pawn extends Piece {
 
     private boolean passnt = false;
 
-    public Pawn(boolean isWhite, Position pos) {
-        super(isWhite, pos);
-    }
-
     public Pawn(boolean isWhite, Position pos, Board board) {
         super(isWhite, pos, board);
     }

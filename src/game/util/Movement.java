@@ -36,7 +36,7 @@ public class Movement { // Pawn Rook King have "moved"
     } 
 
     private boolean isVacantPosition(Position pos) {
-        return board.getPiece(pos) == null && isInBound(pos);
+        return isInBound(pos) && board.getPiece(pos) == null;
     }
 
     protected boolean isDifferentColor(Position a, Position b) {
@@ -97,24 +97,32 @@ public class Movement { // Pawn Rook King have "moved"
 
     }
     
-    public void crossMove() { // + sign movement
-        
-        int x = current.getCol();
-        int y = current.getRow();
+    public void plusMove() { // + sign movement
+            
+        int row = current.getRow();
+        int col = current.getCol();
 
         for (int s = 0; s < 4; s++) {
-            
-            int dx = (int) Math.cos(s * Math.PI);
-            int dy = (int) Math.sin(s * Math.PI);
+
+            int dx = (int) Math.cos(s * Math.PI / 2);
+            int dy = (int) Math.sin(s * Math.PI / 2);
 
             for (int i = 1; i < Math.max(Constant.ROW, Constant.COL); i++) {
-
-                Position p = new Position(x + dx * i, y + dy * i);
+                Position p = new Position(row + dy * i, col + dx * i);
 
                 if (!isInBound(p)) break;
 
-                if (isVacantPosition(p) || !isSameColorPiece(current, p)) moves.add(p);
-                
+                if (isVacantPosition(p)) {
+
+                    moves.add(p);
+
+                } else {
+                    
+                    if (isDifferentColor(p, current)) moves.add(p);
+
+                    break;
+                }
+
             }
         }
     }
