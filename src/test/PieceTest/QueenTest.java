@@ -1,9 +1,13 @@
 package test.PieceTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import game.board.Board;
+import game.piece.Rook;
 import game.position.Position;
 
 public class QueenTest {
@@ -21,5 +25,19 @@ public class QueenTest {
     }
 
     @Test
-    public void 
+    public void QueenConstructorTest() {
+
+        Rook wRook = new Rook(true, qW, b);
+
+        assertTrue(!wRook.isMoved());
+        assertEquals(qW, wRook.getPos());
+        assertEquals(b, wRook.getBoard());
+
+        Rook bRook = new Rook(false, qB, b);
+
+        assertTrue(!bRook.isMoved());
+        assertEquals(qB, bRook.getPos());
+        assertEquals(b, bRook.getBoard());
+
+    }
 }
