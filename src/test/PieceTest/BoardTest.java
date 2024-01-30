@@ -39,7 +39,7 @@ public class BoardTest {
     public void setPiecePlacementTest() {
 
         Position pos1 = new Position("h8");
-        Pawn p1 = new Pawn(true, pos1);
+        Pawn p1 = new Pawn(true, pos1, b);
         b.setPiece(p1);
         
         assertEquals(pos1.getCol(), 7);
@@ -48,7 +48,7 @@ public class BoardTest {
         assertEquals("...............................................................P", b.exportBoardToString());
 
         Position pos2 = new Position("a1");
-        Pawn p2 = new Pawn(true, pos2);
+        Pawn p2 = new Pawn(true, pos2, b);
         b.setPiece(p2);
         
         assertEquals(pos2.getCol(), 0);
@@ -56,7 +56,7 @@ public class BoardTest {
         assertEquals(p2, b.getBoard().get(0).get(0));
 
         Position pos3 = new Position("d4");
-        Pawn p3 = new Pawn(false, pos3);
+        Pawn p3 = new Pawn(false, pos3, b);
         b.setPiece(p3);
 
         assertEquals(pos3.getCol(), 3);
@@ -64,7 +64,7 @@ public class BoardTest {
         assertEquals(p3, b.getBoard().get(3).get(3));
 
         Position pos4 = new Position("b1");
-        Pawn p4 = new Pawn(false, pos4);
+        Pawn p4 = new Pawn(false, pos4, b);
         b.setPiece(p4);
 
         assertEquals(pos4.getCol(), 1);
@@ -72,7 +72,7 @@ public class BoardTest {
         assertEquals(p4, b.getBoard().get(0).get(1));
 
         Position pos5 = new Position("f4");
-        Pawn p5 = new Pawn(true, pos5);
+        Pawn p5 = new Pawn(true, pos5, b);
         b.setPiece(p5);
 
         assertEquals(pos5.getCol(), 5);
@@ -84,19 +84,19 @@ public class BoardTest {
     public void getPieceFromBoardTest() {
 
         Position pos1 = new Position("d4");
-        Pawn p1 = new Pawn(true, pos1);
+        Pawn p1 = new Pawn(true, pos1, b);
         b.setPiece(p1);
 
         assertEquals(p1, b.getPiece(pos1));
 
         Position pos2 = new Position("e2");
-        Pawn p2 = new Pawn(true, pos2);
+        Pawn p2 = new Pawn(true, pos2, b);
         b.setPiece(p2);
 
         assertEquals(p2, b.getPiece(pos2));
 
         Position pos3 = new Position("a7");
-        Pawn p3 = new Pawn(true, pos3);
+        Pawn p3 = new Pawn(true, pos3, b);
         b.setPiece(p3);
 
         assertEquals(p3, b.getPiece(pos3));

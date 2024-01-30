@@ -1,6 +1,5 @@
 package test.PieceTest;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -120,7 +119,7 @@ public class KnightTest {
     public void knightMoveObstructed() {
 
         Knight kW = new Knight(true, new Position("a1"), b);
-        Pawn p = new Pawn(true, new Position("b3"), b);
+        new Pawn(true, new Position("b3"), b);
         
         assertEquals(1, kW.getLegalMove().size());
 
@@ -129,8 +128,8 @@ public class KnightTest {
 
 
         Knight kB = new Knight(false, new Position("h8"), b);
-        Pawn pB1 = new Pawn(false, new Position("g6"), b);
-        Pawn pB2 = new Pawn(false, new Position("f7"), b); 
+        new Pawn(false, new Position("g6"), b);
+        new Pawn(false, new Position("f7"), b); 
 
         assertEquals(0, kB.getLegalMove().size());
 
@@ -155,13 +154,13 @@ public class KnightTest {
     public void knightCapturableOpposePiece() {
 
         Knight kW = new Knight(true, new Position("e4"), b);
-        Pawn pB1 = new Pawn(false, new Position("d2"), b);
-        Pawn pW1 = new Pawn(true, new Position("c3"), b); 
+        new Pawn(false, new Position("d2"), b);
+        new Pawn(true, new Position("c3"), b); 
         
         assertEquals(7, kW.getLegalMove().size());
 
-        Pawn pW2 = new Pawn(false, new Position("c5"), b);
-        Pawn pW3 = new Pawn(false, new Position("d6"), b); 
+        new Pawn(false, new Position("c5"), b);
+        new Pawn(false, new Position("d6"), b); 
 
         assertEquals(7, kW.getLegalMove().size());
 
@@ -183,14 +182,14 @@ public class KnightTest {
     @Test
     public void knightCantMoveSurroundedByOwnPieces() {
         Knight kW = new Knight(true, new Position("e4"), b);
-        Pawn pW1 = new Pawn(true, new Position("d6"), b);
-        Pawn pW2 = new Pawn(true, new Position("f6"), b);
-        Pawn pW3 = new Pawn(true, new Position("d2"), b);
-        Pawn pW4 = new Pawn(true, new Position("f2"), b);
-        Pawn pW5 = new Pawn(true, new Position("c3"), b);
-        Pawn pW6 = new Pawn(true, new Position("g3"), b);
-        Pawn pW7 = new Pawn(true, new Position("c5"), b);
-        Pawn pW8 = new Pawn(true, new Position("g5"), b);
+        new Pawn(true, new Position("d6"), b);
+        new Pawn(true, new Position("f6"), b);
+        new Pawn(true, new Position("d2"), b);
+        new Pawn(true, new Position("f2"), b);
+        new Pawn(true, new Position("c3"), b);
+        new Pawn(true, new Position("g3"), b);
+        new Pawn(true, new Position("c5"), b);
+        new Pawn(true, new Position("g5"), b);
 
         assertEquals(0, kW.getLegalMove().size());
     }
@@ -198,14 +197,14 @@ public class KnightTest {
     @Test
     public void knightCantMoveSurroundedByOpposePieces() {
         Knight kW = new Knight(false, new Position("e4"), b);
-        Pawn pW1 = new Pawn(true, new Position("d6"), b);
-        Pawn pW2 = new Pawn(true, new Position("f6"), b);
-        Pawn pW3 = new Pawn(true, new Position("d2"), b);
-        Pawn pW4 = new Pawn(true, new Position("f2"), b);
-        Pawn pW5 = new Pawn(true, new Position("c3"), b);
-        Pawn pW6 = new Pawn(true, new Position("g3"), b);
-        Pawn pW7 = new Pawn(true, new Position("c5"), b);
-        Pawn pW8 = new Pawn(true, new Position("g5"), b);
+        new Pawn(true, new Position("d6"), b);
+        new Pawn(true, new Position("f6"), b);
+        new Pawn(true, new Position("d2"), b);
+        new Pawn(true, new Position("f2"), b);
+        new Pawn(true, new Position("c3"), b);
+        new Pawn(true, new Position("g3"), b);
+        new Pawn(true, new Position("c5"), b);
+        new Pawn(true, new Position("g5"), b);
         
         assertEquals(8, kW.getLegalMove().size());
     }
