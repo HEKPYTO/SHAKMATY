@@ -108,6 +108,7 @@ public class Movement { // Pawn Rook King have "moved"
             int dy = (int) Math.sin(s * Math.PI / 2);
 
             for (int i = 1; i < Math.max(Constant.ROW, Constant.COL); i++) {
+
                 Position p = new Position(row + dy * i, col + dx * i);
 
                 if (!isInBound(p)) break;
@@ -129,8 +130,8 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void diagonalMove() { // x sign movement 
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int row = current.getRow();
+        int col = current.getCol();
 
         for (int s = 0; s < 4; s++) {
 
@@ -139,12 +140,20 @@ public class Movement { // Pawn Rook King have "moved"
             
             for (int i = 1; i < Math.max(Constant.ROW, Constant.COL); i++) {
 
-                Position p = new Position(x + s * dx * i, y + s * dy * i);
+                Position p = new Position(row + dy * i, col + dx * i);
 
                 if (!isInBound(p)) break;
 
-                if (isVacantPosition(p) ||
-                    !isSameColorPiece(current, p)) moves.add(p);
+                if (isVacantPosition(p)) {
+
+                    moves.add(p);
+
+                } else {
+                    
+                    if (isDifferentColor(p, current)) moves.add(p);
+
+                    break;
+                }
 
             }
         }
@@ -175,11 +184,11 @@ public class Movement { // Pawn Rook King have "moved"
 
     public void squareMove() {
 
-        int x = current.getCol();
-        int y = current.getRow();
+        int row = current.getRow();
+        int col = current.getCol();
 
-        for (int i = x - 1; i < x + 1; i++) {
-            for (int j = y - 1; j < y + 1; j++) {
+        for (int i = col - 1; i < col + 1; i++) {
+            for (int j = row - 1; j < row + 1; j++) {
 
                 Position p = new Position(i, j);
 

@@ -31,7 +31,7 @@ public class RookTest {
     }
 
     @Test
-    public void rookConstructorWithBoardTest() {
+    public void rookConstructorTest() {
 
         Rook wRook = new Rook(true, wRR, b);
 
@@ -140,7 +140,7 @@ public class RookTest {
         new Pawn(true, new Position("d4"), b);
         new Pawn(true, new Position("f4"), b);
 
-        assertEquals(0, rook.getLegalMove().size());
+        assertEquals(0, rook.getLegalMove().size()); // same color block
 
         Rook rook2 = new Rook(false, new Position("c7"), b);
 
@@ -149,6 +149,28 @@ public class RookTest {
         new Pawn(true, new Position("b7"), b);
         new Pawn(true, new Position("d7"), b);
 
-        assertEquals(4, rook2.getLegalMove().size());
+        assertEquals(4, rook2.getLegalMove().size()); // can capture different color
+    }
+
+    @Test 
+    public void rookSomeObstructed() {
+
+        Rook rook = new Rook(true, new Position("f3"), b);
+
+        new Pawn(true, new Position("f4"), b);
+        new Pawn(true, new Position("f2"), b);
+        new Pawn(false, new Position("g3"), b);
+        new Pawn(false, new Position("e3"), b);
+
+        assertEquals(2, rook.getLegalMove().size()); 
+
+        Rook rook2 = new Rook(false, new Position("c7"), b);
+
+        new Pawn(true, new Position("c6"), b);
+        new Pawn(true, new Position("c8"), b);
+        new Pawn(true, new Position("b7"), b);
+        new Pawn(false, new Position("d7"), b);
+
+        assertEquals(3, rook2.getLegalMove().size()); 
     }
 }
