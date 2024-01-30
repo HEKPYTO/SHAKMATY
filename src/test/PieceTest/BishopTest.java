@@ -46,4 +46,26 @@ public class BishopTest {
         assertEquals(b, bDB.getBoard());
     }
 
+    @Test
+    public void bishopMoveStartingPositonTest() {
+        Bishop wDB = new Bishop(true, wdb, b);
+
+        assertEquals(7, wDB.getLegalMove().size());
+
+        Bishop bDB = new Bishop(false, bdb, b);
+
+        assertEquals(7, bDB.getLegalMove().size());
+    }
+
+    @Test
+    public void bishopAtCenterTest() {
+        Position middle_w = new Position("d4");
+        Bishop wDB = new Bishop(true, middle_w, b);
+        assertEquals(13, wDB.getLegalMove().size());
+
+        Position middle_b = new Position("g4");
+        Bishop bWB = new Bishop(false, middle_b, b);
+        assertEquals(9, bWB.getLegalMove().size());
+    }
+
 }
