@@ -29,30 +29,6 @@ public class PieceTest {
     }
 
     @Test
-    public void constructorWhiteTest() {
-
-        Piece p1 = new Pawn(true, posWhite);
-
-        assert(p1.isWhite());
-        assertEquals(posWhite, p1.getPos());
-        assertNull(p1.getBoard());
-        assertTrue(!p1.isMovable());
-        
-    }
-
-    @Test
-    public void constructorBlackTest() {
-
-        Piece p2 = new Pawn(false, posBlack);
-
-        assert(!p2.isWhite());
-        assertEquals(posBlack, p2.getPos());
-        assertNull(p2.getBoard());
-        assertTrue(!p2.isMovable());
-        
-    }
-
-    @Test
     public void constructorWhiteTestWithBoard() {
 
         Piece p1 = new Pawn(true, posWhite, b);

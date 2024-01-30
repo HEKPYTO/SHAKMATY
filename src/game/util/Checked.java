@@ -38,7 +38,7 @@ public class Checked extends Movement {
             }
             moves.clearMoves();
 
-            moves.crossMove();
+            moves.diagonalMove();
             for (Position p: moves.getMoves()) {
                 Piece x = board.getPiece(p);
                 if (((x instanceof Rook) || 
