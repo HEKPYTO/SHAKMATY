@@ -187,16 +187,15 @@ public class Movement { // Pawn Rook King have "moved"
         int row = current.getRow();
         int col = current.getCol();
 
-        for (int i = col - 1; i < col + 1; i++) {
-            for (int j = row - 1; j < row + 1; j++) {
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
 
                 Position p = new Position(i, j);
 
                 if (!isInBound(p) || p.equals(current)) continue;
 
                 if (isVacantPosition(p) || 
-                    !isSameColorPiece(current, p)) moves.add(p);
-
+                    !isSameColorPiece(p, current)) moves.add(p);
             }
         }
     }

@@ -24,56 +24,53 @@ public class Checked extends Movement {
         getCheckedMove();
     }
 
-    public void getCheckedMove() {
-        if (board.getPiece(current) instanceof King) {
-            // King k = (King) board.getPiece(current);
+    private void getCheckedMove() {
 
-            Movement moves = new Movement(current, board);
+        Movement moves = new Movement(current, board);
 
-            moves.PawnCaptureMove();
-            for (Position p: moves.getMoves()) {
-                Piece x = board.getPiece(p);
-                if ((x instanceof Pawn) && 
-                    isDifferentColor(p, current)) checked.add(p);
-            }
-            moves.clearMoves();
+        moves.PawnCaptureMove();
+        for (Position p: moves.getMoves()) {
+            Piece x = board.getPiece(p);
+            if ((x instanceof Pawn) && 
+                isDifferentColor(p, current)) checked.add(p);
+        }
+        moves.clearMoves();
 
-            moves.diagonalMove();
-            for (Position p: moves.getMoves()) {
-                Piece x = board.getPiece(p);
-                if (((x instanceof Rook) || 
-                    (x instanceof Queen)) &&
-                    isDifferentColor(p, current)) checked.add(p);
-            }
-            moves.clearMoves();
+        moves.diagonalMove();
+        for (Position p: moves.getMoves()) {
+            Piece x = board.getPiece(p);
+            if (((x instanceof Rook) || 
+                (x instanceof Queen)) &&
+                isDifferentColor(p, current)) checked.add(p);
+        }
+        moves.clearMoves();
 
-            moves.diagonalMove();
-            for (Position p: moves.getMoves()) {
-                Piece x = board.getPiece(p);
+        moves.diagonalMove();
+        for (Position p: moves.getMoves()) {
+            Piece x = board.getPiece(p);
 
-                if (((x instanceof Bishop) ||
-                    (x instanceof Queen)) &&
-                    isDifferentColor(p, current)) checked.add(p);
-            }
-            moves.clearMoves();
+            if (((x instanceof Bishop) ||
+                (x instanceof Queen)) &&
+                isDifferentColor(p, current)) checked.add(p);
+        }
+        moves.clearMoves();
 
-            moves.lShapeMove();
-            for (Position p: moves.getMoves()) {
-                Piece k = board.getPiece(p);
+        moves.lShapeMove();
+        for (Position p: moves.getMoves()) {
+            Piece k = board.getPiece(p);
 
-                if ((k instanceof Knight) &&
-                    isDifferentColor(p, current)) checked.add(p);
-            }
-            moves.clearMoves();
+            if ((k instanceof Knight) &&
+                isDifferentColor(p, current)) checked.add(p);
+        }
+        moves.clearMoves();
 
-            moves.squareMove();
-            for (Position p: moves.getMoves()) {
-                Piece k = board.getPiece(p);
+        moves.squareMove();
+        for (Position p: moves.getMoves()) {
+            Piece k = board.getPiece(p);
 
-                if ((k instanceof King)) checked.add(p); // there should be only one king
-            }
-            moves.clearMoves();
-        } 
+            if ((k instanceof King)) checked.add(p); // there should be only one king
+        }
+        moves.clearMoves();
     }
     
     public boolean willBeChecked(Position next) {
@@ -91,7 +88,6 @@ public class Checked extends Movement {
         }
         return false;
     }
-
 
 
     public Position getCurrent() {
