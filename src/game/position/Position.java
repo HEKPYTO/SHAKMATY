@@ -30,9 +30,9 @@ public class Position {
         validatePosition();
     }
 
-    public Position(int x, int y, int rX, int rY) {
-        this(x, y);
-        rookPos = new Position(rX, rY);
+    public Position(int row, int col, int rRow, int rCol) {
+        this(row, col);
+        rookPos = new Position(rRow, rCol);
     }
 
     public Position(String s, String r) { // For Castling

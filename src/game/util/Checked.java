@@ -178,7 +178,7 @@ public class Checked extends Movement {
     }
 
     public boolean isInChekced() {
-        return getCheckedMove().size() == 0;
+        return getCheckedMove().size() != 0;
     }
 
     public boolean willBeChecked(Position p) {

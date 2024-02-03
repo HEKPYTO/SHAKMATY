@@ -1,4 +1,5 @@
 package test.PieceTest;
+
 import game.piece.Bishop;
 import game.position.Position;
 import game.board.Board;
@@ -10,17 +11,11 @@ import org.junit.*;
 
 public class BishopTest {
 
-    Board b;            //Board
-    Position wdb;     // White Dark Square Bishop
-    Position wlb;     // White Light Square Bishop
-    Position bdb;     // Black Dark Square Bishop
-    Position blb;     // Black Light Square Bishop
-
-    //Bishop W_D_B = new Bishop(true, new Position(2, 7));    // White Dark Square Bishop
-    //Bishop W_L_B = new Bishop(true, new Position(5, 7));    // White Light Square Bishop 
-    //Bishop B_D_B = new Bishop(false, new Position(2, 0));   // Black Dark Square Bishop 
-    //Bishop B_L_B = new Bishop(false, new Position(5, 0));   // Black Light Square Bishop
-    
+    Board b; // Board
+    Position wdb; // White Dark Square Bishop
+    Position wlb; // White Light Square Bishop
+    Position bdb; // Black Dark Square Bishop
+    Position blb; // Black Light Square Bisho
 
     @Before
     public void setup() {
@@ -66,6 +61,41 @@ public class BishopTest {
         Position middle_b = new Position("g4");
         Bishop bWB = new Bishop(false, middle_b, b);
         assertEquals(9, bWB.getLegalMove().size());
+    }
+
+    @Test
+    public void bishopDiagonalMovementTest() {
+        Bishop wDB = new Bishop(true, wdb, b);
+        assertEquals(7, wDB.getLegalMove().size());
+
+        new Bishop(false, new Position("f5"), b);
+        assertEquals(5, wDB.getLegalMove().size());
+
+        Bishop bDB = new Bishop(false, new Position("a1"), b);
+        assertEquals(7, bDB.getLegalMove().size());
+    }
+
+    @Test
+    public void bishopCaptureTest() {
+        Bishop wDB = new Bishop(true, wdb, b);
+        new Bishop(false, new Position("f5"), b);
+        assertEquals(5, wDB.getLegalMove().size());
+    }
+
+    @Test
+    public void bishopEdgeCaseTest() {
+        Bishop bDB = new Bishop(false, blb, b);
+        assertEquals(7, bDB.getLegalMove().size());
+
+        Bishop wLB = new Bishop(true, wlb, b);
+        assertEquals(7, wLB.getLegalMove().size());
+    }
+
+    @Test
+    public void bishopInvalidMoveTest() {
+        Bishop wDB = new Bishop(true, wdb, b);
+        new Bishop(true, new Position("e7"), b);
+        assertEquals(wDB.getLegalMove().size(), 7);
     }
 
 }

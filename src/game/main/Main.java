@@ -1,7 +1,9 @@
 package game.main;
 
 import game.board.Board;
+import game.piece.King;
 import game.piece.Knight;
+import game.piece.Rook;
 import game.position.Position;
 
 public class Main {
@@ -10,10 +12,11 @@ public class Main {
 
         Board b = new Board();
 
-        Position h7 = new Position("h7");
-        Knight k = new Knight(true, h7, b);
+        King k1 = new King(true, new Position("e1"), b);
 
-        System.out.println(k.isMoved());
+        Rook rR = new Rook(true, new Position("h1"), b);
+
+        System.out.println(k1.getLegalMove());
 
     }
 

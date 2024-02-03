@@ -8,7 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import game.board.Board;
+import game.piece.Bishop;
 import game.piece.King;
+import game.piece.Knight;
 import game.piece.Pawn;
 import game.piece.Rook;
 import game.position.Position;
@@ -90,23 +92,23 @@ public class KingTest {
         King k1 = new King(true, kW, b);
         new Pawn(false, new Position("e2"), b);
 
-        assertEquals(k1.getLegalMove().size(), 5);
+        assertEquals(3, k1.getLegalMove().size());
 
         assertTrue(k1.getLegalMove().contains(new Position("e2")));
 
         King k2 = new King(false, kB, b);
         new Rook(true, new Position("d8"), b);
 
-        assertEquals(k2.getLegalMove().size(), 5);
+        assertEquals(4, k2.getLegalMove().size());
 
         assertTrue(k2.getLegalMove().contains(new Position("d8")));
 
         King k3 = new King(false, new Position("e4"), b);
         new Rook(true, new Position("d5"), b);
+        
+        assertEquals(3, k3.getLegalMove().size()); // rook cant be capture as it was defended by rook d8
 
-        assertEquals(k3.getLegalMove().size(), 8);
-
-        assertTrue(k3.getLegalMove().contains(new Position("d5")));
+        assertFalse(k3.getLegalMove().contains(new Position("d5")));
 
     }
 
@@ -143,8 +145,83 @@ public class KingTest {
         King k1 = new King(true, new Position("a1"), b);
         new Pawn(false, new Position("b2"), b);
 
-        assertEquals(0, k1.getCheckedMove());
+        assertTrue(k1.isInChecked());
 
-        assertTrue(k1.inChecked());
+        assertTrue(k1.getLegalMove().contains(new Position("b2")));
+
+        King k2 = new King(false, new Position("e8"), b);
+        new Pawn(true, new Position("d7"), b);
+        new Pawn(true, new Position("f7"), b);
+
+        assertTrue(k2.isInChecked());
+
+        assertTrue(k2.getLegalMove().contains(new Position("d7")));
+        assertTrue(k2.getLegalMove().contains(new Position("f7")));
+    }
+
+    @Test
+    public void kingBlockCheckTest() {
+
+        King k1 = new King(true, new Position("e1"), b);
+
+        new Rook(false, new Position("e8"), b);
+
+        assertTrue(k1.isInChecked());
+
+        new Rook(true, new Position("e2"), b);
+
+        assertFalse(k1.isInChecked());
+    }
+
+    @Test
+    public void kingNoMoveTest() {
+
+        King k1 = new King(true, new Position("a1"), b);
+
+        new Rook(false, new Position("b3"), b);
+        new Rook(false, new Position("c2"), b);
+
+        assertTrue(k1.getLegalMove().isEmpty());
+
+        King k2 = new King(false, new Position("h8"), b);
+
+        new Knight(true, new Position("f6"), b);
+        new Bishop(true, new Position("f8"), b);
+
+        assertTrue(k2.getLegalMove().isEmpty());
+    }
+
+    @Test
+    public void castlingMoveWhiteTest() {
+
+        King k1 = new King(true, new Position("e1"), b);
+        assertFalse(k1.isMoved());
+
+        Rook rR = new Rook(true, new Position("h1"), b);
+        assertFalse(rR.isMoved());
+
+        assertTrue(k1.getLegalMove().contains(new Position("g1"))); // short castle
+
+        Rook rL = new Rook(true, new Position("a1"), b);
+        assertFalse(rL.isMoved());
+
+        assertTrue(k1.getLegalMove().contains(new Position("c1"))); // long castle
+    }
+
+    @Test
+    public void castlingMoveBlackTest() {
+
+        King k1 = new King(false, new Position("e8"), b);
+        assertFalse(k1.isMoved());
+
+        Rook rR = new Rook(false, new Position("h8"), b);
+        assertFalse(rR.isMoved());
+
+        assertTrue(k1.getLegalMove().contains(new Position("g8"))); // short castle
+
+        Rook rL = new Rook(false, new Position("a8"), b);
+        assertFalse(rL.isMoved());
+
+        assertTrue(k1.getLegalMove().contains(new Position("c8"))); // long castle
     }
 }

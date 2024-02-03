@@ -3,6 +3,7 @@ package game.piece;
 import java.util.ArrayList;
 
 import game.board.Board;
+import game.constant.Constant;
 import game.position.Position;
 import game.util.Checked;
 import game.util.Movement;
@@ -22,6 +23,11 @@ public class King extends Piece {
 
         moves.squareMove();
 
+        if (!moved) {
+            moves.shortCastleMove();
+            moves.longCastleMove();
+        }
+
         ArrayList<Position> legalize = new ArrayList<Position>();
 
         for (Position move: moves.getMoves()) {
@@ -30,6 +36,8 @@ public class King extends Piece {
 
             if (check.getCheckedPosition().size() == 0) legalize.add(move);
         }
+
+        System.out.println(moves);
 
         setLegalMove(legalize);
     }
@@ -45,14 +53,14 @@ public class King extends Piece {
         return "King " + pos.toString();
     }
 
-    public boolean inChecked() {
+    public boolean isInChecked() {
         Checked check = new Checked(pos, board, isWhite());
 
         return check.isInChekced();
     }
 
-    public boolean inChecked(Position p) {
-        Checked check = new Checked(p, board);
+    public boolean isInChecked(Position p) {
+        Checked check = new Checked(p, board, isWhite());
 
         return check.isInChekced();
     }

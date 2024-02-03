@@ -207,10 +207,10 @@ public class Movement { // Pawn Rook King have "moved"
         int assumeRookX = Constant.COL - 1;
         int backRankY = board.getPiece(current).isWhite() ? 0: Constant.ROW - 1;
 
-        Position assumeRook = new Position(assumeRookX, backRankY);
+        Position assumeRook = new Position(backRankY, assumeRookX);
 
-        if (board.getPiece(current) instanceof King && 
-            board.getPiece(assumeRook) instanceof Rook) return;
+        if (!(board.getPiece(current) instanceof King && 
+            board.getPiece(assumeRook) instanceof Rook)) return;
 
         King k = (King) board.getPiece(current);
         Rook r = (Rook) board.getPiece(assumeRook);
@@ -221,13 +221,18 @@ public class Movement { // Pawn Rook King have "moved"
         int rookX = r.getPos().getCol();
 
         for (int i = kingX + 1; i < rookX; i++) {
-            if (!board.isVacantPosition(new Position(i, backRankY))) return;
+            Position p = new Position(backRankY, i);
+
+            Checked check = new Checked(p, board, k.isWhite());
+
+            if (!isVacantPosition(p) ||
+                check.isInChekced()) return;
         }
 
         int kingPlacementX = Constant.COL - 2;
         int rookPlacementX = Constant.COL - 3;
 
-        moves.add(new Position(kingPlacementX, backRankY, rookPlacementX, backRankY));
+        moves.add(new Position(backRankY, kingPlacementX, backRankY, rookPlacementX));
     }
 
     public void longCastleMove() {
@@ -235,10 +240,10 @@ public class Movement { // Pawn Rook King have "moved"
         int assumeRookX = 0;
         int backRankY = board.getPiece(current).isWhite() ? 0: Constant.COL - 1;
 
-        Position assumeRook = new Position(assumeRookX, backRankY);
+        Position assumeRook = new Position(backRankY, assumeRookX);
 
-        if (board.getPiece(current) instanceof King &&
-            board.getPiece(assumeRook) instanceof Rook) return;
+        if (!(board.getPiece(current) instanceof King &&
+            board.getPiece(assumeRook) instanceof Rook)) return;
 
         King k = (King) board.getPiece(current);
         Rook r = (Rook) board.getPiece(assumeRook);
@@ -249,13 +254,18 @@ public class Movement { // Pawn Rook King have "moved"
         int rookX = r.getPos().getCol();
 
         for (int i = rookX + 1; i < kingX; i++) {
-            if (!board.isVacantPosition(new Position(i, backRankY))) return;
+            Position p = new Position(backRankY, i);
+
+            Checked check = new Checked(p, board, k.isWhite());
+
+            if (!isVacantPosition(p) ||
+                check.isInChekced()) return;
         }
 
-        int kingPlacementX = 3;
-        int rookPlacementX = 4;
+        int kingPlacementX = 2;
+        int rookPlacementX = 3;
 
-        moves.add(new Position(kingPlacementX, backRankY, rookPlacementX, backRankY));
+        moves.add(new Position(backRankY, kingPlacementX, backRankY, rookPlacementX));
     }
 
     public void enPassantMove() {
