@@ -24,12 +24,20 @@ public class King extends Piece {
 
         ArrayList<Position> legalize = new ArrayList<Position>();
 
-        for (Position p: moves.getMoves()) {
-            Checked check = new Checked(p, board);
-            if (!check.willBeChecked(p)) legalize.add(p);
+        for (Position move: moves.getMoves()) {
+
+            Checked check = new Checked(move, board, isWhite());
+
+            if (check.getCheckedPosition().size() == 0) legalize.add(move);
         }
 
         setLegalMove(legalize);
+    }
+
+    public ArrayList<Position> getCheckedMove() {
+        Checked check = new Checked(pos, board, isWhite());
+
+        return check.getChecked();
     }
 
     @Override
@@ -38,15 +46,15 @@ public class King extends Piece {
     }
 
     public boolean inChecked() {
-        Checked check = new Checked(pos, board);
+        Checked check = new Checked(pos, board, isWhite());
 
-        return check.getChecked().size() == 0;
+        return check.isInChekced();
     }
 
     public boolean inChecked(Position p) {
         Checked check = new Checked(p, board);
 
-        return check.getChecked().size() == 0;
+        return check.isInChekced();
     }
 
     public boolean isMoved() {

@@ -22,20 +22,20 @@ public class Movement { // Pawn Rook King have "moved"
         clearMoves(); // usable anyway
     }
 
-    private boolean isInBound(Position pos) {
+    protected boolean isInBound(Position pos) {
         return 0 <= pos.getCol() && 
             pos.getCol() <= Constant.COL - 1 &&
             0 <= pos.getRow() &&
             pos.getRow() <= Constant.ROW - 1;
     }
 
-    private boolean isSameColorPiece(Position a, Position b) { 
+    protected boolean isSameColorPiece(Position a, Position b) { 
         return board.getPiece(a) != null && 
             board.getPiece(b) != null && 
             board.getPiece(a).isWhite() == board.getPiece(b).isWhite();
     } 
 
-    private boolean isVacantPosition(Position pos) {
+    protected boolean isVacantPosition(Position pos) {
         return isInBound(pos) && board.getPiece(pos) == null;
     }
 

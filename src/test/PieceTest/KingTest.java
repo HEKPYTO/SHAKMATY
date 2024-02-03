@@ -143,7 +143,7 @@ public class KingTest {
         King k1 = new King(true, new Position("a1"), b);
         new Pawn(false, new Position("b2"), b);
 
-        assertEquals(k1.inChecked(), 0);
+        assertEquals(0, k1.getCheckedMove());
 
         assertTrue(k1.inChecked());
     }
