@@ -1,13 +1,16 @@
 package test.PieceTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import game.board.Board;
 import game.constant.Constant;
+import game.piece.Knight;
 import game.piece.Pawn;
 import game.position.Position;
 
@@ -100,5 +103,34 @@ public class BoardTest {
         b.setPiece(p3);
 
         assertEquals(p3, b.getPiece(pos3));
+    }
+
+    @Test
+    public void movePiece() {
+
+        Pawn p1 = new Pawn(true, new Position("d2"), b);
+        b.movePiece(p1, new Position("d4"));
+
+        assertEquals(new Position("d4"), p1.getPos());
+
+        assertFalse(b.getPiece(new Position("d2")) instanceof Pawn);
+
+        Knight k1 = new Knight(false, new Position("b7"), b); // Illegal move
+
+        b.movePiece(k1, new Position("d7"));
+
+        assertEquals(new Position("b7"), k1.getPos());
+
+        assertFalse(b.getPiece(new Position("d7")) instanceof Knight);
+    }
+
+    @Test
+    public void copyBoardTest() {
+        new Pawn(false, new Position("e5"), b);
+        new Pawn(true, new Position("c6"), b);
+
+        Board b1 = b.copyBoard();
+
+        assertTrue(b.equals(b1));
     }
 }

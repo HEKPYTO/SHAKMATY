@@ -38,6 +38,9 @@ public class Board {
 
     public void setPiece(int row, int col, Piece piece) {
         board.get(row).set(col, piece);
+        if (piece == null)
+            return;
+
         piece.move(new Position(row, col));
     }
 
@@ -46,6 +49,8 @@ public class Board {
     }
 
     public void setPiece(Piece piece) {
+        if (piece == null)
+            return;
         setPiece(piece.getPos(), piece);
     }
 
@@ -64,17 +69,21 @@ public class Board {
 
     public boolean movePiece(Position from, Position to) {
         Piece p = getPiece(from);
-        p.legalMove();
 
         if (p.getLegalMove().contains(to)) {
-            if (!isVacantPosition(to)) capture(to);
-            setPieceTo(p, to);
-            p.legalMove(); // get next legal moves
+            if (!isVacantPosition(to))
+                capture(to);
+            else {
+                setPieceTo(p, to);
+                moves.add(to);
+            }
+
+
+            p.move(to);
             return true;
         }
 
         return false;
-
     }
 
     public void capture(Position to) { // TBD
@@ -87,49 +96,79 @@ public class Board {
 
     }
 
-    public boolean isValidPosition(Position pos) { // Is in chess square
-        return 0 <= pos.getCol() && 
-            pos.getCol() <= ROW &&
-            0 <= pos.getRow() &&
-            pos.getRow() <= COL;
+    private boolean isValidPosition(Position pos) { // Is in chess square
+        return 0 <= pos.getCol() &&
+                pos.getCol() <= ROW &&
+                0 <= pos.getRow() &&
+                pos.getRow() <= COL;
     }
 
-    public boolean isVacantPosition(Position pos) { // Is that space free
+    private boolean isVacantPosition(Position pos) { // Is that space free
         return isValidPosition(pos) && getPiece(pos) == null;
     }
 
-    public boolean isSameColorPiece(Position a, Position b) { // Is same Color Piece
+    private boolean isSameColorPiece(Position a, Position b) { // Is same Color Piece
         return getPiece(a) != null && getPiece(b) != null && getPiece(a) == getPiece(b);
-    } 
+    }
 
     public void setPieceTo(Piece p, Position to) {
 
-        int x = p.getPos().getCol();
-        int y = p.getPos().getRow();
+        int col = p.getPos().getCol();
+        int row = p.getPos().getRow();
 
-        if (p.getBoard() == null) p.setBoard(this);
-
+        if (p.getBoard() == null) {
+            p.setBoard(this);
+            return;
+        }
         setPiece(to, p);
-        setPiece(new Position(x, y), null);
-
-        //!
+        setPiece(new Position(row, col), null);
     }
 
-    public Board cloneBoard() {
+    public Board copyBoard() {
         Board b = new Board();
-    
-       b.importBoardFromString(exportBoardToString());
+
+        for (int i = 0; i < Constant.ROW; i++) {
+            for (int j = 0; j < Constant.COL; j++) {
+                b.setPiece(getPiece(new Position(j, i)));
+            }
+        }
 
         return b;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+    
+        Board otherBoard = (Board) o;
+    
+        for (int i = 0; i < Constant.ROW; i++) {
+            for (int j = 0; j < Constant.COL; j++) {
+                Position position = new Position(j, i);
+    
+                Piece thisP = getPiece(position);
+                Piece otherP = otherBoard.getPiece(position);
+    
+                if ((thisP == null && otherP != null) || (thisP != null && !thisP.equals(otherP))) {
+                    return false;
+                }
+            }
+        }
+    
+        return true;
+    }
+
     public String exportBoardToString() {
         StringBuilder s = new StringBuilder();
-    
+
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
-    
+
                 if (p instanceof Pawn) {
                     s.append(p.isWhite() ? "P" : "p");
                 } else if (p instanceof Bishop) {
@@ -149,18 +188,20 @@ public class Board {
         }
         return s.toString();
     }
-    
+
     public boolean importBoardFromString(String s) {
-        if (s.length() != ROW * COL) return false;
-    
+        if (s.length() != ROW * COL)
+            return false;
+
         int index = 0;
         for (int i = ROW - 1; i >= 0; i--) {
             for (int j = 0; j < COL; j++) {
                 char c = s.charAt(index++);
                 Piece p = readPiece(c, i, j);
-    
-                if (p == null) continue;
-    
+
+                if (p == null)
+                    continue;
+
                 setPiece(p);
             }
         }
@@ -204,11 +245,11 @@ public class Board {
 
     public String displayBoard() {
         StringBuilder s = new StringBuilder();
-    
+
         for (int i = ROW - 1; i >= 0; i--) {
             for (int j = 0; j < COL; j++) {
                 Piece p = getPiece(new Position(i, j));
-    
+
                 if (p instanceof Pawn) {
                     s.append(p.isWhite() ? "♟" : "♙");
                 } else if (p instanceof Bishop) {
@@ -224,16 +265,15 @@ public class Board {
                 } else {
                     s.append((i + j) % 2 != 0 ? "□" : "■");
                 }
-    
+
                 s.append(" ");
             }
-    
+
             s.append("\n");
         }
-    
+
         return s.toString();
     }
-
 
     public ArrayList<ArrayList<Piece>> getBoard() {
         return this.board;

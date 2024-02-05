@@ -3,7 +3,6 @@ package game.piece;
 import java.util.ArrayList;
 
 import game.board.Board;
-import game.constant.Constant;
 import game.position.Position;
 import game.util.Checked;
 import game.util.Movement;
