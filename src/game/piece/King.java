@@ -35,6 +35,8 @@ public class King extends Piece {
             if (!checked.isInCheck()) legalize.add(possibleMove);
         }
 
+        if (legalize.equals(legalMove)) return;
+
         setLegalMove(legalize);
     }
 

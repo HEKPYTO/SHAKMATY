@@ -175,6 +175,17 @@ public class Movement {
             if (!board.isEmpty(p) && !board.isSameColor(current, p)) {
                 Piece enemy = board.getPiece(p);
 
+                if (enemy instanceof King) {
+                    Movement enemyKMovement = new Movement(p, board);
+                    enemyKMovement.squareMove();
+
+                    for (Position kp: enemyKMovement.getMoves()) {
+                        if (kp.equals(current)) return true;
+                    }
+
+                    return false;
+                }
+
                 for (Position enemyLegalMove : enemy.getNextLegalMove()) {
                     if (current.equals(enemyLegalMove)) return true;
                 }
