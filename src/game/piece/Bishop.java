@@ -1,6 +1,6 @@
 package game.piece;
 
-import game.board.Board;
+import game.Board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -11,9 +11,9 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public void legalMove() {
+    public void calculateLegalMove() {
 
-        Movement moves = new Movement(pos, board);
+        Movement moves = new Movement(position, board);
 
         moves.diagonalMove();
 
@@ -21,7 +21,12 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "Bishop " + pos.toString();
+    public Object deepCopy() {
+        Bishop bishop = new Bishop(white, position, board);
+        bishop.setLegalMove(legalMove);
+        if (moved) hasMoved();
+
+        return bishop;
     }
+
 }

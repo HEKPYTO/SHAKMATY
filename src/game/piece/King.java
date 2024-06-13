@@ -1,75 +1,56 @@
 package game.piece;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import game.board.Board;
+import game.Board.Board;
 import game.position.Position;
-import game.util.Checked;
 import game.util.Movement;
 
 public class King extends Piece {
-
-    private boolean moved = false;
 
     public King(boolean isWhite, Position position, Board board) {
         super(isWhite, position, board);
     }
 
     @Override
-    public void legalMove() {
+    public void calculateLegalMove() {
 
-        Movement moves = new Movement(pos, board);
+        Movement move = new Movement(position, board);
 
-        moves.squareMove();
+        move.squareMove();
 
         if (!moved) {
-            moves.shortCastleMove();
-            moves.longCastleMove();
+            move.shortCastleMove();
+            move.longCastleMove();
         }
 
-        ArrayList<Position> legalize = new ArrayList<Position>();
+        Set<Position> legalize = new HashSet<Position>();
 
-        for (Position move: moves.getMoves()) {
+        for (Position possibleMove: move.getMoves()) {
+            Board virtualBoard = board.copyBoard();
+            virtualBoard.movePiece(position, possibleMove);
 
-            Checked check = new Checked(move, board, isWhite());
-
-            if (check.getCheckedPosition().size() == 0) legalize.add(move);
+            Movement checked = new Movement(possibleMove, virtualBoard);
+            if (!checked.isInCheck()) legalize.add(possibleMove);
         }
-
-        System.out.println(moves);
 
         setLegalMove(legalize);
     }
 
-    public ArrayList<Position> getCheckedMove() {
-        Checked check = new Checked(pos, board, isWhite());
-
-        return check.getChecked();
-    }
-
     @Override
-    public String toString() {
-        return "King " + pos.toString();
+    public Object deepCopy() {
+        King king = new King(white, position, board);
+        king.setLegalMove(legalMove);
+        if (moved) hasMoved();
+
+        return king;
     }
 
-    public boolean isInChecked() {
-        Checked check = new Checked(pos, board, isWhite());
+    public boolean isInCheck() {
+        Movement check = new Movement(position, board);
 
-        return check.isInChekced();
-    }
-
-    public boolean isInChecked(Position p) {
-        Checked check = new Checked(p, board, isWhite());
-
-        return check.isInChekced();
-    }
-
-    public boolean isMoved() {
-        return this.moved;
-    }
-
-    public void setMoved(boolean moved) {
-        this.moved = moved;
+        return check.isInCheck();
     }
 
 

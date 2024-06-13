@@ -1,16 +1,15 @@
 package test.PieceTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import game.Board.Board;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.board.Board;
 import game.piece.Pawn;
 import game.piece.Rook;
 import game.position.Position;
+
+import static org.junit.Assert.*;
 
 public class RookTest {
     
@@ -35,58 +34,49 @@ public class RookTest {
 
         Rook wRook = new Rook(true, wRR, b);
 
-        assertTrue(!wRook.isMoved());
-        assertEquals(wRR, wRook.getPos());
+        assertFalse(wRook.isMoved());
+        assertEquals(wRR, wRook.getPosition());
         assertEquals(b, wRook.getBoard());
 
         Rook bRook = new Rook(false, bRL, b);
 
-        assertTrue(!bRook.isMoved());
-        assertEquals(bRL, bRook.getPos());
+        assertFalse(bRook.isMoved());
+        assertEquals(bRL, bRook.getPosition());
         assertEquals(b, bRook.getBoard());
     }
 
     @Test
-    public void testRookMovedStatus() {
-        Rook wRook = new Rook(true, wRL, b);
-        assertFalse(wRook.isMoved());
-
-        wRook.move(new Position("a3"));
-        assertTrue(wRook.isMoved());
-    }
-
-    @Test
-    public void rookMoveStartingPositonTest() { // 7 vertical + 7 horizontal
+    public void rookMoveStartingPositionTest() { // 7 vertical + 7 horizontal
 
         Rook wRook = new Rook(true, wRL, b); 
 
-        assertEquals(14, wRook.getLegalMove().size());
+        assertEquals(14, wRook.getNextLegalMove().size());
 
         Rook bRook = new Rook(false, bRR, b);
         
-        assertEquals(14, bRook.getLegalMove().size());
+        assertEquals(14, bRook.getNextLegalMove().size());
     }
 
     @Test
-    public void rookAtCenterTest() {
+    public void rookAtCenterTest() { // 7 vertical + 7 horizontal
 
         Rook wRook = new Rook(true, new Position("e4"), b);
         
-        assertEquals(14, wRook.getLegalMove().size());
+        assertEquals(14, wRook.getNextLegalMove().size());
 
-        assertTrue(wRook.getLegalMove().contains(new Position("d4")));
-        assertTrue(wRook.getLegalMove().contains(new Position("f4")));
-        assertTrue(wRook.getLegalMove().contains(new Position("e3")));
-        assertTrue(wRook.getLegalMove().contains(new Position("e5")));
+        assertTrue(wRook.getNextLegalMove().contains(new Position("d4")));
+        assertTrue(wRook.getNextLegalMove().contains(new Position("f4")));
+        assertTrue(wRook.getNextLegalMove().contains(new Position("e3")));
+        assertTrue(wRook.getNextLegalMove().contains(new Position("e5")));
 
         Rook bRook = new Rook(false, new Position("d6"), b);
         
-        assertEquals(14, bRook.getLegalMove().size());
+        assertEquals(14, bRook.getNextLegalMove().size());
 
-        assertTrue(bRook.getLegalMove().contains(new Position("d7")));
-        assertTrue(bRook.getLegalMove().contains(new Position("d5")));
-        assertTrue(bRook.getLegalMove().contains(new Position("c6")));
-        assertTrue(bRook.getLegalMove().contains(new Position("e6")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("d7")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("d5")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("c6")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("e6")));
     }
 
     @Test
@@ -97,37 +87,37 @@ public class RookTest {
         new Rook(true, new Position("a5"), b);
         new Rook(true, new Position("c1"), b);
         
-        assertEquals(4, wRook.getLegalMove().size());
+        assertEquals(4, wRook.getNextLegalMove().size());
 
         Rook bRook = new Rook(false, new Position("h8"), b);
         
         new Rook(false, new Position("h1"), b);
         new Rook(false, new Position("d8"), b);
         
-        assertEquals(9, bRook.getLegalMove().size());
+        assertEquals(9, bRook.getNextLegalMove().size());
     }
 
     @Test
-    public void rookMoveCapturable() {
+    public void rookMoveCapture() {
 
         Rook wRook = new Rook(true, new Position("a1"), b);
         
         new Rook(false, new Position("a5"), b);
         new Rook(false, new Position("c1"), b);
         
-        assertTrue(wRook.getLegalMove().contains(new Position("a5")));
-        assertTrue(wRook.getLegalMove().contains(new Position("c1")));
-        assertEquals(6, wRook.getLegalMove().size());
+        assertTrue(wRook.getNextLegalMove().contains(new Position("a5")));
+        assertTrue(wRook.getNextLegalMove().contains(new Position("c1")));
+        assertEquals(6, wRook.getNextLegalMove().size());
 
         Rook bRook = new Rook(false, new Position("h8"), b);
         
         new Rook(true, new Position("h6"), b);
         new Rook(true, new Position("b8"), b);
 
-        assertTrue(bRook.getLegalMove().contains(new Position("h6")));
-        assertTrue(bRook.getLegalMove().contains(new Position("b8")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("h6")));
+        assertTrue(bRook.getNextLegalMove().contains(new Position("b8")));
         
-        assertEquals(8, bRook.getLegalMove().size());
+        assertEquals(8, bRook.getNextLegalMove().size());
     }
 
     @Test
@@ -140,7 +130,7 @@ public class RookTest {
         new Pawn(true, new Position("d4"), b);
         new Pawn(true, new Position("f4"), b);
 
-        assertEquals(0, rook.getLegalMove().size()); // same color block
+        assertEquals(0, rook.getNextLegalMove().size()); // same color block
 
         Rook rook2 = new Rook(false, new Position("c7"), b);
 
@@ -149,7 +139,7 @@ public class RookTest {
         new Pawn(true, new Position("b7"), b);
         new Pawn(true, new Position("d7"), b);
 
-        assertEquals(4, rook2.getLegalMove().size()); // can capture different color
+        assertEquals(4, rook2.getNextLegalMove().size()); // can capture different color
     }
 
     @Test 
@@ -162,7 +152,7 @@ public class RookTest {
         new Pawn(false, new Position("g3"), b);
         new Pawn(false, new Position("e3"), b);
 
-        assertEquals(2, rook.getLegalMove().size()); 
+        assertEquals(2, rook.getNextLegalMove().size());
 
         Rook rook2 = new Rook(false, new Position("c7"), b);
 
@@ -171,6 +161,6 @@ public class RookTest {
         new Pawn(true, new Position("b7"), b);
         new Pawn(false, new Position("d7"), b);
 
-        assertEquals(3, rook2.getLegalMove().size()); 
+        assertEquals(3, rook2.getNextLegalMove().size());
     }
 }

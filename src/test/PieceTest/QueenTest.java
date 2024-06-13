@@ -1,16 +1,14 @@
 package test.PieceTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import game.Board.Board;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.board.Board;
 import game.piece.Pawn;
 import game.piece.Queen;
 import game.position.Position;
+
+import static org.junit.Assert.*;
 
 public class QueenTest {
 
@@ -29,53 +27,37 @@ public class QueenTest {
     @Test
     public void queenConstructorTest() {
         Queen wQueen = new Queen(true, qW, b);
-        assertTrue(!wQueen.isMoved());
-        assertEquals(qW, wQueen.getPos());
+        assertFalse(wQueen.isMoved());
+        assertTrue(wQueen.getColor());
+        assertEquals(qW, wQueen.getPosition());
         assertEquals(b, wQueen.getBoard());
 
         Queen bQueen = new Queen(false, qB, b);
-        assertTrue(!bQueen.isMoved());
-        assertEquals(qB, bQueen.getPos());
+        assertFalse(bQueen.isMoved());
+        assertFalse(bQueen.getColor());
+        assertEquals(qB, bQueen.getPosition());
         assertEquals(b, bQueen.getBoard());
     }
 
     @Test
-    public void queenMovedStatusTest() {
-        Queen wQueen = new Queen(true, qW, b);
-        assertFalse(wQueen.isMoved());
-
-        wQueen.move(new Position("e2"));
-        assertTrue(wQueen.isMoved());
-    }
-
-    @Test
-    public void queenMovedTest() {
-        Queen wQueen = new Queen(true, qW, b);
-        assertFalse(wQueen.isMoved());
-
-        wQueen.move(new Position("h5"));
-        assertTrue(wQueen.getPos().equals(new Position("h5")));
-    }
-
-    @Test
-    public void queenMoveStartingPositonTest() {
+    public void queenMoveStartingPositionTest() {
         Queen wQueen = new Queen(true, qW, b);
 
-        assertEquals(21, wQueen.getLegalMove().size());
-        assertTrue(wQueen.getLegalMove().contains(new Position("h1")));
-        assertTrue(wQueen.getLegalMove().contains(new Position("h5")));
-        assertTrue(wQueen.getLegalMove().contains(new Position("d8")));
-        assertTrue(wQueen.getLegalMove().contains(new Position("a4")));
-        assertTrue(wQueen.getLegalMove().contains(new Position("a1")));
+        assertEquals(21, wQueen.getNextLegalMove().size());
+        assertTrue(wQueen.getNextLegalMove().contains(new Position("h1")));
+        assertTrue(wQueen.getNextLegalMove().contains(new Position("h5")));
+        assertTrue(wQueen.getNextLegalMove().contains(new Position("d8")));
+        assertTrue(wQueen.getNextLegalMove().contains(new Position("a4")));
+        assertTrue(wQueen.getNextLegalMove().contains(new Position("a1")));
 
         Queen bQueen = new Queen(false, qB, b);
 
-        assertEquals(21, bQueen.getLegalMove().size());
-        assertTrue(bQueen.getLegalMove().contains(new Position("a8")));
-        assertTrue(bQueen.getLegalMove().contains(new Position("a5")));
-        assertTrue(bQueen.getLegalMove().contains(new Position("d1")));
-        assertTrue(bQueen.getLegalMove().contains(new Position("h4")));
-        assertTrue(bQueen.getLegalMove().contains(new Position("h8")));
+        assertEquals(21, bQueen.getNextLegalMove().size());
+        assertTrue(bQueen.getNextLegalMove().contains(new Position("a8")));
+        assertTrue(bQueen.getNextLegalMove().contains(new Position("a5")));
+        assertTrue(bQueen.getNextLegalMove().contains(new Position("d1")));
+        assertTrue(bQueen.getNextLegalMove().contains(new Position("h4")));
+        assertTrue(bQueen.getNextLegalMove().contains(new Position("h8")));
     }
 
     @Test
@@ -83,27 +65,27 @@ public class QueenTest {
 
         Queen wQ = new Queen(true, new Position("e5"), b);
 
-        assertEquals(27, wQ.getLegalMove().size());
-        assertTrue(wQ.getLegalMove().contains(new Position("a5"))); // end points
-        assertTrue(wQ.getLegalMove().contains(new Position("b8")));
-        assertTrue(wQ.getLegalMove().contains(new Position("e8")));
-        assertTrue(wQ.getLegalMove().contains(new Position("h8")));
-        assertTrue(wQ.getLegalMove().contains(new Position("h5")));
-        assertTrue(wQ.getLegalMove().contains(new Position("h2")));
-        assertTrue(wQ.getLegalMove().contains(new Position("e1")));
-        assertTrue(wQ.getLegalMove().contains(new Position("a1")));
+        assertEquals(27, wQ.getNextLegalMove().size());
+        assertTrue(wQ.getNextLegalMove().contains(new Position("a5"))); // end points
+        assertTrue(wQ.getNextLegalMove().contains(new Position("b8")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("e8")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("h8")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("h5")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("h2")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("e1")));
+        assertTrue(wQ.getNextLegalMove().contains(new Position("a1")));
 
         Queen bQ = new Queen(true, new Position("c2"), b);
 
-        assertEquals(23, bQ.getLegalMove().size());
-        assertTrue(bQ.getLegalMove().contains(new Position("a2"))); // end points
-        assertTrue(bQ.getLegalMove().contains(new Position("a4")));
-        assertTrue(bQ.getLegalMove().contains(new Position("c8")));
-        assertTrue(bQ.getLegalMove().contains(new Position("h7")));
-        assertTrue(bQ.getLegalMove().contains(new Position("h2")));
-        assertTrue(bQ.getLegalMove().contains(new Position("d1")));
-        assertTrue(bQ.getLegalMove().contains(new Position("c1")));
-        assertTrue(bQ.getLegalMove().contains(new Position("b1")));
+        assertEquals(23, bQ.getNextLegalMove().size());
+        assertTrue(bQ.getNextLegalMove().contains(new Position("a2"))); // end points
+        assertTrue(bQ.getNextLegalMove().contains(new Position("a4")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("c8")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("h7")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("h2")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("d1")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("c1")));
+        assertTrue(bQ.getNextLegalMove().contains(new Position("b1")));
     }
 
     @Test
@@ -115,7 +97,7 @@ public class QueenTest {
         new Pawn(true, new Position("b1"), b);
         new Pawn(true, new Position("b2"), b);
 
-        assertEquals(0, q.getLegalMove().size());
+        assertEquals(0, q.getNextLegalMove().size());
 
         Queen q2 = new Queen(true, new Position("c8"), b); // edge
         new Pawn(true, new Position("c7"), b);
@@ -124,7 +106,7 @@ public class QueenTest {
         new Pawn(true, new Position("b7"), b);
         new Pawn(true, new Position("d7"), b);
 
-        assertEquals(0, q2.getLegalMove().size());
+        assertEquals(0, q2.getNextLegalMove().size());
 
         Queen q3 = new Queen(true, new Position("h4"), b);
         new Pawn(true, new Position("h5"), b);
@@ -133,7 +115,7 @@ public class QueenTest {
         new Pawn(true, new Position("g4"), b);
         new Pawn(true, new Position("g5"), b);
 
-        assertEquals(0, q3.getLegalMove().size());
+        assertEquals(0, q3.getNextLegalMove().size());
     }
 
     @Test
@@ -144,13 +126,13 @@ public class QueenTest {
         new Pawn(true, new Position("a2"), b);
         new Pawn(true, new Position("b1"), b);
 
-        assertEquals(7, q.getLegalMove().size());
+        assertEquals(7, q.getNextLegalMove().size());
 
         Queen q1 = new Queen(true, new Position("f1"), b); // expose one diagonal
 
         new Pawn(true, new Position("e2"), b);
 
-        assertEquals(14, q1.getLegalMove().size());
+        assertEquals(14, q1.getNextLegalMove().size());
 
         Queen q2 = new Queen(false, new Position("c5"), b); // expose only cross
 
@@ -163,7 +145,7 @@ public class QueenTest {
         new Pawn(false, new Position("c7"), b);
         new Pawn(false, new Position("b6"), b);
 
-        assertEquals(4, q2.getLegalMove().size());
+        assertEquals(4, q2.getNextLegalMove().size());
     }
 
     @Test
@@ -174,14 +156,14 @@ public class QueenTest {
         new Pawn(false, new Position("h2"), b);
         new Pawn(false, new Position("g1"), b);
 
-        assertEquals(9, q1.getLegalMove().size());
+        assertEquals(9, q1.getNextLegalMove().size());
 
         Queen q2 = new Queen(true, new Position("h8"), b);
 
         new Pawn(false, new Position("h7"), b);
         new Pawn(true, new Position("g8"), b);
 
-        assertEquals(8, q2.getLegalMove().size());
+        assertEquals(8, q2.getNextLegalMove().size());
 
         Queen q3 = new Queen(false, new Position("c5"), b); // expose only cross
 
@@ -194,16 +176,18 @@ public class QueenTest {
         new Pawn(false, new Position("d5"), b);
         new Pawn(false, new Position("c4"), b);
 
-        assertEquals(6, q3.getLegalMove().size());
+        assertEquals(6, q3.getNextLegalMove().size());
 
-        Queen q4 = new Queen(true, new Position("a5"), b);
+        Board b1 = new Board();
 
-        new Pawn(false, new Position("b6"), b);
-        new Pawn(true, new Position("b5"), b);
-        new Pawn(false, new Position("b4"), b);
-        new Pawn(false, new Position("a3"), b);
+        Queen q4 = new Queen(true, new Position("a5"), b1);
 
-        assertEquals(7, q4.getLegalMove().size());
+        new Pawn(false, new Position("b6"), b1);
+        new Pawn(true, new Position("b5"), b1);
+        new Pawn(false, new Position("b4"), b1);
+        new Pawn(false, new Position("a3"), b1);
+
+        assertEquals(7, q4.getNextLegalMove().size());
     }
 
     @Test
@@ -215,7 +199,7 @@ public class QueenTest {
         new Pawn(false, new Position("b1"), b);
         new Queen(false, new Position("b2"), b);
 
-        assertEquals(0, q.getLegalMove().size());
+        assertEquals(0, q.getNextLegalMove().size());
 
         Queen q1 = new Queen(true, new Position("h4"), b); // one side all capturable
 
@@ -225,7 +209,7 @@ public class QueenTest {
         new Queen(false, new Position("g4"), b);
         new Queen(false, new Position("g3"), b);
 
-        assertEquals(5, q1.getLegalMove().size());
+        assertEquals(5, q1.getNextLegalMove().size());
 
         Queen q2 = new Queen(true, new Position("c5"), b); // center obstructed
 
@@ -238,6 +222,6 @@ public class QueenTest {
         new Pawn(false, new Position("c6"), b);
         new Pawn(false, new Position("c4"), b);
 
-        assertEquals(8, q2.getLegalMove().size());
+        assertEquals(8, q2.getNextLegalMove().size());
     }
 }

@@ -1,16 +1,15 @@
 package test.PieceTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import game.Board.Board;
+import game.util.Constant;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.board.Board;
-import game.constant.Constant;
 import game.piece.Pawn;
 import game.piece.Piece;
 import game.position.Position;
+
+import static org.junit.Assert.*;
 
 
 public class PieceTest {
@@ -32,10 +31,11 @@ public class PieceTest {
 
         Piece p1 = new Pawn(true, posWhite, b);
 
-        assert(p1.isWhite());
-        assertEquals(posWhite, p1.getPos());
+        assertTrue(p1.isWhite());
+        assertEquals(posWhite, p1.getPosition());
         assertEquals(b, p1.getBoard());
-        assertTrue(!p1.isMovable());
+        assertEquals(p1, b.getPiece(posWhite));
+        assertFalse(p1.isMoved());
     }
 
     @Test
@@ -43,10 +43,30 @@ public class PieceTest {
 
         Piece p2 = new Pawn(false, posBlack, b);
 
-        assert(!p2.isWhite());
-        assertEquals(posBlack, p2.getPos());
+        assertFalse(p2.isWhite());
+        assertEquals(posBlack, p2.getPosition());
         assertEquals(b, p2.getBoard());
-        assertTrue(!p2.isMovable());
+        assertEquals(p2, b.getPiece(posBlack));
+        assertFalse(p2.isMoved());
+    }
+
+    @Test
+    public void equalsTest() {
+        Board b1 = new Board();
+        Board b2 = new Board();
+
+        Piece p1 = new Pawn(true, posWhite, b1);
+        Piece p2 = new Pawn(true, posWhite, b2);
+
+        assertTrue(p1.isWhite());
+        assertEquals(posWhite, p1.getPosition());
+        assertEquals(b1, p1.getBoard());
+
+        assertTrue(p2.isWhite());
+        assertEquals(posWhite, p2.getPosition());
+        assertEquals(b2, p2.getBoard());
+
+        assertEquals(p1, p2);
     }
 
 }

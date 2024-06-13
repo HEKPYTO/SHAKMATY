@@ -1,6 +1,8 @@
 package game.position;
 
-import game.constant.Constant;
+import game.util.Constant;
+
+import java.util.Objects;
 
 public class Position {
 
@@ -24,10 +26,10 @@ public class Position {
         int colIndex = s.charAt(0) - 'a';
         int rowIndex = s.charAt(1) - '1';
 
-        setRow(rowIndex);
-        setCol(colIndex);
+        Position p = new Position(rowIndex, colIndex);
 
-        validatePosition();
+        setRow(p.getRow());
+        setCol(p.getCol());
     }
 
     public Position(int row, int col, int rRow, int rCol) {
@@ -40,25 +42,23 @@ public class Position {
         setRookPos(new Position(r));
     }
 
-    private void validatePosition() {
-        if (col < 0 || col >= Constant.COL || row < 0 || row >= Constant.ROW) {
-            throw new IllegalArgumentException("Position out of bounds.");
-        }
-    }
-
     public String toString() {
         return "" + (char) (col + 'a') + (char) (row + '1');
     }
 
+    @Override
     public boolean equals(Object obj) {
 
-        if (this == obj) return true;
+        if (obj instanceof Position p) {
+            return p.row == row && p.col == col;
+        }
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        return false;
+    }
 
-        Position other = (Position) obj;
-        return row == other.getRow() && col == other.getCol();
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(toString());
     }
 
     public int getRow() {

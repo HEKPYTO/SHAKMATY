@@ -1,6 +1,6 @@
 package game.piece;
 
-import game.board.Board;
+import game.Board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -11,9 +11,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    public void legalMove() {
+    public void calculateLegalMove() {
 
-        Movement moves = new Movement(pos, board);
+        Movement moves = new Movement(position, board);
 
         moves.lShapeMove();
 
@@ -21,7 +21,12 @@ public class Knight extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "Knight " + pos.toString();
+    public Object deepCopy() {
+        Knight knight = new Knight(white, position, board);
+        knight.setLegalMove(legalMove);
+        if (moved) hasMoved();
+
+        return knight;
     }
+
 }

@@ -1,9 +1,0 @@
-Select, to play as:
-
-(1) White (Start First)
-
-(2) Black (Follow White)
-
-(r) Restart From Begining
-
-(q) Quit

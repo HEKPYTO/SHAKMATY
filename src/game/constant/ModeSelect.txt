@@ -1,9 +1,0 @@
-Select Game Mode:
-
-(1) Single Player (Against Computer)
-
-(2) Versus Player (Yourself / Friend on This Device)
-
-(3) Debug Mode (If you UNDERSTAND what you doing)
-
-(q) Quit this game

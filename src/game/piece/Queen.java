@@ -1,6 +1,6 @@
 package game.piece;
 
-import game.board.Board;
+import game.Board.Board;
 import game.position.Position;
 import game.util.Movement;
 
@@ -11,9 +11,9 @@ public class Queen extends Piece {
     }
 
     @Override
-    public void legalMove() {
+    public void calculateLegalMove() {
 
-        Movement moves = new Movement(pos, board);
+        Movement moves = new Movement(position, board);
 
         moves.plusMove();
         moves.diagonalMove();
@@ -22,8 +22,11 @@ public class Queen extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "Queen " + pos.toString();
+    public Object deepCopy() {
+        Queen queen = new Queen(white, position, board);
+        queen.setLegalMove(legalMove);
+        if (moved) hasMoved();
+
+        return queen;
     }
-    
 }

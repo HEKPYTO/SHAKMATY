@@ -1,16 +1,14 @@
 package test.PieceTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import game.Board.Board;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.board.Board;
 import game.piece.Knight;
 import game.piece.Pawn;
 import game.position.Position;
+
+import static org.junit.Assert.*;
 
 public class KnightTest {
 
@@ -37,81 +35,72 @@ public class KnightTest {
 
         Knight k1 = new Knight(true, wKL, b);
 
-        assertTrue(!k1.isMoved());
-        assertEquals(wKL, k1.getPos());
+        assertFalse(k1.isMoved());
+        assertEquals(wKL, k1.getPosition());
         assertEquals(b, k1.getBoard());
 
         Knight k2 = new Knight(false, bKL, b);
 
-        assertTrue(!k2.isMoved());
-        assertEquals(bKL, k2.getPos());
+        assertFalse(k2.isMoved());
+        assertEquals(bKL, k2.getPosition());
         assertEquals(b, k2.getBoard());
         
-    }
-
-    @Test
-    public void testKnightMovedStatus() {
-        Knight k = new Knight(true, new Position("b1"), b);
-        assertFalse(k.isMoved());
-
-        k.move(new Position("c3"));
-        assertTrue(k.isMoved());
     }
 
     @Test
     public void knightMoveStartingPositonTest() {
 
         Knight kWL = new Knight(true, wKL, b);
-        
-        assertEquals(3, kWL.getLegalMove().size());
 
-        assertTrue(kWL.getLegalMove().contains(new Position("a3")));
-        assertTrue(kWL.getLegalMove().contains(new Position("c3")));
-        assertTrue(kWL.getLegalMove().contains(new Position("d2")));
+        assertEquals(3, kWL.getNextLegalMove().size());
+
+        assertTrue(kWL.getNextLegalMove().contains(new Position("a3")));
+        assertTrue(kWL.getNextLegalMove().contains(new Position("c3")));
+        assertTrue(kWL.getNextLegalMove().contains(new Position("d2")));
 
         Knight kWR = new Knight(true, wKR, b);
         
-        assertEquals(3, kWR.getLegalMove().size());
+        assertEquals(3, kWR.getNextLegalMove().size());
 
-        assertTrue(kWR.getLegalMove().contains(new Position("f3")));
-        assertTrue(kWR.getLegalMove().contains(new Position("h3")));
-        assertTrue(kWR.getLegalMove().contains(new Position("e2")));
+        assertTrue(kWR.getNextLegalMove().contains(new Position("f3")));
+        assertTrue(kWR.getNextLegalMove().contains(new Position("h3")));
+        assertTrue(kWR.getNextLegalMove().contains(new Position("e2")));
 
         Knight kBL = new Knight(false, bKL, b);
         
-        assertEquals(3, kBL.getLegalMove().size());
+        assertEquals(3, kBL.getNextLegalMove().size());
 
-        assertTrue(kBL.getLegalMove().contains(new Position("a6")));
-        assertTrue(kBL.getLegalMove().contains(new Position("c6")));
-        assertTrue(kBL.getLegalMove().contains(new Position("d7")));
+        assertTrue(kBL.getNextLegalMove().contains(new Position("a6")));
+        assertTrue(kBL.getNextLegalMove().contains(new Position("c6")));
+        assertTrue(kBL.getNextLegalMove().contains(new Position("d7")));
 
         Knight kBR = new Knight(false, bKR, b);
         
-        assertEquals(3, kBR.getLegalMove().size());
+        assertEquals(3, kBR.getNextLegalMove().size());
 
-        assertTrue(kBR.getLegalMove().contains(new Position("f6")));
-        assertTrue(kBR.getLegalMove().contains(new Position("h6")));
-        assertTrue(kBR.getLegalMove().contains(new Position("e7")));
+        assertTrue(kBR.getNextLegalMove().contains(new Position("f6")));
+        assertTrue(kBR.getNextLegalMove().contains(new Position("h6")));
+        assertTrue(kBR.getNextLegalMove().contains(new Position("e7")));
 
     }
 
     @Test
-    public void knightAtConerMove() {
+    public void knightAtCornerMove() {
 
         Knight kW = new Knight(true, new Position("a1"), b);
         
-        assertEquals(2, kW.getLegalMove().size());
+        assertEquals(2, kW.getNextLegalMove().size());
 
-        assertTrue(kW.getLegalMove().contains(new Position("b3")));
-        assertTrue(kW.getLegalMove().contains(new Position("c2")));
+        assertTrue(kW.getNextLegalMove().contains(new Position("b3")));
+        assertTrue(kW.getNextLegalMove().contains(new Position("c2")));
 
 
         Knight kB = new Knight(false, new Position("h8"), b);
 
-        assertEquals(2, kB.getLegalMove().size());
+        assertEquals(2, kB.getNextLegalMove().size());
 
-        assertTrue(kB.getLegalMove().contains(new Position("g6")));
-        assertTrue(kB.getLegalMove().contains(new Position("f7")));
+        assertTrue(kB.getNextLegalMove().contains(new Position("g6")));
+        assertTrue(kB.getNextLegalMove().contains(new Position("f7")));
 
     }
 
@@ -121,20 +110,20 @@ public class KnightTest {
         Knight kW = new Knight(true, new Position("a1"), b);
         new Pawn(true, new Position("b3"), b);
         
-        assertEquals(1, kW.getLegalMove().size());
+        assertEquals(1, kW.getNextLegalMove().size());
 
-        assertFalse(kW.getLegalMove().contains(new Position("b3")));
-        assertTrue(kW.getLegalMove().contains(new Position("c2")));
+        assertFalse(kW.getNextLegalMove().contains(new Position("b3")));
+        assertTrue(kW.getNextLegalMove().contains(new Position("c2")));
 
 
         Knight kB = new Knight(false, new Position("h8"), b);
         new Pawn(false, new Position("g6"), b);
         new Pawn(false, new Position("f7"), b); 
 
-        assertEquals(0, kB.getLegalMove().size());
+        assertEquals(0, kB.getNextLegalMove().size());
 
-        assertFalse(kB.getLegalMove().contains(new Position("g6")));
-        assertFalse(kB.getLegalMove().contains(new Position("f7")));
+        assertFalse(kB.getNextLegalMove().contains(new Position("g6")));
+        assertFalse(kB.getNextLegalMove().contains(new Position("f7")));
 
     }
 
@@ -143,11 +132,11 @@ public class KnightTest {
 
         Knight kW = new Knight(true, new Position("e4"), b);
         
-        assertEquals(8, kW.getLegalMove().size());
+        assertEquals(8, kW.getNextLegalMove().size());
 
         Knight kB = new Knight(false, new Position("f6"), b);
         
-        assertEquals(8, kB.getLegalMove().size());
+        assertEquals(8, kB.getNextLegalMove().size());
     } 
 
     @Test
@@ -157,16 +146,16 @@ public class KnightTest {
         new Pawn(false, new Position("d2"), b);
         new Pawn(true, new Position("c3"), b); 
         
-        assertEquals(7, kW.getLegalMove().size());
+        assertEquals(7, kW.getNextLegalMove().size());
 
         new Pawn(false, new Position("c5"), b);
         new Pawn(false, new Position("d6"), b); 
 
-        assertEquals(7, kW.getLegalMove().size());
+        assertEquals(7, kW.getNextLegalMove().size());
 
         Knight kB = new Knight(false, new Position("b7"), b);
 
-        assertEquals(2, kB.getLegalMove().size());
+        assertEquals(2, kB.getNextLegalMove().size());
     }
 
     @Test
@@ -175,8 +164,8 @@ public class KnightTest {
         Knight kW = new Knight(true, new Position("d4"), b);
         Knight kB = new Knight(false, new Position("c6"), b);
 
-        assertTrue(kW.getLegalMove().contains(new Position("c6")));
-        assertTrue(kB.getLegalMove().contains(new Position("d4")));
+        assertTrue(kW.getNextLegalMove().contains(new Position("c6")));
+        assertTrue(kB.getNextLegalMove().contains(new Position("d4")));
     }
 
     @Test
@@ -191,7 +180,7 @@ public class KnightTest {
         new Pawn(true, new Position("c5"), b);
         new Pawn(true, new Position("g5"), b);
 
-        assertEquals(0, kW.getLegalMove().size());
+        assertEquals(0, kW.getNextLegalMove().size());
     }
 
     @Test
@@ -206,6 +195,6 @@ public class KnightTest {
         new Pawn(true, new Position("c5"), b);
         new Pawn(true, new Position("g5"), b);
         
-        assertEquals(8, kW.getLegalMove().size());
+        assertEquals(8, kW.getNextLegalMove().size());
     }
 }

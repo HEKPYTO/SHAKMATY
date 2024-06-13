@@ -1,52 +1,29 @@
 package game.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import game.board.Board;
-import game.constant.Constant;
+
+import game.Board.Board;
 import game.piece.King;
 import game.piece.Pawn;
+import game.piece.Piece;
 import game.piece.Rook;
 import game.position.Position;
 
-public class Movement { // Pawn Rook King have "moved" 
+public class Movement {
 
     protected Position current;
-    protected ArrayList<Position> moves;
+    protected Set<Position> moves = new HashSet<Position>();
     protected Board board;
 
     public Movement(Position current, Board board) {
         setCurrent(current);
         setBoard(board);
-
-        clearMoves(); // usable anyway
-    }
-
-    protected boolean isInBound(Position pos) {
-        return 0 <= pos.getCol() && 
-            pos.getCol() <= Constant.COL - 1 &&
-            0 <= pos.getRow() &&
-            pos.getRow() <= Constant.ROW - 1;
-    }
-
-    protected boolean isSameColorPiece(Position a, Position b) { 
-        return board.getPiece(a) != null && 
-            board.getPiece(b) != null && 
-            board.getPiece(a).isWhite() == board.getPiece(b).isWhite();
-    } 
-
-    protected boolean isVacantPosition(Position pos) {
-        return isInBound(pos) && board.getPiece(pos) == null;
-    }
-
-    protected boolean isDifferentColor(Position a, Position b) {
-        return board.getPiece(a) != null && 
-            board.getPiece(b) != null &&
-            board.getPiece(a).isWhite() != board.getPiece(b).isWhite();
     }
 
     public void singlePawnMove() {
-
         int col = current.getCol();
         int row = current.getRow();
 
@@ -54,34 +31,29 @@ public class Movement { // Pawn Rook King have "moved"
 
         Position p = new Position(row + singleMove, col);
 
-        if (isInBound(p) && isVacantPosition(p)) moves.add(p);
-        
+        if (board.isInBound(p) && board.isEmpty(p)) moves.add(p);
     }
 
     public void doublePawnMove() {
-
         int col = current.getCol();
         int row = current.getRow();
 
-        boolean isWhite = board.getPiece(current).isWhite();
+        if (board.getPiece(current).isMoved()) return;
 
-        if ((isWhite && row != 1) || (!isWhite && row != Constant.COL - 2)) return;
-
-        int singleMove = isWhite ? 1: -1;
+        int singleMove = board.getPiece(current).isWhite() ? 1: -1;
 
         Position p1 = new Position(row + singleMove, col);
 
-        if (!(isInBound(p1) && isVacantPosition(p1))) return;
+        if (!(board.isInBound(p1) && board.isEmpty(p1))) return;
 
-        int doubleMove = isWhite ? 2: -2;
+        int doubleMove = board.getPiece(current).isWhite() ? 2: -2;
 
         Position p2 = new Position(row + doubleMove, col);
 
-        if (isInBound(p2) && isVacantPosition(p2)) moves.add(p2);
-
+        if (board.isInBound(p2) && board.isEmpty(p2)) moves.add(p2);
     }
 
-    public void PawnCaptureMove() {
+    public void pawnCaptureMove() {
 
         int col = current.getCol();
         int row = current.getRow();
@@ -91,10 +63,9 @@ public class Movement { // Pawn Rook King have "moved"
         Position pLeft = new Position(row + singleMove, col - 1);
         Position pRight = new Position(row + singleMove, col + 1);
 
-        if (isInBound(pLeft) && isDifferentColor(pLeft, current)) moves.add(pLeft);
+        if (board.isInBound(pLeft) && !board.isEmpty(pLeft) && !board.isSameColor(current, pLeft)) moves.add(pLeft);
 
-        if (isInBound(pRight) && isDifferentColor(pRight, current)) moves.add(pRight);
-
+        if (board.isInBound(pRight) && !board.isEmpty(pRight) && !board.isSameColor(current, pRight)) moves.add(pRight);
     }
     
     public void plusMove() { // + sign movement
@@ -111,19 +82,13 @@ public class Movement { // Pawn Rook King have "moved"
 
                 Position p = new Position(row + dy * i, col + dx * i);
 
-                if (!isInBound(p)) break;
+                if (!board.isInBound(p)) break;
 
-                if (isVacantPosition(p)) {
-
-                    moves.add(p);
-
-                } else {
-                    
-                    if (isDifferentColor(p, current)) moves.add(p);
-
+                if (board.isEmpty(p)) moves.add(p);
+                else {
+                    if (!board.isSameColor(current, p)) moves.add(p);
                     break;
                 }
-
             }
         }
     }
@@ -142,16 +107,12 @@ public class Movement { // Pawn Rook King have "moved"
 
                 Position p = new Position(row + dy * i, col + dx * i);
 
-                if (!isInBound(p)) break;
+                if (!board.isInBound(p)) break;
 
-                if (isVacantPosition(p)) {
-
-                    moves.add(p);
-
-                } else {
+                if (board.isEmpty(p)) moves.add(p);
+                else {
                     
-                    if (isDifferentColor(p, current)) moves.add(p);
-
+                    if (!board.isSameColor(current, p)) moves.add(p);
                     break;
                 }
 
@@ -175,9 +136,7 @@ public class Movement { // Pawn Rook King have "moved"
 
             Position p = new Position(row + move[0], col + move[1]);
 
-            if (isInBound(p) && 
-                (isVacantPosition(p) || 
-                !isSameColorPiece(current, p))) moves.add(p);
+            if (board.isInBound(p) && (board.isEmpty(p) || !board.isSameColor(current, p))) moves.add(p);
 
         }
     }
@@ -192,12 +151,37 @@ public class Movement { // Pawn Rook King have "moved"
 
                 Position p = new Position(i, j);
 
-                if (!isInBound(p) || p.equals(current)) continue;
+                if (!board.isInBound(p) || p.equals(current)) continue;
 
-                if (isVacantPosition(p) || 
-                    !isSameColorPiece(p, current)) moves.add(p);
+                if (board.isEmpty(p) || !board.isSameColor(current, p)) moves.add(p);
             }
         }
+    }
+
+    public boolean isInCheck() {
+
+        Movement checked = new Movement(current, board);
+
+        if (!(board.getPiece(current) instanceof King)) return false;
+
+        checked.plusMove();
+        checked.diagonalMove();
+        checked.squareMove();
+        checked.lShapeMove();
+
+        Set<Position> checkedMoves = checked.getMoves();
+
+        for (Position p : checkedMoves) {
+            if (!board.isEmpty(p) && !board.isSameColor(current, p)) {
+                Piece enemy = board.getPiece(p);
+
+                for (Position enemyLegalMove : enemy.getNextLegalMove()) {
+                    if (current.equals(enemyLegalMove)) return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // Castling move depends on King, 
@@ -209,24 +193,17 @@ public class Movement { // Pawn Rook King have "moved"
 
         Position assumeRook = new Position(backRankY, assumeRookX);
 
-        if (!(board.getPiece(current) instanceof King && 
-            board.getPiece(assumeRook) instanceof Rook)) return;
-
-        King k = (King) board.getPiece(current);
-        Rook r = (Rook) board.getPiece(assumeRook);
+        if (!(board.getPiece(assumeRook) instanceof Rook r && board.getPiece(current) instanceof King k)) return;
 
         if (k.isMoved() || r.isMoved()) return;
 
-        int kingX = k.getPos().getCol();
-        int rookX = r.getPos().getCol();
+        int kingX = k.getPosition().getCol();
+        int rookX = r.getPosition().getCol();
 
         for (int i = kingX + 1; i < rookX; i++) {
             Position p = new Position(backRankY, i);
 
-            Checked check = new Checked(p, board, k.isWhite());
-
-            if (!isVacantPosition(p) ||
-                check.isInChekced()) return;
+            if (!board.isEmpty(p) || new Movement(p, board).isInCheck()) return;
         }
 
         int kingPlacementX = Constant.COL - 2;
@@ -242,24 +219,17 @@ public class Movement { // Pawn Rook King have "moved"
 
         Position assumeRook = new Position(backRankY, assumeRookX);
 
-        if (!(board.getPiece(current) instanceof King &&
-            board.getPiece(assumeRook) instanceof Rook)) return;
-
-        King k = (King) board.getPiece(current);
-        Rook r = (Rook) board.getPiece(assumeRook);
+        if (!(board.getPiece(assumeRook) instanceof Rook r && board.getPiece(current) instanceof King k)) return;
 
         if (k.isMoved() || r.isMoved()) return;
 
-        int kingX = k.getPos().getCol();
-        int rookX = r.getPos().getCol();
+        int kingX = k.getPosition().getCol();
+        int rookX = r.getPosition().getCol();
 
         for (int i = rookX + 1; i < kingX; i++) {
             Position p = new Position(backRankY, i);
 
-            Checked check = new Checked(p, board, k.isWhite());
-
-            if (!isVacantPosition(p) ||
-                check.isInChekced()) return;
+            if (!board.isEmpty(p) || new Movement(p, board).isInCheck()) return;
         }
 
         int kingPlacementX = 2;
@@ -284,24 +254,19 @@ public class Movement { // Pawn Rook King have "moved"
         Position afterLPos = new Position(enPos + singleMove, col - 1);
         Position afterRPos = new Position(enPos + singleMove, col + 1);
 
-        if (isInBound(lPos) && 
-            !isSameColorPiece(current, lPos) && 
+        if (board.isInBound(lPos) &&
+            !board.isSameColor(current, lPos) &&
             board.getPiece(lPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(lPos)).isPassant() &&
-            isInBound(afterLPos)) moves.add(afterLPos);
+            ((Pawn) board.getPiece(lPos)).canPassantCapture() &&
+            board.isInBound(afterLPos)) moves.add(afterLPos);
 
-        if (isInBound(rPos) && 
-            !isSameColorPiece(current, rPos) && 
+        if (board.isInBound(rPos) &&
+            !board.isSameColor(current, rPos) &&
             board.getPiece(rPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(rPos)).isPassant() &&
-            isInBound(afterRPos)) moves.add(afterRPos);
+            ((Pawn) board.getPiece(rPos)).canPassantCapture() &&
+            board.isInBound(afterRPos)) moves.add(afterRPos);
 
     }
-
-    public void clearMoves() {
-        setMoves(new ArrayList<Position>());
-    }
-
 
     public Position getCurrent() {
         return this.current;
@@ -311,12 +276,12 @@ public class Movement { // Pawn Rook King have "moved"
         this.current = current;
     }
 
-    public ArrayList<Position> getMoves() {
+    public Set<Position> getMoves() {
         return this.moves;
     }
 
-    public void setMoves(ArrayList<Position> moves) {
-        this.moves = moves;
+    public void clearMoves() {
+        moves.clear();
     }
 
     public Board getBoard() {

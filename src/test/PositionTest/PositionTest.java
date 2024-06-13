@@ -1,12 +1,10 @@
-package test.PieceTest;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package test.PositionTest;
 
 import org.junit.Test;
 
 import game.position.Position;
+
+import static org.junit.Assert.*;
 
 
 public class PositionTest {

@@ -1,25 +1,26 @@
 package game.piece;
 
-import game.board.Board;
-import game.constant.Constant;
+
+import game.Board.Board;
 import game.position.Position;
+import game.util.Constant;
 import game.util.Movement;
 
 public class Pawn extends Piece {
 
-    private boolean passnt = false;
+    private boolean passantCapture = false;
 
     public Pawn(boolean isWhite, Position pos, Board board) {
         super(isWhite, pos, board);
     }
 
     @Override
-    public void legalMove() {
+    public void calculateLegalMove() {
 
-        Movement moves = new Movement(pos, board);
+        Movement moves = new Movement(position, board);
         moves.singlePawnMove();
         moves.doublePawnMove();
-        moves.PawnCaptureMove();
+        moves.pawnCaptureMove();
         moves.enPassantMove();
 
         setLegalMove(moves.getMoves());
@@ -27,27 +28,24 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "Pawn " + pos.toString();
+    public Object deepCopy() {
+        Pawn pawn = new Pawn(white, position, board);
+        pawn.setLegalMove(legalMove);
+        if (moved) hasMoved();
+        pawn.setPassantCapture(canPassantCapture());
+
+        return pawn;
     }
 
-    public boolean isMoved() {
-        return this.moved;
+    public boolean canPassantCapture() {
+        return passantCapture;
     }
 
-    public void setMoved(boolean moved) {
-        this.moved = moved;
-    }
-
-    public boolean isPassant() {
-        return this.passnt;
-    }
-
-    public void setPassant(boolean passnt) {
-        this.passnt = passnt;
+    public void setPassantCapture(boolean passantCapture) {
+        this.passantCapture = passantCapture;
     }
 
     public boolean canPromote() {
-        return !isWhite() ? pos.getRow() == 0 : pos.getRow() == Constant.COL - 1;
+        return !isWhite() ? position.getRow() == 0 : position.getRow() == Constant.COL - 1;
     }
 }

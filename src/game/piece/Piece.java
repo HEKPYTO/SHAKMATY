@@ -1,85 +1,96 @@
 package game.piece;
 
-import java.util.ArrayList;
-
-import game.board.Board;
+import game.Board.Board;
 import game.position.Position;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Piece {
 
-    private boolean white;
-    protected boolean moved;
-    protected Position pos;
+    protected final boolean white;
+    protected boolean moved = false;
+    protected Position position;
     protected Board board;
-    protected ArrayList<Position> legalMove;
+    protected Set<Position> legalMove = new HashSet<Position>();
 
-    public Piece(boolean isWhite, Position pos, Board board) {
-        legalMove = new ArrayList<Position>();
-        setWhite(isWhite);
-        setBoard(board);
-        setPos(pos);
-        board.setPiece(this);
-        setMoved(false);
-    }
-
-    public abstract void legalMove();
-
-    public abstract String toString();
-
-    public void move(Position to) {
-        setMoved(true);
-        setPos(to);
-        setLegalMove(new ArrayList<Position>()); // new move -> new leagl move
-    }
-
-    public boolean isMovable() {
-        return !legalMove.isEmpty();
-    }
-
-    public boolean isWhite() {
-        return this.white;
-    }
-
-    public boolean getWhite() {
-        return this.white;
-    }
-
-    public void setWhite(boolean white) {
+    public Piece(boolean white, Position position, Board board) {
         this.white = white;
+        setPosition(position);
+        setBoard(board);
+
+        board.placePiece(this, position);
     }
 
+    public abstract void calculateLegalMove();
 
-    public Position getPos() {
-        return this.pos;
+    public abstract Object deepCopy();
+
+    public boolean getColor() {
+        return white;
     }
 
-    public void setPos(Position pos) {
-        this.pos = pos;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public Board getBoard() {
-        return this.board;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Piece piece) {
+            return position.equals(piece.position);
+        }
+
+        return false;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public Set<Position> getNextLegalMove() {
+        clearLegalMove();
+        calculateLegalMove();
+
+        return legalMove;
     }
 
-    public ArrayList<Position> getLegalMove() {
-        this.legalMove();
-        return this.legalMove;
+    public void moveHandle(Position to) {
+        hasMoved();
+        setPosition(to);
     }
 
-    public void setLegalMove(ArrayList<Position> legalMove) {
-        this.legalMove = legalMove;
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + position + ")";
+    }
+
+    public void hasMoved() {
+        this.moved = true;
     }
 
     public boolean isMoved() {
         return this.moved;
     }
 
-    public void setMoved(boolean moved) {
-        this.moved = moved;
+    public boolean isWhite() {
+        return white;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public Set<Position> getLegalMove() {
+        return legalMove;
+    }
+
+    public void setLegalMove(Set<Position> legalMove) {
+        this.legalMove = legalMove;
+    }
+
+    public void clearLegalMove() {legalMove.clear();}
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }
