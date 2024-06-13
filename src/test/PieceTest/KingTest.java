@@ -60,15 +60,15 @@ public class KingTest {
         assertTrue(k1.getNextLegalMove().contains(new Position("e5")));
         assertTrue(k1.getNextLegalMove().contains(new Position("f5")));
 
-//        King k2 = new King(false, kB, b);
-//
-//        assertEquals(5, k2.getNextLegalMove().size());
-//
-//        assertTrue(k2.getNextLegalMove().contains(new Position("d8")));
-//        assertTrue(k2.getNextLegalMove().contains(new Position("d7")));
-//        assertTrue(k2.getNextLegalMove().contains(new Position("e7")));
-//        assertTrue(k2.getNextLegalMove().contains(new Position("f8")));
-//        assertTrue(k2.getNextLegalMove().contains(new Position("f7")));
+        King k2 = new King(false, kB, b);
+
+        assertEquals(5, k2.getNextLegalMove().size());
+
+        assertTrue(k2.getNextLegalMove().contains(new Position("d8")));
+        assertTrue(k2.getNextLegalMove().contains(new Position("d7")));
+        assertTrue(k2.getNextLegalMove().contains(new Position("e7")));
+        assertTrue(k2.getNextLegalMove().contains(new Position("f8")));
+        assertTrue(k2.getNextLegalMove().contains(new Position("f7")));
     }
 
     @Test

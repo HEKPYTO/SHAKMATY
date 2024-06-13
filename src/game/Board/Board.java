@@ -58,8 +58,11 @@ public class Board {
 
     public String displayBoard() {
         StringBuilder showBoard = new StringBuilder();
-        for (int i = 0; i < Constant.COL; i++) {
-            for (int j = 0; j < Constant.ROW; j++) {
+        for (int i = Constant.ROW - 1; i >= 0; i--) {
+
+            showBoard.append(i + 1).append(" ");
+
+            for (int j = 0; j < Constant.COL; j++) {
                 Piece piece = getPiece(new Position(i, j));
 
                 int icon = 0;
@@ -86,6 +89,7 @@ public class Board {
 
             showBoard.append("\n");
         }
+        showBoard.append("  a b c d e f g h");
 
         return showBoard.toString();
     }

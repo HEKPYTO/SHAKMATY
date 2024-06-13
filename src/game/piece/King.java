@@ -55,5 +55,7 @@ public class King extends Piece {
         return check.isInCheck();
     }
 
-
+    public boolean isMate() {
+        return isInCheck() && legalMove.isEmpty();
+    }
 }
