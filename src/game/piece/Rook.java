@@ -1,8 +1,10 @@
 package game.piece;
 
-import game.Board.Board;
+import game.board.Board;
 import game.position.Position;
 import game.util.Movement;
+
+import java.util.Set;
 
 public class Rook extends Piece {
 
@@ -11,21 +13,20 @@ public class Rook extends Piece {
     }
 
     @Override
-    public void calculateLegalMove() {
+    public Set<Position> getLegalMove() {
 
         Movement moves = new Movement(position, board);
 
         moves.plusMove();
 
-        setLegalMove(moves.getMoves());
+        return moves.getMoves();
         
     }
 
     @Override
     public Object deepCopy() {
         Rook rook = new Rook(white, position, board);
-        setLegalMove(legalMove);
-        if (moved) hasMoved();
+        if (moved) hadMoved();
 
         return rook;
     }

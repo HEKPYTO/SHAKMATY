@@ -1,10 +1,12 @@
 package game.piece;
 
 
-import game.Board.Board;
+import game.board.Board;
 import game.position.Position;
 import game.util.Constant;
 import game.util.Movement;
+
+import java.util.Set;
 
 public class Pawn extends Piece {
 
@@ -15,7 +17,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public void calculateLegalMove() {
+    public Set<Position> getLegalMove() {
 
         Movement moves = new Movement(position, board);
         moves.singlePawnMove();
@@ -23,15 +25,13 @@ public class Pawn extends Piece {
         moves.pawnCaptureMove();
         moves.enPassantMove();
 
-        setLegalMove(moves.getMoves());
-
+        return moves.getMoves();
     }
 
     @Override
     public Object deepCopy() {
         Pawn pawn = new Pawn(white, position, board);
-        pawn.setLegalMove(legalMove);
-        if (moved) hasMoved();
+        if (moved) hadMoved();
         pawn.setPassantCapture(canPassantCapture());
 
         return pawn;

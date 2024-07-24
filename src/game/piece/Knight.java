@@ -1,8 +1,10 @@
 package game.piece;
 
-import game.Board.Board;
+import game.board.Board;
 import game.position.Position;
 import game.util.Movement;
+
+import java.util.Set;
 
 public class Knight extends Piece {
 
@@ -11,20 +13,19 @@ public class Knight extends Piece {
     }
 
     @Override
-    public void calculateLegalMove() {
+    public Set<Position> getLegalMove() {
 
         Movement moves = new Movement(position, board);
 
         moves.lShapeMove();
 
-        setLegalMove(moves.getMoves());
+        return moves.getMoves();
     }
 
     @Override
     public Object deepCopy() {
         Knight knight = new Knight(white, position, board);
-        knight.setLegalMove(legalMove);
-        if (moved) hasMoved();
+        if (moved) hadMoved();
 
         return knight;
     }

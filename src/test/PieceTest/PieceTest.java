@@ -1,6 +1,6 @@
 package test.PieceTest;
 
-import game.Board.Board;
+import game.board.Board;
 import game.util.Constant;
 import org.junit.Before;
 import org.junit.Test;

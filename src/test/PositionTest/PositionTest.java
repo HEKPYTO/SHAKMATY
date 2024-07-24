@@ -16,9 +16,9 @@ public class PositionTest {
         assertEquals(p.getRow(), 5);
         assertEquals(p.getCol(), 0);
     }
-    
+
     @Test
-    public void testConstructorString() {
+    public void stringConstructorTest() {
 
         Position pos1 = new Position("a1");
         assertEquals(0, pos1.getRow());
@@ -73,34 +73,6 @@ public class PositionTest {
         assertFalse(pos1.equals(pos3));
     }
 
-    @Test
-    public void testRookPosition() {
-
-        Position shortCastleWhitePos = new Position("g1", "f1");
-        assertEquals("g1", shortCastleWhitePos.toString());
-        assertEquals("f1", shortCastleWhitePos.getRookPos().toString());
-    
-        Position longCastleWhitePos = new Position("c1", "d1");
-        assertEquals("c1", longCastleWhitePos.toString());
-        assertEquals("d1", longCastleWhitePos.getRookPos().toString());
-    
-        Position shortCastleBlackPos = new Position("g8", "f8");
-        assertEquals("g8", shortCastleBlackPos.toString());
-        assertEquals("f8", shortCastleBlackPos.getRookPos().toString());
-    
-        Position longCastleBlackPos = new Position("c8", "d8");
-        assertEquals("c8", longCastleBlackPos.toString());
-        assertEquals("d8", longCastleBlackPos.getRookPos().toString());
-    }
-    
-    @Test
-    public void testSetAndGetRookPosition() {
-        Position pos = new Position("a1");
-        Position rookPos = new Position("b1");
-        pos.setRookPos(rookPos);
-        assertEquals(rookPos, pos.getRookPos());
-    }
-    
     @Test
     public void testEdgeCases() {
         Position pos1 = new Position("a1");

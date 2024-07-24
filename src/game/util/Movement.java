@@ -1,11 +1,10 @@
 package game.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 
-import game.Board.Board;
+import game.board.Board;
 import game.piece.King;
 import game.piece.Pawn;
 import game.piece.Piece;
@@ -158,11 +157,9 @@ public class Movement {
         }
     }
 
-    public boolean isInCheck() {
+    public boolean isInCheck(boolean color) {
 
         Movement checked = new Movement(current, board);
-
-        if (!(board.getPiece(current) instanceof King)) return false;
 
         checked.plusMove();
         checked.diagonalMove();
@@ -172,7 +169,7 @@ public class Movement {
         Set<Position> checkedMoves = checked.getMoves();
 
         for (Position p : checkedMoves) {
-            if (!board.isEmpty(p) && !board.isSameColor(current, p)) {
+            if (!board.isEmpty(p) && board.getPiece(p).isWhite() != color) { // Enemy Piece
                 Piece enemy = board.getPiece(p);
 
                 if (enemy instanceof King) {
@@ -183,11 +180,12 @@ public class Movement {
                         if (kp.equals(current)) return true;
                     }
 
-                    return false;
-                }
+                } else {
 
-                for (Position enemyLegalMove : enemy.getNextLegalMove()) {
-                    if (current.equals(enemyLegalMove)) return true;
+                    for (Position enemyLegalMove : enemy.getLegalMove()) {
+                        if (current.equals(enemyLegalMove)) return true;
+                    }
+
                 }
             }
         }
@@ -195,58 +193,56 @@ public class Movement {
         return false;
     }
 
-    // Castling move depends on King, 
-
     public void shortCastleMove() {
+        int backRank = board.getPiece(current).isWhite() ? 0 : Constant.ROW - 1;
 
-        int assumeRookX = Constant.COL - 1;
-        int backRankY = board.getPiece(current).isWhite() ? 0: Constant.ROW - 1;
+        if (!(board.getPiece(current) instanceof King king) || king.isMoved() || king.isInCheck()) return;
 
-        Position assumeRook = new Position(backRankY, assumeRookX);
+        int kingCol = king.getPosition().getCol();
 
-        if (!(board.getPiece(assumeRook) instanceof Rook r && board.getPiece(current) instanceof King k)) return;
+        Rook castle = null;
 
-        if (k.isMoved() || r.isMoved()) return;
+        for (int col = kingCol + 1; col < Constant.COL; col++) {
+            Position p = new Position(backRank, col);
 
-        int kingX = k.getPosition().getCol();
-        int rookX = r.getPosition().getCol();
+            if (board.getPiece(p) instanceof Rook rook
+                    && rook.isWhite() == king.isWhite()
+                    && !rook.isMoved()) {
 
-        for (int i = kingX + 1; i < rookX; i++) {
-            Position p = new Position(backRankY, i);
+                if (castle == null) castle = rook;
+                else return;
+            } else if (!board.isEmpty(p) || (new Movement(p, board)).isInCheck(king.isWhite())) return;
 
-            if (!board.isEmpty(p) || new Movement(p, board).isInCheck()) return;
+            if (castle != null && p.getCol() >= Constant.COL - 2) break;
         }
 
-        int kingPlacementX = Constant.COL - 2;
-        int rookPlacementX = Constant.COL - 3;
-
-        moves.add(new Position(backRankY, kingPlacementX, backRankY, rookPlacementX));
+        if (castle != null) moves.add(castle.getPosition());
     }
 
     public void longCastleMove() {
+        int backRank = board.getPiece(current).isWhite() ? 0 : Constant.ROW - 1;
 
-        int assumeRookX = 0;
-        int backRankY = board.getPiece(current).isWhite() ? 0: Constant.COL - 1;
+        if (!(board.getPiece(current) instanceof King king) || king.isMoved() || king.isInCheck()) return;
 
-        Position assumeRook = new Position(backRankY, assumeRookX);
+        int kingCol = king.getPosition().getCol();
 
-        if (!(board.getPiece(assumeRook) instanceof Rook r && board.getPiece(current) instanceof King k)) return;
+        Rook castle = null;
 
-        if (k.isMoved() || r.isMoved()) return;
+        for (int col = kingCol - 1; col >= 0; col--) {
+            Position p = new Position(backRank, col);
 
-        int kingX = k.getPosition().getCol();
-        int rookX = r.getPosition().getCol();
+            if (board.getPiece(p) instanceof Rook rook
+                && rook.isWhite() == king.isWhite()
+                && !rook.isMoved()) {
 
-        for (int i = rookX + 1; i < kingX; i++) {
-            Position p = new Position(backRankY, i);
+                if (castle == null) castle = rook;
+                else return;
+            } else if (!board.isEmpty(p) || (new Movement(p, board)).isInCheck(king.isWhite())) return;
 
-            if (!board.isEmpty(p) || new Movement(p, board).isInCheck()) return;
+            if (castle != null && p.getCol() < 2) break;
         }
 
-        int kingPlacementX = 2;
-        int rookPlacementX = 3;
-
-        moves.add(new Position(backRankY, kingPlacementX, backRankY, rookPlacementX));
+        if (castle != null) moves.add(castle.getPosition());
     }
 
     public void enPassantMove() {
@@ -289,10 +285,6 @@ public class Movement {
 
     public Set<Position> getMoves() {
         return this.moves;
-    }
-
-    public void clearMoves() {
-        moves.clear();
     }
 
     public Board getBoard() {

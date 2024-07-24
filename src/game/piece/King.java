@@ -3,8 +3,9 @@ package game.piece;
 import java.util.HashSet;
 import java.util.Set;
 
-import game.Board.Board;
+import game.board.Board;
 import game.position.Position;
+import game.position.TransPosition;
 import game.util.Movement;
 
 public class King extends Piece {
@@ -14,37 +15,41 @@ public class King extends Piece {
     }
 
     @Override
-    public void calculateLegalMove() {
+    public Set<Position> getLegalMove() {
 
-        Movement move = new Movement(position, board);
+        Movement movement = new Movement(position, board);
 
-        move.squareMove();
+        movement.squareMove();
 
-        if (!moved) {
-            move.shortCastleMove();
-            move.longCastleMove();
+        if (!isMoved()) {
+            movement.shortCastleMove();
+            movement.longCastleMove();
         }
+
+//        System.out.println(movement.getMoves());
 
         Set<Position> legalize = new HashSet<Position>();
 
-        for (Position possibleMove: move.getMoves()) {
-            Board virtualBoard = board.copyBoard();
-            virtualBoard.movePiece(position, possibleMove);
+        for (Position possibleMove: movement.getMoves()) {
+            Board vBoard = board.copyBoard();
+//            System.out.println(vBoard.displayBoard());
+            vBoard.movePiece(new TransPosition(position, possibleMove));
 
-            Movement checked = new Movement(possibleMove, virtualBoard);
-            if (!checked.isInCheck()) legalize.add(possibleMove);
+//            System.out.println(position + " : " + possibleMove);
+//            System.out.println(vBoard.displayBoard());
+//            System.out.println("--------------------------------");
+
+            Movement checked = new Movement(possibleMove, vBoard);
+            if (!checked.isInCheck(isWhite())) legalize.add(possibleMove);
         }
 
-        if (legalize.equals(legalMove)) return;
-
-        setLegalMove(legalize);
+        return legalize;
     }
 
     @Override
     public Object deepCopy() {
         King king = new King(white, position, board);
-        king.setLegalMove(legalMove);
-        if (moved) hasMoved();
+        if (moved) hadMoved();
 
         return king;
     }
@@ -52,10 +57,6 @@ public class King extends Piece {
     public boolean isInCheck() {
         Movement check = new Movement(position, board);
 
-        return check.isInCheck();
-    }
-
-    public boolean isMate() {
-        return isInCheck() && legalMove.isEmpty();
+        return check.isInCheck(isWhite());
     }
 }

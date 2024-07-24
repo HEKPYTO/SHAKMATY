@@ -9,8 +9,6 @@ public class Position {
     private int row;
     private int col;
 
-    Position rookPos = null;
-
     public Position(int row, int col) {
         setRow(row);
         setCol(col);
@@ -20,26 +18,18 @@ public class Position {
         if (s.length() != 2 || 
             !Character.isLetter(s.charAt(0)) || 
             !Character.isDigit(s.charAt(1))) {
-            throw new IllegalArgumentException("Invalid position format. Expected format: [a-h][1-8]");
+            throw new IllegalArgumentException(String.format(
+                    "Invalid position format. Expected format: [a-%c][1-%c]",
+                    (char) ('a' + Constant.COL - 1),
+                    (char) ('1' + Constant.ROW - 1)
+            ));
         }
 
         int colIndex = s.charAt(0) - 'a';
         int rowIndex = s.charAt(1) - '1';
 
-        Position p = new Position(rowIndex, colIndex);
-
-        setRow(p.getRow());
-        setCol(p.getCol());
-    }
-
-    public Position(int row, int col, int rRow, int rCol) {
-        this(row, col);
-        rookPos = new Position(rRow, rCol);
-    }
-
-    public Position(String s, String r) { // For Castling
-        this(s);
-        setRookPos(new Position(r));
+        setRow(rowIndex);
+        setCol(colIndex);
     }
 
     public String toString() {
@@ -47,9 +37,9 @@ public class Position {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object object) {
 
-        if (obj instanceof Position p) {
+        if (object instanceof Position p) {
             return p.row == row && p.col == col;
         }
 
@@ -75,15 +65,6 @@ public class Position {
 
     public void setCol(int col) {
         this.col = col;
-    }
-
-
-    public Position getRookPos() {
-        return this.rookPos;
-    }
-
-    public void setRookPos(Position rookPos) {
-        this.rookPos = rookPos;
     }
 
 }
