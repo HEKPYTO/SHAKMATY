@@ -226,11 +226,11 @@ public class PawnTest {
     public void pawnEnPassantFlag() {
         Pawn pawn = new Pawn(true, new Position("a2"), b);
         pawn.setPassantCaptured(false);
-        assertFalse(pawn.canPassantCapture());
+        assertFalse(pawn.canPassantCaptured());
 
         // Set the en passant flag
         pawn.setPassantCaptured(true);
-        assertTrue(pawn.canPassantCapture());
+        assertTrue(pawn.canPassantCaptured());
     }
 
     @Test
