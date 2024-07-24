@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Pawn extends Piece {
 
-    private boolean passantCapture = false;
+    private boolean passantCaptured = false;
 
     public Pawn(boolean isWhite, Position pos, Board board) {
         super(isWhite, pos, board);
@@ -32,17 +32,17 @@ public class Pawn extends Piece {
     public Object deepCopy() {
         Pawn pawn = new Pawn(white, position, board);
         if (moved) hadMoved();
-        pawn.setPassantCapture(canPassantCapture());
+        pawn.setPassantCaptured(canPassantCaptured());
 
         return pawn;
     }
 
-    public boolean canPassantCapture() {
-        return passantCapture;
+    public boolean canPassantCaptured() {
+        return passantCaptured;
     }
 
-    public void setPassantCapture(boolean passantCapture) {
-        this.passantCapture = passantCapture;
+    public void setPassantCaptured(boolean passantCapture) {
+        this.passantCaptured = passantCapture;
     }
 
     public boolean canPromote() {

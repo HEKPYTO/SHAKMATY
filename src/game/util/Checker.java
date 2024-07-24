@@ -53,7 +53,7 @@ public class Checker {
             for (int col = 0; col < Constant.COL; col++) {
                 Position position = new Position(row, col);
                 if (board.getPiece(position) instanceof Pawn pawn && pawn.isWhite() == color) {
-                    pawn.setPassantCapture(false);
+                    pawn.setPassantCaptured(false);
                 }
             }
         }

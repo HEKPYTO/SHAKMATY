@@ -225,11 +225,11 @@ public class PawnTest {
     @Test
     public void pawnEnPassantFlag() {
         Pawn pawn = new Pawn(true, new Position("a2"), b);
-        pawn.setPassantCapture(false);
+        pawn.setPassantCaptured(false);
         assertFalse(pawn.canPassantCapture());
 
         // Set the en passant flag
-        pawn.setPassantCapture(true);
+        pawn.setPassantCaptured(true);
         assertTrue(pawn.canPassantCapture());
     }
 
@@ -243,7 +243,7 @@ public class PawnTest {
         Pawn d5 = new Pawn(false, new Position("d5"), board1);
         e5.hadMoved();
         d5.hadMoved();
-        d5.setPassantCapture(true);
+        d5.setPassantCaptured(true);
 
         assertEquals(2, e5.getLegalMove().size());
         assertTrue(e5.getLegalMove().contains(new Position("e6")));
@@ -254,7 +254,7 @@ public class PawnTest {
         Pawn b5 = new Pawn(false, new Position("b5"), board2);
         a5.hadMoved();
         b5.hadMoved();
-        b5.setPassantCapture(true);
+        b5.setPassantCaptured(true);
 
         assertEquals(2, a5.getLegalMove().size());
         assertTrue(a5.getLegalMove().contains(new Position("b6")));
@@ -265,7 +265,7 @@ public class PawnTest {
         Pawn g5 = new Pawn(false, new Position("g5"), board3);
         h5.hadMoved();
         g5.hadMoved();
-        g5.setPassantCapture(true);
+        g5.setPassantCaptured(true);
 
         assertEquals(2, h5.getLegalMove().size());
         assertTrue(h5.getLegalMove().contains(new Position("h6")));
@@ -277,7 +277,7 @@ public class PawnTest {
         Pawn d4 = new Pawn(true, new Position("d4"), board4);
         e4.hadMoved();
         d4.hadMoved();
-        d4.setPassantCapture(true);
+        d4.setPassantCaptured(true);
 
         assertEquals(2, e4.getLegalMove().size());
         assertTrue(e4.getLegalMove().contains(new Position("e3")));
@@ -288,7 +288,7 @@ public class PawnTest {
         Pawn b4 = new Pawn(true, new Position("b4"), board5);
         a4.hadMoved();
         b4.hadMoved();
-        b4.setPassantCapture(true);
+        b4.setPassantCaptured(true);
 
         assertEquals(2, a4.getLegalMove().size());
         assertTrue(a4.getLegalMove().contains(new Position("a3")));
@@ -299,7 +299,7 @@ public class PawnTest {
         Pawn g4 = new Pawn(true, new Position("g4"), board6);
         h4.hadMoved();
         g4.hadMoved();
-        g4.setPassantCapture(true);
+        g4.setPassantCaptured(true);
 
         assertEquals(2, h4.getLegalMove().size());
         assertTrue(h4.getLegalMove().contains(new Position("h3")));

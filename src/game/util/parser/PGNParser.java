@@ -51,13 +51,15 @@ public class PGNParser extends Parser {
         }
 
         String movesPart = line.replaceAll("\\[.*?]", "").trim().replaceAll("\\d+\\.\\s*", "").replaceAll("\\s+", " ");
-        ArrayList<TransPosition> moves = parse(movesPart);
+        parse(movesPart);
 
         if (!moved) setCount(oldCount);
         else {
-            for (TransPosition move: moves) {
+            for (TransPosition move: translatedMove) {
                 parseMove(move, true);
             }
+
+            if (dummy.getStatus() == Status.WIN) throw new RuntimeException("PLAYER WON THE GAME");
         }
     }
 
@@ -66,30 +68,39 @@ public class PGNParser extends Parser {
     }
 
     @Override
-    protected ArrayList<TransPosition> parse(String line) {
-        ArrayList<TransPosition> moves = new ArrayList<>();
+    protected void parse(String line) {
         String[] moveParts = line.split("\\s+");
         for (String part : moveParts) {
             if (part.matches("\\d+\\.")) continue; // Redundant ?
 
-            TransPosition transPosition;
+            count++;
 
-            setCount(getCount() + 1);
-            transPosition = PGNTranslator(part);
+            switch (part) {
+                case "0-1" -> {
+                    if (!isWhiteTurn()) throw new IllegalArgumentException("BLACK can not WIN on BLACK TURN");
+                    dummy.setStatus(Status.WIN);
+                }
 
-            assert transPosition != null;
+                case "1-0" -> {
+                    if (isWhiteTurn()) throw new IllegalArgumentException("WHITE can not WIN on WHITE TURN");
+                    dummy.setStatus(Status.WIN);
+                }
+            }
+
+            if (dummy.getStatus() == Status.WIN) break;
+
+            TransPosition transPosition = PGNTranslator(part);
+
             if (!dummy.getPiece(transPosition.getFrom()).getLegalMove().contains(transPosition.getTo()))
                 throw new IllegalArgumentException("Illegal Move : " + transPosition);
 
             parseMove(transPosition, false);
             System.out.println(dummy.displayBoard());
-            moves.add(transPosition);
+            translatedMove.add(transPosition);
         }
-
-        return moves;
     }
 
-    public static TransPosition PGNTranslator(String move) {
+    public TransPosition PGNTranslator(String move) {
         Position from = null;
         Position to = null;
         int backRank = isWhiteTurn() ? 0 : Constant.COL - 1;
@@ -97,7 +108,7 @@ public class PGNParser extends Parser {
         // Special Moves
         switch (move) {
             case "O-O" -> {
-                for (int col = Constant.COL - 1; col > 0 ; col--) {
+                for (int col = Constant.COL - 1; col > 0; col--) {
                     Position backPosition = new Position(backRank, col);
                     Piece piece = dummy.getPiece(backPosition);
                     if (piece instanceof Rook) {
@@ -123,16 +134,6 @@ public class PGNParser extends Parser {
                 }
 
                 if (to != null) return new TransPosition(from, to);
-            }
-
-
-            case "0-1" -> {
-                if (!isWhiteTurn()) throw new IllegalArgumentException("BLACK Illegally claimed victory in BLACK TURN");
-                throw new RuntimeException("BLACK assumed WIN");
-            }
-            case "1-0" -> {
-                if (isWhiteTurn()) throw new IllegalArgumentException("WHITE Illegally claimed victory in WHITE TURN");
-                throw new RuntimeException("WHITE assumed WIN");
             }
         }
 
@@ -219,7 +220,7 @@ public class PGNParser extends Parser {
         throw new IllegalArgumentException("Invalid move format: " + move);
     }
 
-    public static Position findPieceFrom(char pieceType, Position to, String specifyRow, String specifyCol) {
+    public Position findPieceFrom(char pieceType, Position to, String specifyRow, String specifyCol) {
         ArrayList<Position> possibleFrom = new ArrayList<>();
         for (int i = 0; i < Constant.COL; i++) {
             for (int j = 0; j < Constant.ROW; j++) {

@@ -1,6 +1,5 @@
 package game.board;
 
-import game.control.State;
 import game.piece.*;
 import game.position.Position;
 import game.position.Status;
@@ -76,10 +75,14 @@ public class Board {
 
         // En Passant Logic Allow
         if (getPiece(tPosition.getTo()) instanceof Pawn pawn && Math.abs(tPosition.getTo().getRow() - tPosition.getFrom().getRow()) == 2) {
-            pawn.setPassantCapture(true);
+            pawn.setPassantCaptured(true);
         }
 
-        // TODO: En Passant Capture Logic
+        // En Passant Capture Logic
+
+        if (getPiece(new Position(tPosition.getFrom().getRow(), tPosition.getTo().getCol())) instanceof Pawn pawn && pawn.canPassantCaptured()) {
+            setPiece(null, pawn.getPosition());
+        }
 
         // Promote Logic
         if (getPiece(tPosition.getTo()) instanceof Pawn pawn && pawn.canPromote() && tPosition.getStatus() == Status.NORMAL) {
@@ -210,5 +213,11 @@ public class Board {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        if (!(status == Status.WIN || status == Status.DRAW || status == Status.KNIGHT)) throw new IllegalStateException("Illegal State for Board");
+
+        this.status = status;
     }
 }

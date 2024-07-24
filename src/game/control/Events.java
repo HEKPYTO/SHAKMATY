@@ -5,12 +5,12 @@ import game.util.Checker;
 import game.util.Constant;
 import game.util.parser.FENParser;
 import game.util.parser.PGNParser;
-import game.util.parser.Parser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 import static game.control.State.*;
+import static game.util.parser.Parser.isWhiteTurn;
 
 public class Events {
 
@@ -32,6 +32,7 @@ public class Events {
         for (;;) {
             switch (gameState) {
                 case WELCOME -> {
+
                     System.out.println(Display.greeter());
                     System.out.println("ENTER MODE: ");
                     String mode = scanner.nextLine().trim();
@@ -53,8 +54,14 @@ public class Events {
                     }
                 }
                 case INPUTPGN -> {
-                    System.out.println("SETUP BOARD MODE (PGN), DEPEND ON SETUP BOARD, LEAVE BLANK TO LEAVE");
-                    if (!pgn.isEmpty()) System.out.println("TYPE [CLEAR] TO CLEAR, CURRENT POSITION: " + pgn);
+                    Board dummy = FENParser.importFromFEN(fen);
+
+                    System.out.println("SETUP BOARD MODE (PGN), DEPEND ON SETUP BOARD, TYPE [OK] TO LEAVE");
+                    if (!pgn.isEmpty()) {
+                        new PGNParser(dummy).action(pgn, true);
+                        System.out.println(new Display(dummy).previewPrint());
+                        System.out.println("TYPE [CLEAR] TO CLEAR, CURRENT POSITION: " + pgn);
+                    }
                     System.out.print("ENTER POSITION CODE FORMAT: ");
                     if (scanner.hasNextLine()) {
                         String position = scanner.nextLine().trim();
@@ -62,42 +69,31 @@ public class Events {
                         switch (position) {
                             case "CLEAR" -> pgn = "";
                             case "OK" -> {
-
+                                changeState(WELCOME);
                             }
                             default -> {
                                 try {
-                                    new PGNParser(board).action(pgn + position, false);
+                                    new PGNParser(dummy).action(pgn + position, false);
+                                    pgn += position;
+                                } catch (IllegalArgumentException | IllegalStateException e) {
+                                    System.out.println(e.getMessage());
                                 }
                             }
                         }
-
-
-
-                        if (position.equals("CLEAR")) { // FIX
-                            pgn = "";
-                        } else {
-                            try {
-                                new PGNParser(board).action(position, false); // HEADLESS MODE (VALIDATE)
-                            } catch (RuntimeException e) {}
-
-                            setPgn(pgn + position);
-                        }
-                        changeState(State.WELCOME);
                     }
                 }
                 case INITPOS -> {
                     try {
                         board = fen.isEmpty() ? FENParser.defaultStartBoard() : FENParser.importFromFEN(fen);
                         parser = new PGNParser(board);
-                        display = new Display(board);
                         if (!pgn.isEmpty()) {
                             try {
                                 parser.action(pgn, true);
-                                count = Parser.getCount();
+//                                count = Parser.getCount();
                             } catch (RuntimeException e) {
-                                count = Parser.getCount();
+//                                count = Parser.getCount();
                                 if (e.getMessage().contains("WON")) {
-                                    changeState(WIN);
+                                    changeState(END);
                                     continue;
                                 }
                             }
@@ -119,8 +115,8 @@ public class Events {
                     }
                 }
                 case TOPLAY -> {
-                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
-                    System.out.print(isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");
+//                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
+//                    System.out.print(isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");
                     if (scanner.hasNextLine()) {
                         String move = scanner.nextLine().trim();
                         if (move.isEmpty()) {
@@ -137,12 +133,12 @@ public class Events {
                     } catch (RuntimeException e) {
                         System.out.println(e.getMessage());
                         if (e.getMessage().contains("WIN")) {
-                            changeState(State.WIN);
+                            changeState(State.END);
                             continue;
                         }
                     }
 
-                    boolean check = (new Checker(board)).isCheck(count % 2 == 0);
+                    boolean check = (new Checker(board)).isCheck(!isWhiteTurn());
                     if (check) {
                         System.out.println("THE MOVE RESULT IN YOUR KING EXPOSED, MAKE A NEW MOVE !");
                     }
@@ -150,8 +146,8 @@ public class Events {
                 }
                 case END -> {
                     System.out.println(board.displayBoard());
-                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
-                    System.out.println(count % 2 != 0 ? "WHITE WON" : "BLACK WON");
+//                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
+//                    System.out.println(count % 2 != 0 ? "WHITE WON" : "BLACK WON");
                     System.out.print("PRESS [ANY] TO CONTINUE: ");
                     String _ = scanner.nextLine().trim();
 
@@ -164,10 +160,6 @@ public class Events {
                 }
             }
         }
-    }
-
-    public static boolean isWhiteTurn() {
-        return count % 2 != 0;
     }
 
     public static String getFen() {

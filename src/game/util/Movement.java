@@ -264,13 +264,13 @@ public class Movement {
         if (board.isInBound(lPos) &&
             !board.isSameColor(current, lPos) &&
             board.getPiece(lPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(lPos)).canPassantCapture() &&
+            ((Pawn) board.getPiece(lPos)).canPassantCaptured() &&
             board.isInBound(afterLPos)) moves.add(afterLPos);
 
         if (board.isInBound(rPos) &&
             !board.isSameColor(current, rPos) &&
             board.getPiece(rPos) instanceof Pawn &&
-            ((Pawn) board.getPiece(rPos)).canPassantCapture() &&
+            ((Pawn) board.getPiece(rPos)).canPassantCaptured() &&
             board.isInBound(afterRPos)) moves.add(afterRPos);
 
     }

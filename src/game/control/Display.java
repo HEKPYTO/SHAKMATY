@@ -11,7 +11,7 @@ public class Display {
     public static final String WELCOME = "- WELCOME TO ---------------------------------------";
     public static final String longBar = "+-------+----------------------------------------+";
     private static final int[][] pieceCount = {{0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
-    private static Board board;
+    private Board board;
 
     public Display(Board board) {
         setBoard(board);
@@ -121,7 +121,7 @@ public class Display {
         return flipLines.toString();
     }
 
-    public static String prettyPrint(boolean isWhite) {
+    public String prettyPrint(boolean isWhite) {
         if (isWhite) {
             return drawHandle(true) + offSetDisplayBoard(flipBoard(board.displayBoard())) + drawHandle(false);
         }
@@ -129,11 +129,15 @@ public class Display {
         return drawHandle(false) + offSetDisplayBoard(board.displayBoard()) + drawHandle(true);
     }
 
+    public String previewPrint() {
+        return longBar + "\n" + offSetDisplayBoard(board.displayBoard()) + longBar;
+    }
+
     public Board getBoard() {
         return board;
     }
 
     public void setBoard(Board board) {
-        Display.board = board;
+        this.board = board;
     }
 }
