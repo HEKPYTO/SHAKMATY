@@ -126,7 +126,7 @@ public class Display {
         StringBuilder mirroredBoard = new StringBuilder();
 
         for (int i = 0; i < lines.length - 1; i++) {
-            StringBuilder revesedLine = new StringBuilder();
+            StringBuilder reversedLine = new StringBuilder();
             String[] elements = lines[i].split(" ");
 
             StringBuilder rev = new StringBuilder();
@@ -138,8 +138,8 @@ public class Display {
 
             rev.append(firstElement);
 
-            revesedLine.append(rev);
-            mirroredBoard.append(revesedLine.reverse()).append("\n");
+            reversedLine.append(rev);
+            mirroredBoard.append(reversedLine.reverse()).append("\n");
         }
 
         mirroredBoard.append("  ");
