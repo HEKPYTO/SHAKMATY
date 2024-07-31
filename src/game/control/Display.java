@@ -121,12 +121,36 @@ public class Display {
         return flipLines.toString();
     }
 
-    public String prettyPrint(boolean isWhite) {
-        if (isWhite) {
-            return drawHandle(true) + offSetDisplayBoard(flipBoard(board.displayBoard())) + drawHandle(false);
+    public static String mirrorBoard(String displayBoard) {
+        String[] lines = displayBoard.split("\n");
+        StringBuilder mirroredBoard = new StringBuilder();
+
+        for (String line : lines) {
+            if (line.matches(".*\\d.*")) {
+                String[] parts = line.split(" ");
+                StringBuilder reversedLine = new StringBuilder();
+                reversedLine.append(parts[0]).append(" ");
+                reversedLine.append(parts[1]).append(" ");
+                for (int i = parts.length - 2; i > 1; i--) {
+                    reversedLine.append(new StringBuilder(parts[i]).reverse()).append(" ");
+                }
+                reversedLine.append(parts[parts.length - 1]);
+                mirroredBoard.append(reversedLine).append("\n");
+            } else {
+                mirroredBoard.append(line).append("\n");
+            }
         }
 
-        return drawHandle(false) + offSetDisplayBoard(board.displayBoard()) + drawHandle(true);
+        return mirroredBoard.toString();
+    }
+
+    public String prettyPrint(boolean isWhite) {
+
+        if (isWhite) {
+            return drawHandle(false) + offSetDisplayBoard(board.displayBoard()) + drawHandle(true);
+        }
+
+        return drawHandle(true) + offSetDisplayBoard(mirrorBoard(flipBoard(board.displayBoard()))) + drawHandle(false);
     }
 
     public String previewPrint() {

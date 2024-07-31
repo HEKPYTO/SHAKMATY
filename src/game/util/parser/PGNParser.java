@@ -43,6 +43,9 @@ public class PGNParser extends Parser {
         Pattern metaPattern = Pattern.compile("\\[([^]]+)]");
         Matcher metaMatch = metaPattern.matcher(line);
         int oldCount = getCount();
+
+        translatedMove.clear();
+
         while (metaMatch.find()) {
             String[] parts = metaMatch.group(1).split(" \"");
             String tag = parts[0];
@@ -54,13 +57,15 @@ public class PGNParser extends Parser {
         parse(movesPart);
 
         if (!moved) setCount(oldCount);
-        else {
-            for (TransPosition move: translatedMove) {
-                parseMove(move, true);
-            }
 
-            if (dummy.getStatus() == Status.WIN) throw new RuntimeException("PLAYER WON THE GAME");
+        System.out.println(translatedMove);
+
+        for (TransPosition move: translatedMove) {
+            if (moved) parseMove(move, true);
+
+            if (board.getStatus() == Status.WIN) throw new RuntimeException("A PLAYER WON THE GAME");
         }
+
     }
 
     private static void parseHeader(String line) { // For later development
@@ -74,18 +79,6 @@ public class PGNParser extends Parser {
             if (part.matches("\\d+\\.")) continue; // Redundant ?
 
             count++;
-
-            switch (part) {
-                case "0-1" -> {
-                    if (!isWhiteTurn()) throw new IllegalArgumentException("BLACK can not WIN on BLACK TURN");
-                    dummy.setStatus(Status.WIN);
-                }
-
-                case "1-0" -> {
-                    if (isWhiteTurn()) throw new IllegalArgumentException("WHITE can not WIN on WHITE TURN");
-                    dummy.setStatus(Status.WIN);
-                }
-            }
 
             if (dummy.getStatus() == Status.WIN) break;
 

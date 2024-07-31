@@ -59,8 +59,6 @@ public class Checker {
         }
     }
 
-    //! IS DRAWN
-
     public Board getBoard() {
         return board;
     }

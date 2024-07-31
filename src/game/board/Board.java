@@ -54,6 +54,7 @@ public class Board {
     public void movePiece(TransPosition tPosition) {
 
         // Castling Handling
+
         if (getPiece(tPosition.getFrom()) instanceof King king &&
             getPiece(tPosition.getTo()) instanceof Rook rook &&
                 king.isWhite() == rook.isWhite()) {
@@ -73,7 +74,8 @@ public class Board {
 
         (new Checker(this)).disablePassant(!getPiece(tPosition.getTo()).isWhite());
 
-        // En Passant Logic Allow
+        // En Passant Allow Logic
+
         if (getPiece(tPosition.getTo()) instanceof Pawn pawn && Math.abs(tPosition.getTo().getRow() - tPosition.getFrom().getRow()) == 2) {
             pawn.setPassantCaptured(true);
         }
@@ -85,14 +87,17 @@ public class Board {
         }
 
         // Promote Logic
+
         if (getPiece(tPosition.getTo()) instanceof Pawn pawn && pawn.canPromote() && tPosition.getStatus() == Status.NORMAL) {
             throw new IllegalStateException("Promotion is Available: Please select piece to promote to");
         }
 
         // Invalid Move Logic
+
         if (!valid) throw new IllegalStateException("Invalid Move Pair: " + tPosition.getFrom() + " -> " + tPosition.getTo());
 
-        // OK Promotion Logic (FROM PGN)
+        // OK Promotion Logic
+
         switch (tPosition.getStatus()) {
             case BISHOP, KNIGHT, ROOK, QUEEN -> promotePiece(tPosition.getTo(), tPosition.getStatus());
             case CHECK -> {
@@ -213,11 +218,5 @@ public class Board {
 
     public Status getStatus() {
         return status;
-    }
-
-    public void setStatus(Status status) {
-        if (!(status == Status.WIN || status == Status.DRAW || status == Status.KNIGHT)) throw new IllegalStateException("Illegal State for Board");
-
-        this.status = status;
     }
 }

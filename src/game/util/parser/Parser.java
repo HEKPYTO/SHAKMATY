@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class Parser { // Moves Parser Template
     protected Board board;
     protected Board dummy;
-    protected static int count;
+    protected int count;
     protected ArrayList<TransPosition> translatedMove = new ArrayList<>();
 
     public Parser(Board board) {
@@ -38,7 +38,7 @@ public abstract class Parser { // Moves Parser Template
         this.count = count;
     }
 
-    public static boolean isWhiteTurn() {
+    public boolean isWhiteTurn() {
         return count % 2 != 0;
     }
 }

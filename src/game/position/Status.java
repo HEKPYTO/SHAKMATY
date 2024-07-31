@@ -9,5 +9,4 @@ public enum Status {
     PROMOTE,
     CHECK,
     WIN,
-    DRAW
 }

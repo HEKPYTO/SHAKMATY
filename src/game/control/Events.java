@@ -6,11 +6,9 @@ import game.util.Constant;
 import game.util.parser.FENParser;
 import game.util.parser.PGNParser;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import static game.control.State.*;
-import static game.util.parser.Parser.isWhiteTurn;
 
 public class Events {
 
@@ -28,8 +26,9 @@ public class Events {
         else throw new IllegalArgumentException("Duplicate State: " + gameState);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void play() {
         for (;;) {
+            System.out.println(gameState);
             switch (gameState) {
                 case WELCOME -> {
 
@@ -44,6 +43,7 @@ public class Events {
                         default -> changeState(State.INITPOS);
                     }
                 }
+
                 case INPUTFGN -> {
                     System.out.println("SETUP BOARD MODE (FEN), WARNING LEAVE BLANK IF UNSURE !");
                     System.out.print("ENTER POSITION CODE FEN FORMAT: ");
@@ -53,12 +53,17 @@ public class Events {
                         changeState(State.WELCOME);
                     }
                 }
+
                 case INPUTPGN -> {
                     Board dummy = FENParser.importFromFEN(fen);
 
                     System.out.println("SETUP BOARD MODE (PGN), DEPEND ON SETUP BOARD, TYPE [OK] TO LEAVE");
                     if (!pgn.isEmpty()) {
-                        new PGNParser(dummy).action(pgn, true);
+                        try {
+                            new PGNParser(dummy).action(pgn, true);
+                        } catch (RuntimeException e) {
+                            System.out.println("WARNING: " + e.getMessage());
+                        }
                         System.out.println(new Display(dummy).previewPrint());
                         System.out.println("TYPE [CLEAR] TO CLEAR, CURRENT POSITION: " + pgn);
                     }
@@ -73,15 +78,19 @@ public class Events {
                             }
                             default -> {
                                 try {
-                                    new PGNParser(dummy).action(pgn + position, false);
-                                    pgn += position;
+                                    new PGNParser(FENParser.importFromFEN(fen)).action(pgn + position, false);
+                                    pgn += position + " ";
                                 } catch (IllegalArgumentException | IllegalStateException e) {
                                     System.out.println(e.getMessage());
+                                } catch (RuntimeException e) {
+                                    if (!e.getMessage().contains("WON")) throw new IllegalStateException("FALSE EXCEPTION: " + e.getMessage());
+                                    pgn += position + " ";
                                 }
                             }
                         }
                     }
                 }
+
                 case INITPOS -> {
                     try {
                         board = fen.isEmpty() ? FENParser.defaultStartBoard() : FENParser.importFromFEN(fen);
@@ -89,9 +98,7 @@ public class Events {
                         if (!pgn.isEmpty()) {
                             try {
                                 parser.action(pgn, true);
-//                                count = Parser.getCount();
                             } catch (RuntimeException e) {
-//                                count = Parser.getCount();
                                 if (e.getMessage().contains("WON")) {
                                     changeState(END);
                                     continue;
@@ -103,20 +110,23 @@ public class Events {
                     }
                     changeState(State.INMATE);
                 }
+
                 case INMATE -> {
-                    boolean isMate = (new Checker(board)).isMate(!isWhiteTurn());
+                    boolean isMate = (new Checker(board)).isMate(!parser.isWhiteTurn());
 
                     switch (board.getStatus()) {
                         case WIN -> {
                             if (isMate) changeState(END);
                             else throw new IllegalStateException("False Mate Flags"); // False WIN is not acceptable
-                        } case DRAW -> changeState(END);
+                        }
                         default -> changeState(TOPLAY);
                     }
                 }
+
                 case TOPLAY -> {
-//                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
-//                    System.out.print(isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");
+                    System.out.println(parser.getCount());
+                    System.out.println(new Display(board).prettyPrint(!parser.isWhiteTurn()));
+                    System.out.print(!parser.isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");
                     if (scanner.hasNextLine()) {
                         String move = scanner.nextLine().trim();
                         if (move.isEmpty()) {
@@ -129,7 +139,7 @@ public class Events {
                 }
                 case CHECKLEGAL -> {
                     try {
-                        parser.action(inputMove, true); // handle resign by remove from PGN
+                        parser.action(inputMove, true);
                     } catch (RuntimeException e) {
                         System.out.println(e.getMessage());
                         if (e.getMessage().contains("WIN")) {
@@ -138,7 +148,7 @@ public class Events {
                         }
                     }
 
-                    boolean check = (new Checker(board)).isCheck(!isWhiteTurn());
+                    boolean check = (new Checker(board)).isCheck(!parser.isWhiteTurn());
                     if (check) {
                         System.out.println("THE MOVE RESULT IN YOUR KING EXPOSED, MAKE A NEW MOVE !");
                     }
@@ -146,8 +156,8 @@ public class Events {
                 }
                 case END -> {
                     System.out.println(board.displayBoard());
-//                    System.out.println(Display.prettyPrint(!isWhiteTurn()));
-//                    System.out.println(count % 2 != 0 ? "WHITE WON" : "BLACK WON");
+                    System.out.println((new Display(board)).prettyPrint(!parser.isWhiteTurn()));
+                    System.out.println(parser.isWhiteTurn() ? "WHITE WON" : "BLACK WON");
                     System.out.print("PRESS [ANY] TO CONTINUE: ");
                     String _ = scanner.nextLine().trim();
 
