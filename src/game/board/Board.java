@@ -72,7 +72,9 @@ public class Board {
 
         boolean valid = movePiece(tPosition.getFrom(), tPosition.getTo());
 
-        (new Checker(this)).disablePassant(!getPiece(tPosition.getTo()).isWhite());
+        // Invalid Move Logic
+
+        if (!valid) throw new IllegalStateException("Invalid Move Pair: " + tPosition.getFrom() + " -> " + tPosition.getTo());
 
         // En Passant Allow Logic
 
@@ -92,10 +94,6 @@ public class Board {
             throw new IllegalStateException("Promotion is Available: Please select piece to promote to");
         }
 
-        // Invalid Move Logic
-
-        if (!valid) throw new IllegalStateException("Invalid Move Pair: " + tPosition.getFrom() + " -> " + tPosition.getTo());
-
         // OK Promotion Logic
 
         switch (tPosition.getStatus()) {
@@ -110,6 +108,8 @@ public class Board {
                 if (isMate) this.status = Status.WIN;
             }
         }
+
+        (new Checker(this)).disablePassant(!getPiece(tPosition.getTo()).isWhite());
     }
 
     private void promotePiece(Position pos, Status status) {

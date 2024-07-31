@@ -28,7 +28,7 @@ public class Events {
 
     public static void play() {
         for (;;) {
-            System.out.println(gameState);
+//            System.out.println(gameState);
             switch (gameState) {
                 case WELCOME -> {
 
@@ -126,6 +126,7 @@ public class Events {
                 case TOPLAY -> {
                     System.out.println(parser.getCount());
                     System.out.println(new Display(board).prettyPrint(!parser.isWhiteTurn()));
+                    System.out.println("ROUND: " + (parser.getCount() - (parser.getCount() % 2) + 1));
                     System.out.print(!parser.isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");
                     if (scanner.hasNextLine()) {
                         String move = scanner.nextLine().trim();
@@ -140,6 +141,11 @@ public class Events {
                 case CHECKLEGAL -> {
                     try {
                         parser.action(inputMove, true);
+                    } catch (IllegalArgumentException | IllegalStateException e) {
+                        System.out.println("ERROR: " + e.getMessage());
+                        changeState(TOPLAY);
+                        parser.setCount(parser.getCount() - 1);
+                        continue;
                     } catch (RuntimeException e) {
                         System.out.println(e.getMessage());
                         if (e.getMessage().contains("WIN")) {

@@ -58,8 +58,6 @@ public class PGNParser extends Parser {
 
         if (!moved) setCount(oldCount);
 
-        System.out.println(translatedMove);
-
         for (TransPosition move: translatedMove) {
             if (moved) parseMove(move, true);
 
@@ -88,7 +86,6 @@ public class PGNParser extends Parser {
                 throw new IllegalArgumentException("Illegal Move : " + transPosition);
 
             parseMove(transPosition, false);
-            System.out.println(dummy.displayBoard());
             translatedMove.add(transPosition);
         }
     }
@@ -142,7 +139,7 @@ public class PGNParser extends Parser {
             String checked = matcher.group(6);
             String mate = matcher.group(7);
 
-            System.out.println(piece + " " + file + " " + rank + " " + destination + " " + promotion);
+//            System.out.println(piece + " " + file + " " + rank + " " + destination + " " + promotion);
 
             int destCol = destination.charAt(0) - 'a';
             int destRow = destination.charAt(1) - '1';
@@ -153,7 +150,6 @@ public class PGNParser extends Parser {
                 if (file != null) { // Pawn Capture
                     destRow += 1;
                     int startRow = isWhiteTurn() ? destRow - 1: destRow + 1;
-//                    System.out.println("CAP: " + startRow + " : " + destRow);
                     from = new Position(file + startRow);
                 } else {
                     int startRow = isWhiteTurn() ? destRow - 1 : destRow + 1;
@@ -166,7 +162,6 @@ public class PGNParser extends Parser {
                 }
             } else {
                 char pieceChar = piece.toLowerCase().charAt(0);
-//                System.out.println(pieceChar + " " + to + " " + rank + " " + file);
                 from = findPieceFrom(pieceChar, to, rank, file);
 
             }
@@ -190,9 +185,6 @@ public class PGNParser extends Parser {
             Board vDummy = dummy.copyBoard();
             vDummy.movePiece(new TransPosition(from, to));
             boolean isInCheck = (new Checker(vDummy)).isCheck(!isWhiteTurn());
-
-            System.out.println(move);
-            System.out.println(checked + " " + isInCheck);
 
             boolean isMate = (new Checker(vDummy)).isMate(!isWhiteTurn());
             if (!isMate && mate != null) {

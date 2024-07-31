@@ -26,18 +26,12 @@ public class King extends Piece {
             movement.longCastleMove();
         }
 
-//        System.out.println(movement.getMoves());
-
         Set<Position> legalize = new HashSet<Position>();
 
         for (Position possibleMove: movement.getMoves()) {
             Board vBoard = board.copyBoard();
-//            System.out.println(vBoard.displayBoard());
-            vBoard.movePiece(new TransPosition(position, possibleMove));
 
-//            System.out.println(position + " : " + possibleMove);
-//            System.out.println(vBoard.displayBoard());
-//            System.out.println("--------------------------------");
+            vBoard.movePiece(new TransPosition(position, possibleMove));
 
             Movement checked = new Movement(possibleMove, vBoard);
             if (!checked.isInCheck(isWhite())) legalize.add(possibleMove);
