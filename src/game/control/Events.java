@@ -147,7 +147,7 @@ public class Events {
                         continue;
                     } catch (RuntimeException e) {
                         System.out.println(e.getMessage());
-                        if (e.getMessage().contains("WIN")) {
+                        if (e.getMessage().contains("WON")) {
                             changeState(State.END);
                             continue;
                         }
