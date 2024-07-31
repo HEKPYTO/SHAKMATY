@@ -14,7 +14,7 @@ import game.position.Position;
 public class Movement {
 
     protected Position current;
-    protected Set<Position> moves = new HashSet<Position>();
+    protected Set<Position> moves = new HashSet<>();
     protected Board board;
 
     public Movement(Position current, Board board) {
@@ -62,9 +62,9 @@ public class Movement {
         Position pLeft = new Position(row + singleMove, col - 1);
         Position pRight = new Position(row + singleMove, col + 1);
 
-        if (board.isInBound(pLeft) && !board.isEmpty(pLeft) && !board.isSameColor(current, pLeft)) moves.add(pLeft);
+        if (board.isInBound(pLeft) && !board.isEmpty(pLeft) && board.isSameColor(current, pLeft)) moves.add(pLeft);
 
-        if (board.isInBound(pRight) && !board.isEmpty(pRight) && !board.isSameColor(current, pRight)) moves.add(pRight);
+        if (board.isInBound(pRight) && !board.isEmpty(pRight) && board.isSameColor(current, pRight)) moves.add(pRight);
     }
     
     public void plusMove() { // + sign movement
@@ -85,7 +85,7 @@ public class Movement {
 
                 if (board.isEmpty(p)) moves.add(p);
                 else {
-                    if (!board.isSameColor(current, p)) moves.add(p);
+                    if (board.isSameColor(current, p)) moves.add(p);
                     break;
                 }
             }
@@ -111,7 +111,7 @@ public class Movement {
                 if (board.isEmpty(p)) moves.add(p);
                 else {
                     
-                    if (!board.isSameColor(current, p)) moves.add(p);
+                    if (board.isSameColor(current, p)) moves.add(p);
                     break;
                 }
 
@@ -135,7 +135,7 @@ public class Movement {
 
             Position p = new Position(row + move[0], col + move[1]);
 
-            if (board.isInBound(p) && (board.isEmpty(p) || !board.isSameColor(current, p))) moves.add(p);
+            if (board.isInBound(p) && (board.isEmpty(p) || board.isSameColor(current, p))) moves.add(p);
 
         }
     }
@@ -152,7 +152,7 @@ public class Movement {
 
                 if (!board.isInBound(p) || p.equals(current)) continue;
 
-                if (board.isEmpty(p) || !board.isSameColor(current, p)) moves.add(p);
+                if (board.isEmpty(p) || board.isSameColor(current, p)) moves.add(p);
             }
         }
     }
@@ -262,21 +262,17 @@ public class Movement {
         Position afterRPos = new Position(enPos + singleMove, col + 1);
 
         if (board.isInBound(lPos) &&
-            !board.isSameColor(current, lPos) &&
+                board.isSameColor(current, lPos) &&
             board.getPiece(lPos) instanceof Pawn &&
             ((Pawn) board.getPiece(lPos)).canPassantCaptured() &&
             board.isInBound(afterLPos)) moves.add(afterLPos);
 
         if (board.isInBound(rPos) &&
-            !board.isSameColor(current, rPos) &&
+                board.isSameColor(current, rPos) &&
             board.getPiece(rPos) instanceof Pawn &&
             ((Pawn) board.getPiece(rPos)).canPassantCaptured() &&
             board.isInBound(afterRPos)) moves.add(afterRPos);
 
-    }
-
-    public Position getCurrent() {
-        return this.current;
     }
 
     public void setCurrent(Position current) {

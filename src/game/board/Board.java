@@ -36,7 +36,7 @@ public class Board {
 
         // General Move
 
-        if (!isSameColor(from, to) || isEmpty(to)) {
+        if (isSameColor(from, to) || isEmpty(to)) {
             Piece piece = getPiece(from);
 
             if (piece == null) throw new IllegalArgumentException("Piece is null at " + from);
@@ -130,7 +130,7 @@ public class Board {
     }
 
     public boolean isSameColor(Position position1, Position position2) {
-        return !isEmpty(position1) && !isEmpty(position2) && getPiece(position1).isWhite() == getPiece(position2).isWhite();
+        return isEmpty(position1) || isEmpty(position2) || getPiece(position1).isWhite() != getPiece(position2).isWhite();
     }
 
     public boolean isEmpty(Position position) {
