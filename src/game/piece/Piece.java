@@ -24,24 +24,15 @@ public abstract class Piece {
 
     public abstract Object deepCopy();
 
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj instanceof Piece piece) {
-//            return position.equals(piece.position);
-//        }
-//        return false;
-//    }
-
     public void moveHandle(Position to) {
         hadMoved();
         setPosition(to);
     }
 
-//    @Override
-//    public String toString() {
-//        return getClass().getSimpleName() + "(" + position + ")";
-//    }
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + position + ")";
+    }
 
     public void hadMoved() {
         this.moved = true;
