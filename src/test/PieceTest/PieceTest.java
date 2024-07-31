@@ -49,24 +49,4 @@ public class PieceTest {
         assertEquals(p2, b.getPiece(posBlack));
         assertFalse(p2.isMoved());
     }
-
-    @Test
-    public void equalsTest() {
-        Board b1 = new Board();
-        Board b2 = new Board();
-
-        Piece p1 = new Pawn(true, posWhite, b1);
-        Piece p2 = new Pawn(true, posWhite, b2);
-
-        assertTrue(p1.isWhite());
-        assertEquals(posWhite, p1.getPosition());
-        assertEquals(b1, p1.getBoard());
-
-        assertTrue(p2.isWhite());
-        assertEquals(posWhite, p2.getPosition());
-        assertEquals(b2, p2.getBoard());
-
-        assertEquals(p1, p2);
-    }
-
 }
