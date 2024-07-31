@@ -132,10 +132,18 @@ public class Display {
                 reversedLine.append(parts[0]).append(" ");
                 reversedLine.append(parts[1]).append(" ");
                 for (int i = parts.length - 2; i > 1; i--) {
-                    reversedLine.append(new StringBuilder(parts[i]).reverse()).append(" ");
+                    reversedLine.append(parts[i]).append(" ");
                 }
                 reversedLine.append(parts[parts.length - 1]);
-                mirroredBoard.append(reversedLine).append("\n");
+                mirroredBoard.append(reversedLine.toString()).append("\n");
+            } else if (line.matches(".*[a-h].*")) {
+                String[] parts = line.split(" ");
+                StringBuilder reversedLine = new StringBuilder();
+                reversedLine.append("  ");
+                for (int i = parts.length - 1; i > 1; i--) {
+                    reversedLine.append(parts[i]).append(" ");
+                }
+                mirroredBoard.append(reversedLine.toString()).append("\n");
             } else {
                 mirroredBoard.append(line).append("\n");
             }
