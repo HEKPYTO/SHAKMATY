@@ -124,7 +124,6 @@ public class Events {
                 }
 
                 case TOPLAY -> {
-                    System.out.println(parser.getCount());
                     System.out.println(new Display(board).prettyPrint(!parser.isWhiteTurn()));
                     System.out.println("ROUND: " + (parser.getCount() / 2 + 1));
                     System.out.print(!parser.isWhiteTurn() ? "WHITE TO PLAY : " : "BLACK TO PLAY : ");

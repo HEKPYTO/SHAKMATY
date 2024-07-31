@@ -125,29 +125,25 @@ public class Display {
         String[] lines = displayBoard.split("\n");
         StringBuilder mirroredBoard = new StringBuilder();
 
-        for (String line : lines) {
-            if (line.matches(".*\\d.*")) {
-                String[] parts = line.split(" ");
-                StringBuilder reversedLine = new StringBuilder();
-                reversedLine.append(parts[0]).append(" ");
-                reversedLine.append(parts[1]).append(" ");
-                for (int i = parts.length - 2; i > 1; i--) {
-                    reversedLine.append(parts[i]).append(" ");
-                }
-                reversedLine.append(parts[parts.length - 1]);
-                mirroredBoard.append(reversedLine.toString()).append("\n");
-            } else if (line.matches(".*[a-h].*")) {
-                String[] parts = line.split(" ");
-                StringBuilder reversedLine = new StringBuilder();
-                reversedLine.append("  ");
-                for (int i = parts.length - 1; i > 1; i--) {
-                    reversedLine.append(parts[i]).append(" ");
-                }
-                mirroredBoard.append(reversedLine.toString()).append("\n");
-            } else {
-                mirroredBoard.append(line).append("\n");
+        for (int i = 0; i < lines.length - 1; i++) {
+            StringBuilder revesedLine = new StringBuilder();
+            String[] elements = lines[i].split(" ");
+
+            StringBuilder rev = new StringBuilder();
+
+            String firstElement = elements[0];
+            for (int j = 1; j < elements.length; j++) {
+                rev.append(elements[j]).append(" ");
             }
+
+            rev.append(firstElement);
+
+            revesedLine.append(rev);
+            mirroredBoard.append(revesedLine.reverse()).append("\n");
         }
+
+        mirroredBoard.append("  ");
+        mirroredBoard.append(new StringBuilder(lines[lines.length - 1]).reverse());
 
         return mirroredBoard.toString();
     }
