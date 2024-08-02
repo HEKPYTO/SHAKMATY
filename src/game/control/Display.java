@@ -8,7 +8,7 @@ import game.util.Constant;
 public class Display {
 
     public static final String SEPARATOR = "--------------------------------------------------";
-    public static final String WELCOME = "- WELCOME TO ---------------------------------------";
+    public static final String WELCOME = "- WELCOME TO -------------------------------------";
     public static final String longBar = "+-------+----------------------------------------+";
     private static final int[][] pieceCount = {{0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
     private Board board;
