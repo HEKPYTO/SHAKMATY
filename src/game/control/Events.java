@@ -1,6 +1,7 @@
 package game.control;
 
 import game.board.Board;
+import game.position.Status;
 import game.util.Checker;
 import game.util.Constant;
 import game.util.parser.FENParser;
@@ -31,7 +32,6 @@ public class Events {
 //            System.out.println(gameState);
             switch (gameState) {
                 case WELCOME -> {
-
                     System.out.println(Display.greeter());
                     System.out.println("ENTER MODE: ");
                     String mode = scanner.nextLine().trim();
@@ -83,6 +83,7 @@ public class Events {
                                 } catch (IllegalArgumentException | IllegalStateException e) {
                                     System.out.println(e.getMessage());
                                 } catch (RuntimeException e) {
+                                    System.out.println(e.getMessage());
                                     if (!e.getMessage().contains("WON")) throw new IllegalStateException("FALSE EXCEPTION: " + e.getMessage());
                                     pgn += position + " ";
                                 }
@@ -90,17 +91,17 @@ public class Events {
                         }
                     }
                 }
-
                 case INITPOS -> {
                     try {
                         board = fen.isEmpty() ? FENParser.defaultStartBoard() : FENParser.importFromFEN(fen);
                         parser = new PGNParser(board);
+                        parser.setCount(FENParser.isWhiteTurn() ? 0 : 1);
                         if (!pgn.isEmpty()) {
                             try {
                                 parser.action(pgn, true);
                             } catch (RuntimeException e) {
                                 if (e.getMessage().contains("WON")) {
-                                    changeState(END);
+                                    changeState(WIN);
                                     continue;
                                 }
                             }
@@ -110,19 +111,30 @@ public class Events {
                     }
                     changeState(State.INMATE);
                 }
-
                 case INMATE -> {
                     boolean isMate = (new Checker(board)).isMate(!parser.isWhiteTurn());
+                    boolean isDrawn = (new Checker(board)).isDrawn();
+                    boolean isStaleMate = (new Checker(board)).isStaleMate(!parser.isWhiteTurn());
 
-                    switch (board.getStatus()) {
-                        case WIN -> {
-                            if (isMate) changeState(END);
-                            else throw new IllegalStateException("False Mate Flags"); // False WIN is not acceptable
+                    // WIN
+
+                    if (board.getStatus() == Status.WIN) {
+                        if (isMate) {
+                            changeState(WIN);
+                            continue;
                         }
-                        default -> changeState(TOPLAY);
+                        else throw new IllegalStateException("False Mate Flags");
                     }
-                }
 
+                    // DRAW
+
+                    else if (isDrawn || isStaleMate) {
+                        changeState(DRAW);
+                        continue;
+                    }
+
+                    changeState(TOPLAY);
+                }
                 case TOPLAY -> {
                     System.out.println(new Display(board).prettyPrint(!parser.isWhiteTurn()));
                     System.out.println("ROUND: " + (parser.getCount() / 2 + 1));
@@ -132,8 +144,13 @@ public class Events {
                         if (move.isEmpty()) {
                             System.out.println("PLEASE INPUT SOMETHING");
                         } else {
-                            setInputMove(move);
-                            changeState(State.CHECKLEGAL);
+                            String[] moves = move.split("\\s+");
+                            if (moves.length > 1) {
+                                System.out.println("PLEASE INPUT ONLY ONE MOVE");
+                            } else {
+                                setInputMove(move);
+                                changeState(State.CHECKLEGAL);
+                            }
                         }
                     }
                 }
@@ -148,22 +165,42 @@ public class Events {
                     } catch (RuntimeException e) {
                         System.out.println(e.getMessage());
                         if (e.getMessage().contains("WON")) {
-                            changeState(State.END);
+                            changeState(WIN);
                             continue;
                         }
+                        System.out.println("FALSE FLAG !");
+                        changeState(EXIT);
                     }
 
-                    boolean check = (new Checker(board)).isCheck(!parser.isWhiteTurn());
+                    boolean check = (new Checker(board)).isCheck(parser.isWhiteTurn());
                     if (check) {
                         System.out.println("THE MOVE RESULT IN YOUR KING EXPOSED, MAKE A NEW MOVE !");
                     }
                     changeState(check ? State.TOPLAY : State.INMATE);
                 }
-                case END -> {
-                    System.out.println(board.displayBoard());
+                case WIN -> {
                     System.out.println((new Display(board)).prettyPrint(!parser.isWhiteTurn()));
                     System.out.println(parser.isWhiteTurn() ? "WHITE WON" : "BLACK WON");
                     System.out.print("PRESS [ANY] TO CONTINUE: ");
+
+                    changeState(CLEANUP);
+                }
+                case DRAW -> {
+                    boolean isDrawn = (new Checker(board)).isDrawn();
+                    boolean isStaleMate = (new Checker(board)).isStaleMate(!parser.isWhiteTurn());
+                    System.out.println((new Display(board)).prettyPrint(!parser.isWhiteTurn()));
+                    System.out.print("GAME DRAWN");
+                    if (isDrawn) {
+                        System.out.println(": INSUFFICIENT MATERIALS");
+                    } else if (isStaleMate) {
+                        System.out.println(": " + (parser.isWhiteTurn() ? "WHITE": "BLACK") + " STALEMATED");
+                    }
+                    System.out.print("PRESS [ANY] TO CONTINUE: ");
+                    String _ = scanner.nextLine().trim();
+
+                    changeState(CLEANUP);
+                }
+                case CLEANUP -> {
                     String _ = scanner.nextLine().trim();
 
                     setFen("");

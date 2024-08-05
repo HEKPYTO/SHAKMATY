@@ -187,6 +187,7 @@ public class PGNParser extends Parser {
             boolean isInCheck = (new Checker(vDummy)).isCheck(!isWhiteTurn());
 
             boolean isMate = (new Checker(vDummy)).isMate(!isWhiteTurn());
+
             if (!isMate && mate != null) {
                 throw new IllegalArgumentException("This is not mating move: " + move);
             }
