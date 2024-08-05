@@ -5,9 +5,13 @@ import game.piece.*;
 import game.position.Position;
 import game.util.Constant;
 
+import java.util.Arrays;
+
 import static java.lang.Character.toUpperCase;
 
 public class FENParser {
+
+    private static boolean whiteTurn = true;
 
     public static String exportToFEN(Board board) { // Not Entirely Correct, but good enough
         StringBuilder fen = new StringBuilder();
@@ -89,6 +93,8 @@ public class FENParser {
             if (col != Constant.COL) throw new IllegalArgumentException("column exceed maximum board limits");
         }
 
+        if (fenParts.length >= 2) whiteTurn = fenParts[1].equals("w");
+
         return board;
     }
 
@@ -115,4 +121,11 @@ public class FENParser {
         return importFromFEN(Constant.STARTPOS);
     }
 
+    public static boolean isWhiteTurn() {
+        return whiteTurn;
+    }
+
+    public static void setWhiteTurn(boolean whiteTurn) {
+        FENParser.whiteTurn = whiteTurn;
+    }
 }

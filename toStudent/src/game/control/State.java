@@ -8,6 +8,8 @@ public enum State {
     INMATE,
     TOPLAY,
     CHECKLEGAL,
-    END,
+    WIN,
+    DRAW,
+    CLEANUP,
     EXIT
 }
