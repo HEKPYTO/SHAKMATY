@@ -99,7 +99,7 @@ public class Display {
         String[] lines = displayBoard.split("\n");
         StringBuilder finalBoard = new StringBuilder();
         for (String line : lines) {
-            finalBoard.append("|       |     ").append(line).append("\n");
+            finalBoard.append("|       |         ").append(line).append("\n");
         }
 
         finalBoard.deleteCharAt(finalBoard.length() - 1);
