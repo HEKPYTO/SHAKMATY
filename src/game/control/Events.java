@@ -203,7 +203,7 @@ public class Events {
                 case CLEANUP -> {
                     String _ = scanner.nextLine().trim();
 
-                    setFen("");
+                    setFen(Constant.STARTPOS);
                     changeState(WELCOME);
                 }
                 case EXIT -> {
