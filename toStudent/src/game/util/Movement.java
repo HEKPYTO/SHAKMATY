@@ -68,7 +68,7 @@ public class Movement {
     }
 
     // WOW YOU MADE IT HERE, HOW IS Q1 & Q2 ? 
-    // START OF OWN IMPLEMENTATION OF THIS CLASS. GOOD LUCK ! :0
+    // START OF OWN IMPLEMENTATION OF THIS CLASS. GOOD LUCK ! :0 <- dejavu ?
     
     public void plusMove() { // + sign movement
             
@@ -107,32 +107,62 @@ public class Movement {
         // Warnings: Piece SHOULD NOT able to capture another piece with SAME color.
     }
 
+    // END OF IMPLEMENTATION METHOD
+    // DON'T TOUCH WHAT IS BELOW. OK ? :)
+
     public void squareMove() {
 
-        // TODO: Implement this method
-        // Adds moves in all eight directions (adjacent square from current include 1-unit distance)
+        int row = current.getRow();
+        int col = current.getCol();
 
-        // Make sure the move selected in the square does not include the current position. 
-        // And check that the square isInBound. And the position is empty, or not the same color as the current pierce in the current position.
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
 
-        // Warnings: Piece SHOULD NOT able to capture another piece with SAME color.
+                Position p = new Position(i, j);
 
+                if (!board.isInBound(p) || p.equals(current)) continue;
+
+                if (board.isEmpty(p) || board.isSameColor(current, p)) moves.add(p);
+            }
+        }
     }
 
     public boolean isInCheck(boolean color) {
 
-        // TODO: Implement this method
-        // Determines if the position is under attack by checking possible moves of all enemy pieces.
-        // This method is dependent on the color given as a parameter.
+        Movement checked = new Movement(current, board);
 
-        // change return logic (boolean)
+        checked.plusMove();
+        checked.diagonalMove();
+        checked.squareMove();
+        checked.lShapeMove();
 
-        return true;
+        Set<Position> checkedMoves = checked.getMoves();
 
+        for (Position p : checkedMoves) {
+            if (!board.isEmpty(p) && board.getPiece(p).isWhite() != color) { // Enemy Piece
+                Piece enemy = board.getPiece(p);
+
+                if (enemy instanceof King) {
+                    Movement enemyKMovement = new Movement(p, board);
+                    enemyKMovement.squareMove();
+
+                    for (Position kp: enemyKMovement.getMoves()) {
+                        if (kp.equals(current)) return true;
+                    }
+
+                } else {
+
+                    for (Position enemyLegalMove : enemy.getLegalMove()) {
+                        if (current.equals(enemyLegalMove)) return true;
+                    }
+
+                }
+            }
+        }
+
+        return false;
     }
 
-    // END OF IMPLEMENTATION METHOD
-    // DON'T TOUCH WHAT IS BELOW. OK ? :)
 
     public void shortCastleMove() {
         int backRank = board.getPiece(current).isWhite() ? 0 : Constant.ROW - 1;

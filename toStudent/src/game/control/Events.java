@@ -23,13 +23,15 @@ public class Events {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static void changeState(State next) {
-        if (next != gameState) gameState = next;
-        else throw new IllegalArgumentException("Duplicate State: " + gameState);
+        if (next != gameState)
+            gameState = next;
+        else
+            throw new IllegalArgumentException("Duplicate State: " + gameState);
     }
 
     public static void play() {
         for (;;) {
-//            System.out.println(gameState);
+            // System.out.println(gameState);
             switch (gameState) {
                 case WELCOME -> {
                     System.out.println(Display.greeter());
@@ -49,7 +51,8 @@ public class Events {
                     System.out.print("ENTER POSITION CODE FEN FORMAT: ");
                     if (scanner.hasNextLine()) {
                         String initFEN = scanner.nextLine().trim();
-                        if (!initFEN.isEmpty()) setFen(initFEN);
+                        if (!initFEN.isEmpty())
+                            setFen(initFEN);
                         changeState(State.WELCOME);
                     }
                 }
@@ -84,7 +87,8 @@ public class Events {
                                     System.out.println(e.getMessage());
                                 } catch (RuntimeException e) {
                                     System.out.println(e.getMessage());
-                                    if (!e.getMessage().contains("WON")) throw new IllegalStateException("FALSE EXCEPTION: " + e.getMessage());
+                                    if (!e.getMessage().contains("WON"))
+                                        throw new IllegalStateException("FALSE EXCEPTION: " + e.getMessage());
                                     pgn += position + " ";
                                 }
                             }
@@ -122,8 +126,8 @@ public class Events {
                         if (isMate) {
                             changeState(WIN);
                             continue;
-                        }
-                        else throw new IllegalStateException("False Mate Flags");
+                        } else
+                            throw new IllegalStateException("False Mate Flags");
                     }
 
                     // DRAW
@@ -193,7 +197,7 @@ public class Events {
                     if (isDrawn) {
                         System.out.println(": INSUFFICIENT MATERIALS");
                     } else if (isStaleMate) {
-                        System.out.println(": " + (parser.isWhiteTurn() ? "WHITE": "BLACK") + " STALEMATED");
+                        System.out.println(": " + (parser.isWhiteTurn() ? "WHITE" : "BLACK") + " STALEMATED");
                     }
                     System.out.print("PRESS [ANY] TO CONTINUE: ");
                     String _ = scanner.nextLine().trim();
@@ -203,7 +207,7 @@ public class Events {
                 case CLEANUP -> {
                     String _ = scanner.nextLine().trim();
 
-                    setFen("");
+                    setFen(Constant.STARTPOS);
                     changeState(WELCOME);
                 }
                 case EXIT -> {
