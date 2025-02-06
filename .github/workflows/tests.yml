@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           submodules: 'recursive'
           persist-credentials: false
           lfs: true
@@ -39,6 +39,7 @@ jobs:
 
       - name: Compile
         run: |
+          mkdir -p out/production/SHAKMATY
           javac -cp "lib/*:src" -d out/production/SHAKMATY $(find src -name "*.java")
 
       - name: Run Tests
